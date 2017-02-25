@@ -18,9 +18,11 @@
 
 #include"context.h"
 #include"function.h"
+#include"system_control.h"
 #include"config_loader.h"
 #include"config.h"
 #include"gtt_highspeed.h"
+#include"gtt_urban.h"
 #include"rrm.h"
 #include"tmc.h"
 #include"wt.h"
@@ -31,6 +33,9 @@ using namespace std;
 context* context::s_singleton_context = nullptr;
 
 context* context::get_context() {
+	if (s_singleton_context == nullptr) {
+		context_build();
+	}
 	return s_singleton_context;
 }
 
@@ -39,20 +44,69 @@ void context::set_context(context* t_singleton_context) {
 	s_singleton_context = t_singleton_context;
 }
 
-void context::context_factory() {
+void context::context_build() {
 	context* __context = new context();
 	set_context(__context);
 
-	//初始化成员，并为容器成员注入依赖项
-	get_context()->dependency_injecte();
+	__context->initialize();
 }
 
 context::context() {
 
 }
 
+void context::initialize() {
+	set_system_control(new system_control());
+	get_system_control()->set_context(this);
+
+	set_config_loader(new config_loader());
+
+	set_global_control_config(new global_control_config());
+	get_global_control_config()->set_config_loader(get_config_loader());
+	get_global_control_config()->load();
+
+	set_gtt_config(gtt_config::gtt_config_bind_by_mode(get_global_control_config()->get_gtt_mode()));
+	get_gtt_config()->set_config_loader(get_config_loader());
+	get_gtt_config()->load();
+
+	set_rrm_config(new rrm_config());
+	get_rrm_config()->set_config_loader(get_config_loader());
+	get_rrm_config()->load();
+
+	set_tmc_config(new tmc_config());
+	get_tmc_config()->set_config_loader(get_config_loader());
+	get_tmc_config()->load();
+
+	set_gtt(gtt::gtt_bind_by_mode(get_global_control_config()->get_gtt_mode()));
+	get_gtt()->set_config(get_gtt_config());
+
+	set_rrm(new rrm());
+	get_rrm()->set_config(get_rrm_config());
+
+	set_tmc(new tmc());
+	get_tmc()->set_config(get_tmc_config());
+
+	set_wt(new wt());
+
+	set_event_array();
+
+	set_tti_event_list();
+}
+
+void context::dependcy_inject() {
+	
+}
+
 context::~context() {
 	memory_clean::safe_delete(m_vue_array, true);
+}
+
+void context::set_system_control(system_control* t_system_control) {
+	m_system_control = t_system_control;
+}
+
+system_control* context::get_system_control() {
+	return m_system_control;
 }
 
 void context::set_config_loader(config_loader* t_config_loader) {
@@ -158,49 +212,4 @@ void context::set_tti_event_list() {
 
 vector<std::list<sender_event*>>& context::get_tti_event_list() {
 	return m_tti_event_list;
-}
-
-void context::dependency_injecte() {
-	//初始化配置文件加载器
-	set_config_loader(new config_loader());
-
-	//初始化配置参数对象
-	set_global_control_config(new global_control_config());
-	set_gtt_config(new gtt_highspeed_config());
-	set_rrm_config(new rrm_config());
-	set_tmc_config(new tmc_config());
-
-	//为配置参数对象注入依赖项(配置文件加载器)，并执行初始化动作(加载配置文件)
-	get_global_control_config()->set_config_loader(get_config_loader());
-	get_global_control_config()->load();
-
-	get_gtt_config()->set_config_loader(get_config_loader());
-	get_gtt_config()->load();
-
-	get_rrm_config()->set_config_loader(get_config_loader());
-	get_rrm_config()->load();
-
-	get_tmc_config()->set_config_loader(get_config_loader());
-	get_tmc_config()->load();
-
-	//初始化gtt对象，并为其注入依赖项(配置参数对象)
-	set_gtt(new gtt_highspeed());
-	get_gtt()->set_config(get_gtt_config());
-
-	//初始化rrm对象，并为其注入依赖项(配置参数对象)
-	set_rrm(new rrm());
-	get_rrm()->set_config(get_rrm_config());
-
-	//初始化tmc对象，并为其注入依赖项(配置参数对象)
-	set_tmc(new tmc());
-	get_tmc()->set_config(get_tmc_config());
-
-	//初始化wt共享资源
-	set_wt(new wt());
-
-	//事件数组初始化
-	set_event_array();
-
-	//在配置对象初始化完毕后，该对象才可以进行初始化
-	set_tti_event_list();
 }

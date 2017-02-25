@@ -1,5 +1,8 @@
 #pragma once
 
+#include<string>
+#include"enumeration.h"
+
 class gtt_config;
 
 class gtt {
@@ -8,6 +11,13 @@ class gtt {
 	* 将context设为友元，容器要为其注入依赖项
 	*/
 	friend class context;
+
+	/*--------------------静态--------------------*/
+public:
+	/*
+	* 根据gtt模式来生成gtt组件对象
+	*/
+	static gtt* gtt_bind_by_mode(gtt_mode t_mode);
 
 	/*--------------------字段--------------------*/
 	/*

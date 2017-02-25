@@ -1,11 +1,9 @@
 #pragma once
 
 #include<vector>
+#include"enumeration.h"
 
-enum platform{
-	Windows,
-	Linux
-};
+#define INVALID -1
 
 class config_loader;
 
@@ -53,6 +51,15 @@ private:
 public:
 	int get_fresh_period();
 
+	/*
+	* 信道刷新周期
+	*/
+private:
+	gtt_mode m_gtt_mode;
+	void set_gtt_mode(gtt_mode t_gtt_mode);
+public:
+	gtt_mode get_gtt_mode();
+
 	/*--------------------接口--------------------*/
 public:
 	void load();
@@ -65,6 +72,12 @@ class gtt_config {
 	* 将context设为友元，容器要为其注入依赖项
 	*/
 	friend class context;
+
+	/*--------------------字段--------------------*/
+	/*
+	* 根据gtt模式来生成gtt_config配置文件对象
+	*/
+	static gtt_config* gtt_config_bind_by_mode(gtt_mode t_mode);
 
 	/*--------------------字段--------------------*/
 	/*
@@ -96,7 +109,7 @@ public:
 	* 路长,单位m
 	*/
 private:
-	double m_road_length = 3464;
+	double m_road_length = INVALID;
 	void set_road_length(double t_road_length);
 public:
 	double get_road_length();
@@ -105,7 +118,7 @@ public:
 	* 路宽，单位m
 	*/
 private:
-	double m_road_width = 4;
+	double m_road_width = INVALID;
 	void set_road_width(double t_road_width);
 public:
 	double get_road_width();
@@ -114,7 +127,7 @@ public:
 	* 车速,km/h
 	*/
 private:
-	double m_speed = 140;
+	double m_speed = INVALID;
 	void set_speed(double t_speed);
 public:
 	double get_speed();
@@ -138,7 +151,7 @@ public:
 	* 车辆位置刷新时间,单位s
 	*/
 private:
-	double m_freshtime = 0.1;
+	double m_freshtime = INVALID;
 	void set_freshtime(double t_freshtime);
 public:
 	double get_freshtime();
@@ -146,6 +159,7 @@ public:
 	/*--------------------接口--------------------*/
 public:
 	void load() override;
+
 };
 
 
@@ -153,6 +167,95 @@ class gtt_urban_config :public gtt_config {
 	/*--------------------接口--------------------*/
 public:
 	void load() override;
+	/*
+	* 街区数量
+	*/
+private:
+	const int m_road_num = 14;
+public:
+	int get_road_num();
+
+	/*
+	* 路长，分为东西向和南北向,单位m
+	*/
+private:
+	double m_road_length_ew = INVALID;
+	double m_road_length_sn = INVALID;
+	void set_road_length_ew(double t_road_length_ew);
+	void set_road_length_sn(double t_road_length_sn);
+public:
+	double get_road_length_ew();
+	double get_road_length_sn();
+
+	/*
+	* 路宽，单位m
+	*/
+private:
+	double m_road_width = INVALID;
+	void set_road_width(double t_road_width);
+public:
+	double get_road_width();
+
+	/*
+	* 车速,km/h
+	*/
+private:
+	double m_speed = INVALID;
+	void set_speed(double t_speed);
+public:
+	double get_speed();
+
+	/*
+	* 道路拓扑位置
+	*/
+private:
+	const double m_road_topo_ratio[14 * 2] = {
+		-1.5f, 1.0f,
+		-0.5f, 1.0f,
+		0.5f, 1.0f,
+		1.5f, 1.0f,
+		-2.5f, 0.0f,
+		-1.5f, 0.0f,
+		-0.5f, 0.0f,
+		0.5f, 0.0f,
+		1.5f, 0.0f,
+		2.5f, 0.0f,
+		-1.5f,-1.0f,
+		-0.5f,-1.0f,
+		0.5f,-1.0f,
+		1.5f,-1.0f
+	};
+
+private:
+	const int m_wrap_around_road[14][9] = {
+		{ 0,1,6,5,4,13,8,9,10 },
+		{ 1,2,7,6,5,0,9,10,11 },
+		{ 2,3,8,7,6,1,10,11,12 },
+		{ 3,4,9,8,7,2,11,12,13 },
+		{ 4,5,10,9,8,3,12,13,0 },
+		{ 5,6,11,10,9,4,13,0,1 },
+		{ 6,7,12,11,10,5,0,1,2 },
+		{ 7,8,13,12,11,6,1,2,3 },
+		{ 8,9,0,13,12,7,2,3,4 },
+		{ 9,10,1,0,13,8,3,4,5 },
+		{ 10,11,2,1,0,9,4,5,6 },
+		{ 11,12,3,2,1,10,5,6,7 },
+		{ 12,13,4,3,2,11,6,7,8 },
+		{ 13,0,5,4,3,12,7,8,9 }
+	};
+
+public:
+	const double* get_road_topo_ratio();
+	const int(*get_wrap_around_road())[9];
+	/*
+	* 车辆位置刷新时间,单位s
+	*/
+private:
+	double m_freshtime = INVALID;
+	void set_freshtime(double t_freshtime);
+public:
+	double get_freshtime();
+
 };
 
 

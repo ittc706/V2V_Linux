@@ -5,17 +5,6 @@
 #include<map>
 
 class config_loader {
-	/*------------------静态------------------*/
-public:
-	/*
-	* 将string转为int
-	*/
-	static int string_to_int(std::string t_string);
-
-	/*
-	* 将string转为double
-	*/
-	static double string_to_double(std::string t_string);
 private:
 	/*
 	* 配置文件字符串

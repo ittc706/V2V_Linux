@@ -28,6 +28,14 @@
 
 using namespace std;
 
+void system_control::set_context(context* t_context) {
+	m_context = t_context;
+}
+
+context* system_control::get_context() {
+	return m_context;
+}
+
 system_control::system_control() {
 
 }
@@ -57,12 +65,6 @@ void system_control::process() {
 
 
 void system_control::initialize() {
-	//产生容器唯一单例
-	context::context_factory();
-
-	//为成员变量赋值
-	m_context = context::get_context();
-
 	//gtt单元初始化工作
 	m_context->get_gtt()->initialize();
 

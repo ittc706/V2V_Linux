@@ -3,12 +3,22 @@
 class context;
 
 class system_control {
+	/*------------------友元声明------------------*/
+	/*
+	* 将容器类作为友元，以提供依赖注入的权限
+	*/
+	friend class context;
+
 	/*------------------私有字段------------------*/
 private:
 	/*
 	* 持有容器的指针
 	*/
 	context* m_context = nullptr;
+	void set_context(context* t_context);
+public:
+	context* get_context();
+
 
 	/*----------------拷贝控制成员----------------*/
 public:

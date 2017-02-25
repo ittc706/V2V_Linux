@@ -58,6 +58,7 @@ receiver_event::receiver_event(sender_event* t_sender_event, int t_receiver_vue_
 	set_event_id(t_sender_event->get_event_id());
 	set_send_vue_id(t_sender_event->get_vue_id());
 	set_receive_vue_id(t_receiver_vue_id);
+	set_pattern_idx(t_sender_event->get_pattern_idx());
 
 	m_package_num = context::get_context()->get_tmc_config()->get_package_num();
 	m_bit_num_per_package = context::get_context()->get_tmc_config()->get_bit_num_per_package();

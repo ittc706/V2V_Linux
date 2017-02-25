@@ -11,6 +11,7 @@ class vue_physics {
 	*/
 	friend class vue;
 	friend class gtt_highspeed;
+	friend class gtt_urban;
 
 	/*----------------拷贝控制成员----------------*/
 private:
@@ -105,13 +106,13 @@ public:
 	int get_vue_id();
 
 	/*
-	* 车速，km/h
+	* 车速，m/s
 	*/
 private:
 	double m_speed = 0;
 
 	/*
-	* 速度方向,0代表向东，180代表向西
+	* 速度方向,0代表向东，180代表向西,90代表向北，-90代表向南
 	*/
 private:
 	double m_vangle = 0;
@@ -139,6 +140,11 @@ private:
 	*/
 private:
 	double m_rely = 0;
+	/*
+	* 所在街区id
+	*/
+private:
+	int m_road_id = -1;
 
 	/*
 	* 拥塞等级<Warn>:目前暂时设为0
@@ -153,4 +159,5 @@ public:
 	/*--------------------方法--------------------*/
 public:
 	void update_location();
+	void update_location_urban();
 };
