@@ -1,0 +1,26 @@
+<!--总带宽，单位M-->
+<total_bandwidth>10</total_bandwidth>
+
+
+<!--一个pattern的rb数量-->
+<rb_num_per_pattern>10</rb_num_per_pattern>
+
+
+<!--调制方式
+	2:QOSK
+	4:16QAM
+	6:64QAM-->
+<modulation_type>2</modulation_type>
+
+
+
+<!--信道编码码率-->
+<code_rate>0.5</code_rate>
+
+
+
+<!--丢包临界sinr-->
+<drop_sinr_boundary>1.99</drop_sinr_boundary>
+
+
+
