@@ -10,7 +10,7 @@ gtt* gtt::gtt_bind_by_mode(gtt_mode t_mode) {
 	if (t_mode == HIGHSPEED) {
 		return new gtt_highspeed();
 	}
-	else if (t_mode == URBAN) {
+	else {
 		return new gtt_urban();
 	}
 }

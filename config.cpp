@@ -133,7 +133,7 @@ gtt_config* gtt_config::gtt_config_bind_by_mode(gtt_mode t_mode) {
 	if (t_mode == HIGHSPEED) {
 		return new gtt_highspeed_config();
 	}
-	else if (t_mode == URBAN) {
+	else {
 		return new gtt_urban_config();
 	}
 }

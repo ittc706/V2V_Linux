@@ -2,6 +2,7 @@
 #include<vector>
 #include<list>
 
+class system_control;
 class config_loader;
 class global_control_config;
 class gtt_config;
