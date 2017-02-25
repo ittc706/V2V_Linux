@@ -3,7 +3,7 @@
 *
 *       Filename:  ConfigLoader.cpp
 *
-*    Description:  ÅäÖÃÎÄ¼ş¼ÓÔØÆ÷
+*    Description:  é…ç½®æ–‡ä»¶åŠ è½½å™¨
 *
 *        Version:  1.0
 *        Created:
@@ -34,7 +34,7 @@ int config_loader::string_to_int(std::string t_string) {
 }
 
 double config_loader::string_to_double(std::string t_string) {
-	//ÓÉÓÚdoubleÊµÔÚÌ«´óÁË£¬Ôİ²»´¦ÀíÒç³öÁË£¬¼´Ä¬ÈÏÊäÈëÎªÕı³£·¶Î§
+	//ç”±äºdoubleå®åœ¨å¤ªå¤§äº†ï¼Œæš‚ä¸å¤„ç†æº¢å‡ºäº†ï¼Œå³é»˜è®¤è¾“å…¥ä¸ºæ­£å¸¸èŒƒå›´
 	stringstream ss;
 	ss << t_string;
 	double res;
@@ -43,17 +43,17 @@ double config_loader::string_to_double(std::string t_string) {
 }
 
 void config_loader::resolv_config_file(string t_file) {
-	//Çå¿Õ»º´æ
+	//æ¸…ç©ºç¼“å­˜
 	m_content.clear();
 	m_tag_content_map.clear();
 
-	//¶ÁÈ¡´ı½âÎö×Ö·û´®
+	//è¯»å–å¾…è§£æå­—ç¬¦ä¸²
 	ifstream in(t_file);
 	istreambuf_iterator<char> if_it(in), if_eof;
 	m_content.assign(if_it, if_eof);
 	in.close();
 
-	//½âÎö£¬²¢´æ´¢
+	//è§£æï¼Œå¹¶å­˜å‚¨
 	regex r("<([^<>]*)>([^<>]*)</([^<>]*)>");
 	for (sregex_iterator it(m_content.begin(), m_content.end(), r), eof; it != eof; ++it) {
 		string leftTag = it->operator[](1);

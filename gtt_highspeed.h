@@ -5,7 +5,7 @@
 class gtt_highspeed_config;
 
 class gtt_highspeed:public gtt{
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	void initialize() override;
 

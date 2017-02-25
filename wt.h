@@ -7,112 +7,112 @@
 #include"matrix.h"
 
 class wt {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«contextÉèÎªÓÑÔª£¬ÈİÆ÷ÒªÎªÆä×¢ÈëÒÀÀµÏî
+	* å°†contextè®¾ä¸ºå‹å…ƒï¼Œå®¹å™¨è¦ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹
 	*/
 	friend class context;
 
-	/*---------------¾²Ì¬³ÉÔ±---------------*/
+	/*---------------é™æ€æˆå‘˜---------------*/
 private:
 	/*
-	* Ëæ»úÊıÒıÇæ£¬¸ÃÀà¹²Ïí
+	* éšæœºæ•°å¼•æ“ï¼Œè¯¥ç±»å…±äº«
 	*/
 	static std::default_random_engine s_engine;
 
 	/*
-	* ¹²Ïí×ÊÔ´
+	* å…±äº«èµ„æº
 	*/
 	static std::vector<double>* m_qpsk_mi;
 
 	/*
-	* ¹«¹²×ÊÔ´×ÊÔ´³õÊ¼»¯£¬½»ÓÉÈİÆ÷µ÷ÓÃ
+	* å…¬å…±èµ„æºèµ„æºåˆå§‹åŒ–ï¼Œäº¤ç”±å®¹å™¨è°ƒç”¨
 	*/
 	static void set_resource();
-	/*----------------×Ö¶Î------------------*/
+	/*----------------å­—æ®µ------------------*/
 private:
 	/*
-	* ·¢ËÍÌìÏßÊı
+	* å‘é€å¤©çº¿æ•°
 	*/
 	int m_nt = 1;
 
 	/*
-	* ½ÓÊÕÌìÏßÊı
+	* æ¥æ”¶å¤©çº¿æ•°
 	*/
 	int m_nr = 2;
 
 	/*
-	* ·¢Éä¹¦ÂÊ
+	* å‘å°„åŠŸç‡
 	*/
 	double m_pt;
 
 	/*
-	* ¾àÀëÂ·¾¶ËğºÄ
+	* è·ç¦»è·¯å¾„æŸè€—
 	*/
 	double m_ploss;
 
 	/*
-	* ¸ÉÈÅ¾àÀëÂ·¾¶ËğºÄ
+	* å¹²æ‰°è·ç¦»è·¯å¾„æŸè€—
 	*/
 	std::vector<double> m_inter_ploss;
 
 	/*
-	* ¸ßË¹ÔëÉùµÄ¹¦ÂÊ£¬µ¥Î»ÊÇmw
+	* é«˜æ–¯å™ªå£°çš„åŠŸç‡ï¼Œå•ä½æ˜¯mw
 	*/
 	double m_sigma;
 
 	/*
-	* Ã¿¸ö×ÓÔØ²¨ÓĞÒ»¸önr*ntµÄĞÅµÀ¾ØÕó
+	* æ¯ä¸ªå­è½½æ³¢æœ‰ä¸€ä¸ªnr*ntçš„ä¿¡é“çŸ©é˜µ
 	*/
 	matrix m_h;
 
 	/*
-	* Ã¿¸ö×ÓÔØ²¨ÓĞÒ»×énr*ntµÄ¸ÉÈÅĞÅµÀ¾ØÕó
-	* ÏÂ±êÎª¸ÉÈÅÔ´±àºÅ
+	* æ¯ä¸ªå­è½½æ³¢æœ‰ä¸€ç»„nr*ntçš„å¹²æ‰°ä¿¡é“çŸ©é˜µ
+	* ä¸‹æ ‡ä¸ºå¹²æ‰°æºç¼–å·
 	*/
 	std::vector<matrix> m_inter_h;
 
 	
 
-	/*------------------½Ó¿Ú------------------*/
+	/*------------------æ¥å£------------------*/
 public:
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯
+	* é»˜è®¤æ„é€ å‡½
 	*/
 	wt();
 
 	/*
-	* Îö¹¹º¯Êı
+	* ææ„å‡½æ•°
 	*/
 	~wt();
 
 	/*
-	* ¼ÆËãÔØ¸É±È
-	* t_send_vue_id:µ±Ç°Á´Â·µÄ·¢ËÍ¶Ë³µÁ¾id
-	* t_receive_vue_id:µ±Ç°Á´Â·µÄ½ÓÊÕ¶Ë³µÁ¾id
-	* t_subcarrier_interval:¸ÃÁ´Â·Õ¼ÓÃµÄ×ÓÔØ²¨Çø¼ä
-	* t_sending_vue_id_set:ÔÚ¸Ã×ÓÔØ²¨Çø¼ä½øĞĞ·¢ËÍµÄ³µÁ¾idÁĞ±í£¬°üÀ¨t_send_vue_id
+	* è®¡ç®—è½½å¹²æ¯”
+	* t_send_vue_id:å½“å‰é“¾è·¯çš„å‘é€ç«¯è½¦è¾†id
+	* t_receive_vue_id:å½“å‰é“¾è·¯çš„æ¥æ”¶ç«¯è½¦è¾†id
+	* t_subcarrier_interval:è¯¥é“¾è·¯å ç”¨çš„å­è½½æ³¢åŒºé—´
+	* t_sending_vue_id_set:åœ¨è¯¥å­è½½æ³¢åŒºé—´è¿›è¡Œå‘é€çš„è½¦è¾†idåˆ—è¡¨ï¼ŒåŒ…æ‹¬t_send_vue_id
 	*/
 	double calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pair<int, int>& t_subcarrier_interval, const std::set<int>& t_sending_vue_id_set);
 
 private:
 	/*
-	* ¶ÁÈ¡¶ÔÓ¦×ÓÔØ²¨µÄĞÅµÀÏìÓ¦¾ØÕó
+	* è¯»å–å¯¹åº”å­è½½æ³¢çš„ä¿¡é“å“åº”çŸ©é˜µ
 	*/
 	matrix read_h(int t_send_vue_id, int t_receive_vue_id, int t_subcarrier_idx);
 
 	/*
-	* ¶ÁÈ¡¶ÔÓ¦³µÁ¾ÔÚ¶ÔÓ¦×ÓÔØ²¨ÉÏµÄ¸ÉÈÅ¾ØÕóÊı×é
+	* è¯»å–å¯¹åº”è½¦è¾†åœ¨å¯¹åº”å­è½½æ³¢ä¸Šçš„å¹²æ‰°çŸ©é˜µæ•°ç»„
 	*/
 	std::vector<matrix> read_inter_h(const std::set<int>& t_sending_vue_id_set, int t_send_vue_id, int t_receive_vue_id, int t_subcarrier_idx);
 
 	/*
-	* ¶ş·Ö·¨²éÕÒËã·¨
+	* äºŒåˆ†æ³•æŸ¥æ‰¾ç®—æ³•
 	*/
 	int closest(std::vector<double> t_vec, double t_target);
 
 	/*
-	* ²é±í
+	* æŸ¥è¡¨
 	*/
 	double get_mutual_information(std::vector<double> t_vec, int t_index);
 };

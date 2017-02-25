@@ -3,7 +3,7 @@
 *
 *       Filename:  system_control.cpp
 *
-*    Description:  ÏµÍ³ÀàÊµÏÖ
+*    Description:  ç³»ç»Ÿç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -37,7 +37,7 @@ system_control::~system_control() {
 }
 
 void system_control::process() {
-	initialize();//³õÊ¼»¯
+	initialize();//åˆå§‹åŒ–
 
 	while (m_context->get_tti() < m_context->get_global_control_config()->get_ntti()) {
 		cout << "TTI: " << m_context->get_tti() << endl;
@@ -57,19 +57,19 @@ void system_control::process() {
 
 
 void system_control::initialize() {
-	//²úÉúÈİÆ÷Î¨Ò»µ¥Àı
+	//äº§ç”Ÿå®¹å™¨å”¯ä¸€å•ä¾‹
 	context::context_factory();
 
-	//Îª³ÉÔ±±äÁ¿¸³Öµ
+	//ä¸ºæˆå‘˜å˜é‡èµ‹å€¼
 	m_context = context::get_context();
 
-	//gttµ¥Ôª³õÊ¼»¯¹¤×÷
+	//gttå•å…ƒåˆå§‹åŒ–å·¥ä½œ
 	m_context->get_gtt()->initialize();
 
-	//rrmµ¥Ôª³õÊ¼»¯¹¤×÷
+	//rrmå•å…ƒåˆå§‹åŒ–å·¥ä½œ
 	m_context->get_rrm()->initialize();
 
-	//tmcµ¥Ôª³õÊ¼»¯¹¤×÷
+	//tmcå•å…ƒåˆå§‹åŒ–å·¥ä½œ
 	m_context->get_tmc()->initialize();
 }
 

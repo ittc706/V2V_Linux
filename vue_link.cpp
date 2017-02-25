@@ -3,7 +3,7 @@
 *
 *       Filename:  vue_link.cpp
 *
-*    Description:  ³µÁ¾ÀàµÄÁ´Â·²ã²¿·ÖÊµÏÖ
+*    Description:  è½¦è¾†ç±»çš„é“¾è·¯å±‚éƒ¨åˆ†å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -67,11 +67,11 @@ void vue_link::receive() {
 
 		double factor = __context->get_rrm_config()->get_modulation_type()* __context->get_rrm_config()->get_code_rate();
 
-		//¸Ã±àÂë·½Ê½ÏÂ£¬¸ÃpatternÔÚÒ»¸ötti×î¶à¿É´«ÊäµÄÓĞĞ§ĞÅÏ¢bitÊıÁ¿
+		//è¯¥ç¼–ç æ–¹å¼ä¸‹ï¼Œè¯¥patternåœ¨ä¸€ä¸ªttiæœ€å¤šå¯ä¼ è¾“çš„æœ‰æ•ˆä¿¡æ¯bitæ•°é‡
 		int transimit_max_bit_num= (int)((double)(__context->get_rrm_config()->get_rb_num_per_pattern() * rrm_config::s_BIT_NUM_PER_RB)* factor);
 		__cur_event->transimit(transimit_max_bit_num);
 
-		//¼ÆËãSINR
+		//è®¡ç®—SINR
 		pair<int, int> subcarrier_interval = get_subcarrier_interval(__cur_event->get_pattern_idx());
 		wt* __wt = context::get_context()->get_wt();
 		
@@ -82,7 +82,7 @@ void vue_link::receive() {
 			vue_network::s_vue_id_per_pattern[__cur_event->get_pattern_idx()]);
 
 		if (sinr < __context->get_rrm_config()->get_drop_sinr_boundary()) {
-			__cur_event->set_is_loss();//¼ÇÂ¼¶ª°ü
+			__cur_event->set_is_loss();//è®°å½•ä¸¢åŒ…
 		}
 
 		if (__cur_event->get_is_finished()) {

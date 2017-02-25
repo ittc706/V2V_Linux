@@ -3,7 +3,7 @@
 *
 *       Filename:  event.cpp
 *
-*    Description:  ÊÂ¼şÀàÊµÏÖ
+*    Description:  äº‹ä»¶ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:

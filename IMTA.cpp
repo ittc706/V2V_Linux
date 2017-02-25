@@ -297,7 +297,7 @@ imta::imta() {
 	m_TxSlantAngle = nullptr;
 	m_RxAntSpacing = nullptr;
 	m_RxSlantAngle = nullptr;
-	//FFT≤Œ ˝≥ı ºªØ
+	//FFTÂèÇÊï∞ÂàùÂßãÂåñ
 	m_FFTIndex = nullptr;
 }
 
@@ -342,7 +342,7 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 	m_Velocityj = t_fVelocityj / 3.6f * t_fFrequency * s_PI2 / s_C;
 	m_VAnglei = t_fVAnglei * s_DEGREE_TO_PI;
 	m_VAnglej = t_fVAnglej * s_DEGREE_TO_PI;
-	//FFTœ‡πÿ
+	//FFTÁõ∏ÂÖ≥
 	m_FFTNum = 1;
 	m_FFTOrder = 0;
 	m_HNum = 666;
@@ -371,7 +371,7 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 	case Los:
 		if (3 < t_eLocation.distance&&t_eLocation.distance < fDistanceBP)
 		{
-			m_PLSF = 22.7f * log10(t_eLocation.distance) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);//◊™ªªŒ™GHz
+			m_PLSF = 22.7f * log10(t_eLocation.distance) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);//ËΩ¨Êç¢‰∏∫GHz
 		}
 		else
 		{
@@ -530,7 +530,7 @@ bool imta::enable(bool *t_pbEnable)
 	{
 		pfPathDelay[byTempPath] = m_DS * log(pfPathDelay[byTempPath]);
 	}
-	sortBubble(pfPathDelay, m_PathNum, false, false); //¥”–°µΩ¥Û
+	sortBubble(pfPathDelay, m_PathNum, false, false); //‰ªéÂ∞èÂà∞Â§ß
 	for (int byTempPath = 0; byTempPath != m_PathNum; ++ byTempPath)
 	{
 		pfPathDelay[m_PathNum - 1 - byTempPath] -= pfPathDelay[0];
@@ -553,7 +553,7 @@ bool imta::enable(bool *t_pbEnable)
 	    
 	randomUniform(pfXAoD, m_PathNum, 1.0f, -1.0f, true);
 	randomUniform(pfXAoA, m_PathNum, 1.0f, -1.0f, true);
-	randomGaussian(pfAoD, m_PathNum, 0.0f, m_AoD / 7.0f);//‘⁄winner 2  «≥˝“‘5.0f
+	randomGaussian(pfAoD, m_PathNum, 0.0f, m_AoD / 7.0f);//Âú®winner 2 ÊòØÈô§‰ª•5.0f
 	randomGaussian(pfAoA, m_PathNum, 0.0f, m_AoA / 7.0f);
 		
 
@@ -678,7 +678,7 @@ void imta::calculate(double* t_HAfterFFT, double t_fT/*s */, double *t_pfTemp, d
 							t_pfTemp[byTempTxAnt * m_RxAntNum * m_PathNum * s_SubPathNum + byTempRxAnt * m_PathNum * s_SubPathNum + byTempPath * s_SubPathNum + byTempSubPath] =
 						            m_TxAntSpacing[byTempTxAnt] * m_SinAoD[byTempPath * s_SubPathNum + byTempSubPath] +
 							         m_RxAntSpacing[byTempRxAnt] * m_SinAoA[byTempPath * s_SubPathNum + byTempSubPath] +
-							         m_CosAoA[byTempPath * s_SubPathNum + byTempSubPath] * t_fT;//t_fTŒ™ ±º‰
+							         m_CosAoA[byTempPath * s_SubPathNum + byTempSubPath] * t_fT;//t_fT‰∏∫Êó∂Èó¥
 						
 							t_pfCos[byTempTxAnt * m_RxAntNum * m_PathNum * s_SubPathNum + byTempRxAnt * m_PathNum * s_SubPathNum + byTempPath * s_SubPathNum + byTempSubPath] =
 								   cos(t_pfTemp[byTempTxAnt * m_RxAntNum * m_PathNum * s_SubPathNum + byTempRxAnt * m_PathNum * s_SubPathNum + byTempPath * s_SubPathNum + byTempSubPath]*2*s_PI*s_C/s_FC);
@@ -722,7 +722,7 @@ void imta::calculate(double* t_HAfterFFT, double t_fT/*s */, double *t_pfTemp, d
 		}
 
 
-		//¿˚”√fftwÃ·π©µƒ∫Ø ˝Ω¯––fft±‰ªª
+		//Âà©Áî®fftwÊèê‰æõÁöÑÂáΩÊï∞ËøõË°åfftÂèòÊç¢
 		fftw_complex *in1, *out1, *in2, *out2;
 		fftw_plan ptemp1, ptemp2;
 		in1 = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * m_FFTNum);

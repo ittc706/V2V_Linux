@@ -8,50 +8,50 @@ enum event_type {
 
 
 class sender_event {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«tmcÉèÎªÓÑÔª£¬ÊÂ¼şÏà¹ØµÄ×Ö¶ÎĞèÒªÍ¨¹ıtmc¶ÔÏóÀ´ÅäÖÃ
+	* å°†tmcè®¾ä¸ºå‹å…ƒï¼Œäº‹ä»¶ç›¸å…³çš„å­—æ®µéœ€è¦é€šè¿‡tmcå¯¹è±¡æ¥é…ç½®
 	*/
 	friend class tmc;
-	/*------------------¾²Ì¬³ÉÔ±------------------*/
+	/*------------------é™æ€æˆå‘˜------------------*/
 private:
 	static int s_event_count;
 
-	/*----------------¿½±´¿ØÖÆ³ÉÔ±----------------*/
+	/*----------------æ‹·è´æ§åˆ¶æˆå‘˜----------------*/
 public:
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êı
+	* é»˜è®¤æ„é€ å‡½æ•°
 	*/
 	sender_event();
 
 	/*
-	* Îö¹¹º¯Êı£¬¸ºÔğÇåÀí×ÊÔ´
+	* ææ„å‡½æ•°ï¼Œè´Ÿè´£æ¸…ç†èµ„æº
 	*/
 	~sender_event();
 
 	/*
-	* ½«¿½±´¹¹Ôìº¯Êı¶¨ÒåÎªÉ¾³ı
+	* å°†æ‹·è´æ„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	sender_event(const sender_event& t_sender_event) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¹¹Ôìº¯Êı¶¨ÒåÎªÉ¾³ı
+	* å°†ç§»åŠ¨æ„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	sender_event(sender_event&& t_sender_event) = delete;
 
 	/*
-	* ½«¿½±´¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ı
+	* å°†æ‹·è´èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	sender_event& operator=(const sender_event& t_sender_event) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ı
+	* å°†ç§»åŠ¨èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	sender_event& operator=(sender_event&& t_sender_event) = delete;
 	
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* ÊÂ¼şid
+	* äº‹ä»¶id
 	*/
 private:
 	int m_event_id = s_event_count++;
@@ -59,7 +59,7 @@ public:
 	int get_event_id();
 
 	/*
-	* ³µÁ¾id
+	* è½¦è¾†id
 	*/
 private:
 	int m_vue_id;
@@ -68,58 +68,58 @@ public:
 	int get_vue_id();
 
 	/*
-	* Õ¼ÓÃÆµ¶Î
+	* å ç”¨é¢‘æ®µ
 	*/
 private:
 	int m_pattern_idx;
 public:
 	void set_pattern_idx(int t_pattern_idx);
 	int get_pattern_idx();
-	/*--------------------·½·¨--------------------*/
+	/*--------------------æ–¹æ³•--------------------*/
 };
 
 
 class receiver_event {
-	/*----------------¿½±´¿ØÖÆ³ÉÔ±----------------*/
+	/*----------------æ‹·è´æ§åˆ¶æˆå‘˜----------------*/
 public:
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êı
+	* é»˜è®¤æ„é€ å‡½æ•°
 	*/
 	receiver_event() = delete;
 
 	/*
-	* ¹¹Ôìº¯Êı
+	* æ„é€ å‡½æ•°
 	*/
 	receiver_event(sender_event* t_sender_event, int t_receiver_vue_id);
 
 	/*
-	* Îö¹¹º¯Êı£¬¸ºÔğÇåÀí×ÊÔ´
+	* ææ„å‡½æ•°ï¼Œè´Ÿè´£æ¸…ç†èµ„æº
 	*/
 	~receiver_event();
 
 	/*
-	* ½«¿½±´¹¹Ôìº¯Êı¶¨ÒåÎªÉ¾³ı
+	* å°†æ‹·è´æ„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	receiver_event(const receiver_event& t_receiver_event) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¹¹Ôìº¯Êı¶¨ÒåÎªÉ¾³ı
+	* å°†ç§»åŠ¨æ„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	receiver_event(receiver_event&& t_receiver_event) = delete;
 
 	/*
-	* ½«¿½±´¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ı
+	* å°†æ‹·è´èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	receiver_event& operator=(const receiver_event& t_receiver_event) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ı
+	* å°†ç§»åŠ¨èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	receiver_event& operator=(receiver_event&& t_receiver_event) = delete;
 
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* ÊÂ¼şid£¬Óë·¢ËÍÊÂ¼şÏàÍ¬
+	* äº‹ä»¶idï¼Œä¸å‘é€äº‹ä»¶ç›¸åŒ
 	*/
 private:
 	int m_event_id;
@@ -128,7 +128,7 @@ public:
 	int get_event_id();
 
 	/*
-	* ·¢ËÍ³µÁ¾id
+	* å‘é€è½¦è¾†id
 	*/
 private:
 	int m_send_vue_id;
@@ -137,7 +137,7 @@ public:
 	int get_send_vue_id();
 
 	/*
-	* ½ÓÊÕ³µÁ¾id
+	* æ¥æ”¶è½¦è¾†id
 	*/
 private:
 	int m_receive_vue_id;
@@ -146,7 +146,7 @@ public:
 	int get_receive_vue_id();
 
 	/*
-	* ÊÕ·¢³µÁ¾Ö®¼äµÄ¾àÀë
+	* æ”¶å‘è½¦è¾†ä¹‹é—´çš„è·ç¦»
 	*/
 private:
 	double m_distance;
@@ -155,7 +155,7 @@ public:
 	double get_distance();
 
 	/*
-	* Õ¼ÓÃÆµ¶Î
+	* å ç”¨é¢‘æ®µ
 	*/
 private:
 	int m_pattern_idx;
@@ -164,31 +164,31 @@ public:
 	int get_pattern_idx();
 
 	/*
-	* Êı¾İ°ü×ÜÊı
+	* æ•°æ®åŒ…æ€»æ•°
 	*/
 private:
 	int m_package_num;
 
 	/*
-	* Ã¿¸ö°üµÄbitÊıÁ¿
+	* æ¯ä¸ªåŒ…çš„bitæ•°é‡
 	*/
 private:
 	std::vector<int> m_bit_num_per_package;
 
 	/*
-	* ±ê¼Ç¼´½«Òª´«ÊäµÄbitËùÔÚµÄ°üĞòºÅ
+	* æ ‡è®°å³å°†è¦ä¼ è¾“çš„bitæ‰€åœ¨çš„åŒ…åºå·
 	*/
 private:
 	int m_package_idx = 0;
 
 	/*
-	* µ±Ç°°üÊ£ÓàbitÊıÄ¿
+	* å½“å‰åŒ…å‰©ä½™bitæ•°ç›®
 	*/
 private:
 	int m_remain_bit_num;
 
 	/*
-	* ±ê¼ÇÊÇ·ñ´«ÊäÍê±Ï(ÎŞÂÛÊÇ·ñ·¢Éú¶ª°ü)
+	* æ ‡è®°æ˜¯å¦ä¼ è¾“å®Œæ¯•(æ— è®ºæ˜¯å¦å‘ç”Ÿä¸¢åŒ…)
 	*/
 private:
 	bool m_is_finished = false;
@@ -196,7 +196,7 @@ public:
 	bool get_is_finished();
 
 	/*
-	* ±ê¼ÇÊÇ·ñ·¢Éú¶ª°ü
+	* æ ‡è®°æ˜¯å¦å‘ç”Ÿä¸¢åŒ…
 	*/
 private:
 	bool m_is_loss = false;
@@ -204,6 +204,6 @@ public:
 	void set_is_loss();
 	bool get_is_loss();
 
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 	void transimit(int t_transimit_max_bit_num);
 };

@@ -3,7 +3,7 @@
 *
 *       Filename:  tmc.cpp
 *
-*    Description:  ÒµÎñÄ£ĞÍÓë¿ØÖÆÀàÊµÏÖ
+*    Description:  ä¸šåŠ¡æ¨¡å‹ä¸æ§åˆ¶ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -49,14 +49,14 @@ tmc_config* tmc::get_config() {
 void tmc::initialize() {
 	context* __context = context::get_context();
 
-	__context->set_tti_event_list();//³õÊ¼»¯tti_event_list³ÉÔ±
+	__context->set_tti_event_list();//åˆå§‹åŒ–tti_event_listæˆå‘˜
 
 	default_random_engine e;
 	for (int vue_id = 0; vue_id < __context->get_gtt()->get_vue_num(); vue_id++) {
-		//³õÊ¼»¯³µÁ¾ÀàµÄperiod_event_next_trigger_tti×Ö¶Î
+		//åˆå§‹åŒ–è½¦è¾†ç±»çš„period_event_next_trigger_ttiå­—æ®µ
 		__context->get_vue_array()[vue_id].get_network_level()->set_periodic_event_next_trigger_tti(__context->get_tmc_config()->get_congestion_level_num());
 		
-		//ÎªÃ¿Á¾³µÅäÖÃ³õÊ¼»¯ÊÂ¼ş´¥·¢Ê±¿Ì
+		//ä¸ºæ¯è¾†è½¦é…ç½®åˆå§‹åŒ–äº‹ä»¶è§¦å‘æ—¶åˆ»
 		for (int congestion_level = 0; congestion_level < __context->get_tmc_config()->get_congestion_level_num(); congestion_level++) {
 			uniform_int_distribution<int> u(0, get_config()->get_periodic_event_period()[congestion_level]);
 			__context->get_vue_array()[vue_id].get_network_level()->m_periodic_event_next_trigger_tti[congestion_level] = u(e);
@@ -69,7 +69,7 @@ void tmc::event_trigger() {
 	context* __context = context::get_context();
 	for (int vue_id = 0; vue_id < __context->get_gtt()->get_vue_num(); vue_id++) {
 		int tti = __context->get_tti();
-		//<Warn>:ÏÂÃæÕâ¾ä»áµ¼ÖÂ£¬ÈôÓµÈûµÈ¼¶¸Ä±äÇ°ºó£¬³µÁ¾ÓÀÔ¶²»´¥·¢ÊÂ¼şÁË
+		//<Warn>:ä¸‹é¢è¿™å¥ä¼šå¯¼è‡´ï¼Œè‹¥æ‹¥å¡ç­‰çº§æ”¹å˜å‰åï¼Œè½¦è¾†æ°¸è¿œä¸è§¦å‘äº‹ä»¶äº†
 		int congestion_level = __context->get_vue_array()[vue_id].get_physics_level()->get_congestion_level();
 		if (__context->get_vue_array()[vue_id].get_network_level()->get_periodic_event_next_trigger_tti()[congestion_level] != tti)continue;
 		
@@ -79,7 +79,7 @@ void tmc::event_trigger() {
 		__context->get_event_array().push_back(__sender_event);
 		__context->get_tti_event_list()[tti].push_back(__sender_event);
 
-		//½«ÊÂ¼ş×´Ì¬±ê¼ÇÎª´ı·¢×´Ì¬
+		//å°†äº‹ä»¶çŠ¶æ€æ ‡è®°ä¸ºå¾…å‘çŠ¶æ€
 		__context->get_vue_array()[vue_id].get_network_level()->add_sender_event(__sender_event);
 
 		for (int congestion_level = 0; congestion_level < __context->get_tmc_config()->get_congestion_level_num(); congestion_level++) {

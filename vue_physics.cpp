@@ -3,7 +3,7 @@
 *
 *       Filename:  vue_physics.cpp
 *
-*    Description:  ³µÁ¾ÀàµÄÎïÀí²ã²¿·ÖÊµÏÖ
+*    Description:  è½¦è¾†ç±»çš„ç‰©ç†å±‚éƒ¨åˆ†å®ç°
 *
 *        Version:  1.0
 *        Created:

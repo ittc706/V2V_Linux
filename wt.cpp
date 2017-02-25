@@ -3,7 +3,7 @@
 *
 *       Filename:  wt.cpp
 *
-*    Description:  ¸ßËÙ³¡¾°ÀàÊµÏÖ
+*    Description:  é«˜é€Ÿåœºæ™¯ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -66,13 +66,13 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pa
 		m_inter_ploss.push_back(vue_physics::get_pl(t_receive_vue_id, inter_vue_id));
 	}
 
-	/*****ÇóÃ¿¸ö×ÓÔØ²¨ÉÏµÄĞÅÔë±È****/
-	vector<double> sinr(subcarrier_num);//Ã¿¸ö×ÓÔØ²¨ÉÏµÄĞÅÔë±È£¬Î¬¶ÈÎªntµÄÏòÁ¿
+	/*****æ±‚æ¯ä¸ªå­è½½æ³¢ä¸Šçš„ä¿¡å™ªæ¯”****/
+	vector<double> sinr(subcarrier_num);//æ¯ä¸ªå­è½½æ³¢ä¸Šçš„ä¿¡å™ªæ¯”ï¼Œç»´åº¦ä¸ºntçš„å‘é‡
 	for (int subcarrier_idx = t_subcarrier_interval.first; subcarrier_idx <= t_subcarrier_interval.second; subcarrier_idx++) {
-		int relative_subcarrier_idx = subcarrier_idx - t_subcarrier_interval.first;//Ïà¶ÔµÄ×ÓÔØ²¨ÏÂ±ê
+		int relative_subcarrier_idx = subcarrier_idx - t_subcarrier_interval.first;//ç›¸å¯¹çš„å­è½½æ³¢ä¸‹æ ‡
 
-		m_h = read_h(t_send_vue_id, t_receive_vue_id, subcarrier_idx);//¶ÁÈëµ±Ç°×ÓÔØ²¨µÄĞÅµÀÏìÓ¦¾ØÕó
-		m_inter_h = read_inter_h(t_sending_vue_id_set, t_send_vue_id,t_receive_vue_id,subcarrier_idx);//¶ÁÈëµ±Ç°×ÓÔØ²¨¸ÉÈÅÏàÓ¦¾ØÕóÊı×é
+		m_h = read_h(t_send_vue_id, t_receive_vue_id, subcarrier_idx);//è¯»å…¥å½“å‰å­è½½æ³¢çš„ä¿¡é“å“åº”çŸ©é˜µ
+		m_inter_h = read_inter_h(t_sending_vue_id_set, t_send_vue_id,t_receive_vue_id,subcarrier_idx);//è¯»å…¥å½“å‰å­è½½æ³¢å¹²æ‰°ç›¸åº”çŸ©é˜µæ•°ç»„
 
 		double h_sum1 = 0;
 		for (int r = 0; r < m_nr; r++) {
@@ -96,7 +96,7 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pa
 		sinr[relative_subcarrier_idx] = 10 * log10(molecule / denominator);
 	}
 
-	//»¥ĞÅÏ¢·½·¨ÇóÓĞĞ§ĞÅÔë±Èsinreff
+	//äº’ä¿¡æ¯æ–¹æ³•æ±‚æœ‰æ•ˆä¿¡å™ªæ¯”sinreff
 
 	double sum_mi = 0, ave_mi = 0;
 	double sinreff = 0;

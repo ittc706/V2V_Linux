@@ -2,7 +2,7 @@
 #include<math.h>
 #include"fftw3.h"
 
-enum location_type { //Î»ÖÃÀàĞÍ 
+enum location_type { //ä½ç½®ç±»å‹ 
 	Los,
 	Nlos,
 	None
@@ -11,12 +11,12 @@ enum location_type { //Î»ÖÃÀàĞÍ
 struct location {
 	bool manhattan;
 	location_type locationType;
-	double distance; //µ¥Î»:m
-	double distance1; //µ¥Î»:m
-	double distance2; //µ¥Î»:m
-	double eNBAntH; //µ¥Î»:m
-	double VeUEAntH; //µ¥Î»:m
-	double RSUAntH;//µ¥Î»£ºm
+	double distance; //å•ä½:m
+	double distance1; //å•ä½:m
+	double distance2; //å•ä½:m
+	double eNBAntH; //å•ä½:m
+	double VeUEAntH; //å•ä½:m
+	double RSUAntH;//å•ä½ï¼šm
 	double posCor[5];
 
 };
@@ -35,10 +35,10 @@ struct antenna {
 };
 
 /*===========================================
-*               imtaĞÅµÀÄ£ĞÍ
+*               imtaä¿¡é“æ¨¡å‹
 * ==========================================*/
 class imta {
-	/*------------------¾²Ì¬------------------*/
+	/*------------------é™æ€------------------*/
 public:
 	static const double s_PI;
 	static const double s_PINeg;
@@ -50,10 +50,10 @@ public:
 	static const double s_C;
 	static const double s_FC;
 public:
-	//Â·¾¶Êı
+	//è·¯å¾„æ•°
 	static const int s_SubPathNum = 20;
 	static const int s_MidPathNum = 3;
-	//Ïà¹ØÏµÊı¾ØÕó
+	//ç›¸å…³ç³»æ•°çŸ©é˜µ
 	static const double s_ConstantInHLoS[25];
 	static const double s_ConstantInHNLoS[25];
 	static const double s_ConstantUMiLoS[25];
@@ -65,7 +65,7 @@ public:
 	static const double s_ConstantUMaNLoS[25];
 	static const double s_ConstantRMaLoS[25];
 	static const double s_ConstantRMaNLoS[25];
-	//½Ç¶ÈÆ«ÒÆÊı×é
+	//è§’åº¦åç§»æ•°ç»„
 	static const double s_AngleOffset[s_SubPathNum];
 	static const double s_MidPathDelayOffset[s_MidPathNum];
 	static const int s_MidPathIndex[s_SubPathNum];
@@ -75,8 +75,8 @@ public:
 	static void sortBubble(double *t_pfArray, int t_wNumber, bool t_bFlagDirection, bool t_bFlagFabs);
 	static void selectMax(double *t_pfArray, int t_byNumber, int *t_pbyFirst, int *t_pbySecond);
 
-	/*------------------Óò------------------*/
-	//ĞÅµÀËùĞè»ù±¾³£Á¿
+	/*------------------åŸŸ------------------*/
+	//ä¿¡é“æ‰€éœ€åŸºæœ¬å¸¸é‡
 	double m_AntGain;
 	double m_MaxAttenu; // dBm
 	int m_TxAntNum;
@@ -88,7 +88,7 @@ public:
 	double m_TxAngle;
 	double m_RxAngle;
 
-	//ĞÅµÀËùĞèÅäÖÃ³£Á¿
+	//ä¿¡é“æ‰€éœ€é…ç½®å¸¸é‡
 	int m_PathNum;
 	double m_Velocityi;
 	double m_Velocityj;
@@ -115,7 +115,7 @@ public:
 
 	int m_PathFirst;
 	int m_PathSecond;
-	//ĞÅµÀËùĞè´æ´¢³£Á¿
+	//ä¿¡é“æ‰€éœ€å­˜å‚¨å¸¸é‡
 	double *m_Gain;
 	double *m_SinAoD;
 	double *m_CosAoD;
@@ -129,7 +129,7 @@ public:
 	double m_CosAoALoS;
 	double *m_PhaseLoS;
 
-	//FFTËùÓÃ±äÁ¿
+	//FFTæ‰€ç”¨å˜é‡
 	int m_FFTNum;
 	int m_FFTOrder;
 	double m_FFTTime;

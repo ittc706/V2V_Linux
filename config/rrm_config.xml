@@ -1,12 +1,12 @@
-<!--总带宽，单位M-->
+<!--鎬诲甫瀹斤紝鍗曚綅M-->
 <total_bandwidth>10</total_bandwidth>
 
 
-<!--一个pattern的rb数量-->
+<!--涓�涓猵attern鐨剅b鏁伴噺-->
 <rb_num_per_pattern>10</rb_num_per_pattern>
 
 
-<!--调制方式
+<!--璋冨埗鏂瑰紡
 	2:QOSK
 	4:16QAM
 	6:64QAM-->
@@ -14,12 +14,12 @@
 
 
 
-<!--信道编码码率-->
+<!--淇￠亾缂栫爜鐮佺巼-->
 <code_rate>0.5</code_rate>
 
 
 
-<!--丢包临界sinr-->
+<!--涓㈠寘涓寸晫sinr-->
 <drop_sinr_boundary>1.99</drop_sinr_boundary>
 
 

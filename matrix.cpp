@@ -3,7 +3,7 @@
 *
 *       Filename:  matrix.cpp
 *
-*    Description:  ¾ØÕóÀàÊµÏÖ
+*    Description:  çŸ©é˜µç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -45,7 +45,7 @@ row_vector::row_vector() :
 
 row_vector::row_vector(int t_col) :
 	m_col(t_col) {
-	if (m_col < 0) throw logic_error("ÏòÁ¿µÄÎ¬¶È±ØĞëÊÇ·Ç¸ºµÄ");
+	if (m_col < 0) throw logic_error("å‘é‡çš„ç»´åº¦å¿…é¡»æ˜¯éè´Ÿçš„");
 	m_row_vector = new complex[m_col]();
 }
 
@@ -59,8 +59,8 @@ row_vector::row_vector(const row_vector& t_row_vector) :
 
 row_vector::row_vector(row_vector&& t_row_vector) noexcept
 	:m_col(t_row_vector.m_col), m_row_vector(t_row_vector.m_row_vector) {
-	//ÔÚ³õÊ¼»¯ÁĞ±í½Ó¹Ü×ÊÔ´
-	t_row_vector.m_row_vector = nullptr;//ÖÃ¿ÕÖ¸Õë
+	//åœ¨åˆå§‹åŒ–åˆ—è¡¨æ¥ç®¡èµ„æº
+	t_row_vector.m_row_vector = nullptr;//ç½®ç©ºæŒ‡é’ˆ
 }
 
 
@@ -74,7 +74,7 @@ row_vector::row_vector(const initializer_list<complex> t_il) {
 
 
 row_vector& row_vector::operator=(const row_vector& t_row_vector) {
-	if (m_row_vector != t_row_vector.m_row_vector) {//¼ì²é×Ô¸³ÖµµÄÕıÈ·ĞÔ
+	if (m_row_vector != t_row_vector.m_row_vector) {//æ£€æŸ¥è‡ªèµ‹å€¼çš„æ­£ç¡®æ€§
 		free();
 		m_col = t_row_vector.m_col;
 		m_row_vector = new complex[m_col]();
@@ -85,11 +85,11 @@ row_vector& row_vector::operator=(const row_vector& t_row_vector) {
 
 
 row_vector& row_vector::operator=(row_vector&& t_row_vector) noexcept {
-	if (m_row_vector != t_row_vector.m_row_vector) {//¼ì²é×Ô¸³ÖµµÄÕıÈ·ĞÔ
-		free();//ÇåÀí×ÊÔ´
+	if (m_row_vector != t_row_vector.m_row_vector) {//æ£€æŸ¥è‡ªèµ‹å€¼çš„æ­£ç¡®æ€§
+		free();//æ¸…ç†èµ„æº
 		m_col = t_row_vector.m_col;
-		m_row_vector = t_row_vector.m_row_vector;//½Ó¹Ü×ÊÔ´
-		t_row_vector.m_row_vector = nullptr;//ÖÃ¿ÕÖ¸Õë
+		m_row_vector = t_row_vector.m_row_vector;//æ¥ç®¡èµ„æº
+		t_row_vector.m_row_vector = nullptr;//ç½®ç©ºæŒ‡é’ˆ
 	}
 	return *this;
 }
@@ -106,7 +106,7 @@ const complex& row_vector::operator[](int t_pos) const {
 
 
 void row_vector::resize(int t_Size) {
-	if (t_Size < 0) throw logic_error("ÏòÁ¿µÄÎ¬¶È±ØĞëÊÇ·Ç¸ºµÄ");
+	if (t_Size < 0) throw logic_error("å‘é‡çš„ç»´åº¦å¿…é¡»æ˜¯éè´Ÿçš„");
 	int preCol = m_col;
 	complex* preRowVector = m_row_vector;
 	m_col = t_Size;
@@ -114,10 +114,10 @@ void row_vector::resize(int t_Size) {
 	int copyCol = m_col < preCol ? m_col : preCol;
 	memcpy(m_row_vector, preRowVector, copyCol * sizeof(complex));
 	/*-----------------------ATTENTION-----------------------
-	* ÕâÀï²»ÄÜµ÷ÓÃfree()À´Îö¹¹Ô­À´µÄ×ÊÔ´
-	* free()»áÊÍ·ÅthisÖ¸ÏòµÄ¶ÔÏóµÄrowVectorÖ¸Õë
-	* ¶ø´ËÊ±£¬¸ÃrowVectorÖ¸ÕëÒÑ¾­Ö¸ÏòÁËĞÂµÄÇøÓò
-	* ±ØĞëÊÖ¶¯É¾³ıÖ®Ç°µÄÖ¸Õë
+	* è¿™é‡Œä¸èƒ½è°ƒç”¨free()æ¥ææ„åŸæ¥çš„èµ„æº
+	* free()ä¼šé‡Šæ”¾thisæŒ‡å‘çš„å¯¹è±¡çš„rowVectoræŒ‡é’ˆ
+	* è€Œæ­¤æ—¶ï¼Œè¯¥rowVectoræŒ‡é’ˆå·²ç»æŒ‡å‘äº†æ–°çš„åŒºåŸŸ
+	* å¿…é¡»æ‰‹åŠ¨åˆ é™¤ä¹‹å‰çš„æŒ‡é’ˆ
 	*------------------------ATTENTION-----------------------*/
 	memory_clean::safe_delete(preRowVector, true);
 }
@@ -136,7 +136,7 @@ void row_vector::print(ostream& t_out) {
 	t_out << toString();
 }
 
-//ĞĞÏòÁ¿µ¥Ä¿È¡·´ÔËËã·û
+//è¡Œå‘é‡å•ç›®å–åè¿ç®—ç¬¦
 row_vector operator-(const row_vector& t_row_vector) {
 	row_vector res(t_row_vector.m_col);
 	for (int c = 0; c < t_row_vector.m_col; c++) {
@@ -146,9 +146,9 @@ row_vector operator-(const row_vector& t_row_vector) {
 }
 
 
-//ĞĞÏòÁ¿ÓëĞĞÏòÁ¿µÄÔËËã
+//è¡Œå‘é‡ä¸è¡Œå‘é‡çš„è¿ç®—
 row_vector operator+(const row_vector& t_row_vector1, const row_vector& t_row_vector2) {
-	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("ÏòÁ¿Î¬¶È²»Í¬£¬ÎŞ·¨Ïà¼Ó");
+	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("å‘é‡ç»´åº¦ä¸åŒï¼Œæ— æ³•ç›¸åŠ ");
 	row_vector res(t_row_vector1.m_col);
 	for (int c = 0; c < t_row_vector1.m_col; c++) {
 		res[c] = t_row_vector1[c] + t_row_vector2[c];
@@ -157,9 +157,9 @@ row_vector operator+(const row_vector& t_row_vector1, const row_vector& t_row_ve
 }
 
 
-//ĞĞÏòÁ¿ÓëĞĞÏòÁ¿µÄÔËËã
+//è¡Œå‘é‡ä¸è¡Œå‘é‡çš„è¿ç®—
 row_vector operator-(const row_vector& t_row_vector1, const row_vector& t_row_vector2) {
-	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("ÏòÁ¿Î¬¶È²»Í¬£¬ÎŞ·¨Ïà¼õ");
+	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("å‘é‡ç»´åº¦ä¸åŒï¼Œæ— æ³•ç›¸å‡");
 	row_vector res(t_row_vector1.m_col);
 	for (int c = 0; c < t_row_vector1.m_col; c++) {
 		res[c] = t_row_vector1[c] - t_row_vector2[c];
@@ -168,7 +168,7 @@ row_vector operator-(const row_vector& t_row_vector1, const row_vector& t_row_ve
 }
 
 
-//ĞĞÏòÁ¿Óë¸´ÊıµÄÔËËã
+//è¡Œå‘é‡ä¸å¤æ•°çš„è¿ç®—
 row_vector operator+(const row_vector& t_row_vector, const complex&t_complex) {
 	row_vector res(t_row_vector.m_col);
 	for (int c = 0; c < t_row_vector.m_col; c++) {
@@ -206,7 +206,7 @@ row_vector operator*(const complex&t_complex, const row_vector& t_row_vector) {
 
 
 row_vector operator/(const row_vector& t_row_vector, const complex&t_complex) {
-	if (complex::abs(t_complex) == 0) throw logic_error("³ıÊıÄ£Öµ²»ÄÜÎª0");
+	if (complex::abs(t_complex) == 0) throw logic_error("é™¤æ•°æ¨¡å€¼ä¸èƒ½ä¸º0");
 	row_vector res(t_row_vector.m_col);
 	for (int c = 0; c < t_row_vector.m_col; c++) {
 		res[c] = t_row_vector[c] / t_complex;
@@ -216,7 +216,7 @@ row_vector operator/(const row_vector& t_row_vector, const complex&t_complex) {
 row_vector operator/(const complex&t_complex, const row_vector& t_row_vector) {
 	row_vector res(t_row_vector.m_col);
 	for (int c = 0; c < t_row_vector.m_col; c++) {
-		if (complex::abs(t_row_vector[c]) == 0) throw logic_error("ÏòÁ¿ÖĞº¬ÓĞÄ£ÖµÎª0µÄÔªËØ£¬²»ÄÜ×÷Îª·ÖÄ¸");
+		if (complex::abs(t_row_vector[c]) == 0) throw logic_error("å‘é‡ä¸­å«æœ‰æ¨¡å€¼ä¸º0çš„å…ƒç´ ï¼Œä¸èƒ½ä½œä¸ºåˆ†æ¯");
 		res[c] = t_complex / t_row_vector[c];
 	}
 	return res;
@@ -224,7 +224,7 @@ row_vector operator/(const complex&t_complex, const row_vector& t_row_vector) {
 
 
 row_vector element_product(const row_vector& t_row_vector1, const row_vector& t_row_vector2) {
-	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("ÏòÁ¿Î¬¶È²»Æ¥Åä");
+	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("å‘é‡ç»´åº¦ä¸åŒ¹é…");
 	row_vector res(t_row_vector1.m_col);
 	for (int c = 0; c < t_row_vector1.m_col; c++) {
 		res[c] = t_row_vector1[c] * t_row_vector2[c];
@@ -232,10 +232,10 @@ row_vector element_product(const row_vector& t_row_vector1, const row_vector& t_
 	return res;
 }
 row_vector element_divide(const row_vector& t_row_vector1, const row_vector& t_row_vector2) {
-	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("ÏòÁ¿Î¬¶È²»Æ¥Åä");
+	if (t_row_vector1.m_col != t_row_vector2.m_col) throw logic_error("å‘é‡ç»´åº¦ä¸åŒ¹é…");
 	row_vector res(t_row_vector1.m_col);
 	for (int c = 0; c < t_row_vector1.m_col; c++) {
-		if (complex::abs(t_row_vector2[c]) == 0) throw logic_error("ÔªËØÄ£ÖµÎª0£¬²»¿É×÷Îª³ıÊı");
+		if (complex::abs(t_row_vector2[c]) == 0) throw logic_error("å…ƒç´ æ¨¡å€¼ä¸º0ï¼Œä¸å¯ä½œä¸ºé™¤æ•°");
 		res[c] = t_row_vector1[c] / t_row_vector2[c];
 	}
 	return res;
@@ -264,7 +264,7 @@ matrix::matrix() :
 
 matrix::matrix(int t_row, int t_col) :
 	m_row(t_row), m_col(t_col) {
-	if (t_row < 0 || t_col < 0) throw logic_error("¾ØÕóµÄÎ¬¶È±ØĞëÊÇ·Ç¸ºµÄ");
+	if (t_row < 0 || t_col < 0) throw logic_error("çŸ©é˜µçš„ç»´åº¦å¿…é¡»æ˜¯éè´Ÿçš„");
 	m_matrix = new row_vector[m_row];
 	for (int iter = 0; iter < m_row; iter++) {
 		m_matrix[iter] = row_vector(m_col);
@@ -277,11 +277,11 @@ matrix::matrix(const matrix& t_matrix) :
 	m_matrix = new row_vector[m_row];
 	for (int iter = 0; iter < m_row; iter++) {
 		/*-----------------------ATTENTION-----------------------
-		* µ÷ÓÃRowVectorµÄ¿½±´¸³ÖµÔËËã·û
-		* ÕâÀï²»ÄÜµ÷ÓÃmemcpyÀ´¿½±´matrix³ÉÔ±£¬ÒòÎªÒªÊµÏÖ¿½±´¸³ÖµµÄÓïÒå
-		* memcpy»á½«t_Matrix.matrixÄÚ´æÇøÓòµÄÖµÍêÈ«¸³ÖµÒ»·İ¸øthis->matrix
-		* µ«ÊÇ¸ÃÄÚ´æÇøÓòÊÇRowVector¶ÔÏó£¬¶ø¸Ã¶ÔÏó°üº¬ÁËÖ¸Õë
-		* ÕâÑù»áµ¼ÖÂ¸´ÖÆÇ°ºó£¬RowVectorÖĞµÄÖ¸ÕëÒ»ÖÂ
+		* è°ƒç”¨RowVectorçš„æ‹·è´èµ‹å€¼è¿ç®—ç¬¦
+		* è¿™é‡Œä¸èƒ½è°ƒç”¨memcpyæ¥æ‹·è´matrixæˆå‘˜ï¼Œå› ä¸ºè¦å®ç°æ‹·è´èµ‹å€¼çš„è¯­ä¹‰
+		* memcpyä¼šå°†t_Matrix.matrixå†…å­˜åŒºåŸŸçš„å€¼å®Œå…¨èµ‹å€¼ä¸€ä»½ç»™this->matrix
+		* ä½†æ˜¯è¯¥å†…å­˜åŒºåŸŸæ˜¯RowVectorå¯¹è±¡ï¼Œè€Œè¯¥å¯¹è±¡åŒ…å«äº†æŒ‡é’ˆ
+		* è¿™æ ·ä¼šå¯¼è‡´å¤åˆ¶å‰åï¼ŒRowVectorä¸­çš„æŒ‡é’ˆä¸€è‡´
 		*------------------------ATTENTION-----------------------*/
 		m_matrix[iter] = t_matrix[iter];
 	}
@@ -290,8 +290,8 @@ matrix::matrix(const matrix& t_matrix) :
 
 matrix::matrix(matrix&& t_matrix) noexcept
 	:m_row(t_matrix.m_row), m_col(t_matrix.m_col), m_matrix(t_matrix.m_matrix) {
-	//ÔÚ³õÊ¼»¯ÁĞ±íÖĞ½Ó¹Ü×ÊÔ´
-	t_matrix.m_matrix = nullptr;//ÖÃ¿ÕÖ¸Õë
+	//åœ¨åˆå§‹åŒ–åˆ—è¡¨ä¸­æ¥ç®¡èµ„æº
+	t_matrix.m_matrix = nullptr;//ç½®ç©ºæŒ‡é’ˆ
 }
 
 
@@ -359,18 +359,18 @@ matrix matrix::hermitian() {
 
 
 matrix matrix::inverse(bool t_try_pseudo_inverse) {
-	if (m_row <= 0 || m_col <= 0 || m_row != m_col) throw logic_error("¸Ã¾ØÕóÎŞ·¨ÇóÄæ");
+	if (m_row <= 0 || m_col <= 0 || m_row != m_col) throw logic_error("è¯¥çŸ©é˜µæ— æ³•æ±‚é€†");
 
 	if (m_row < 3) return inverse_when_dim_lower_than3(t_try_pseudo_inverse);
 
 	matrix mergeMatrix = matrix::horizon_merge(*this, matrix::eye(m_row));
 
-	//ÏÈ±ä»»³ÉÏÂÈı½Ç¾ØÕó
+	//å…ˆå˜æ¢æˆä¸‹ä¸‰è§’çŸ©é˜µ
 	complex zero(0, 0);
 	int tmpRow = 0;
 	row_vector tmpRV;
 	for (int r = 0; r < m_row; r++) {
-		if (mergeMatrix[r][r] == zero) {//Èôµ±Ç°ĞĞµÄ¶Ô½ÇÏß²¿·ÖÎª0£¬ÔòÓë²»Îª0µÄÄÇĞĞ»¥»»
+		if (mergeMatrix[r][r] == zero) {//è‹¥å½“å‰è¡Œçš„å¯¹è§’çº¿éƒ¨åˆ†ä¸º0ï¼Œåˆ™ä¸ä¸ä¸º0çš„é‚£è¡Œäº’æ¢
 			tmpRow = r + 1;
 			while (tmpRow < m_row&&mergeMatrix[tmpRow][r] == zero)
 				tmpRow++;
@@ -379,18 +379,18 @@ matrix matrix::inverse(bool t_try_pseudo_inverse) {
 					return this->pseudo_inverse();
 				}
 				else {
-					throw logic_error("¸Ã¾ØÕó²»ÂúÖÈ£¬ÎŞ·¨ÇóÄæ¾ØÕó");
+					throw logic_error("è¯¥çŸ©é˜µä¸æ»¡ç§©ï¼Œæ— æ³•æ±‚é€†çŸ©é˜µ");
 				}
 			}
 
-			//»¥»»rÓëtmpÁ½ĞĞ
+			//äº’æ¢rä¸tmpä¸¤è¡Œ
 			tmpRV = mergeMatrix[r];
 			mergeMatrix[r] = mergeMatrix[tmpRow];
 			mergeMatrix[tmpRow] = tmpRV;
 		}
-		mergeMatrix[r] = mergeMatrix[r] / mergeMatrix[r][r];//½«¶Ô½ÇÏß²¿·ÖÖÃ1
+		mergeMatrix[r] = mergeMatrix[r] / mergeMatrix[r][r];//å°†å¯¹è§’çº¿éƒ¨åˆ†ç½®1
 
-															//½«¸ÃÁĞµÄÏÂ°ë²¿·ÖÖÃ0
+															//å°†è¯¥åˆ—çš„ä¸‹åŠéƒ¨åˆ†ç½®0
 		for (tmpRow = r + 1; tmpRow < m_row; tmpRow++) {
 			if (mergeMatrix[tmpRow][r] == zero)continue;
 			complex factor = -mergeMatrix[tmpRow][r];
@@ -399,7 +399,7 @@ matrix matrix::inverse(bool t_try_pseudo_inverse) {
 	}
 
 
-	//½«ÓÒ±ß¼ÌĞø±ä»»ÎªÉÏÈı½Ç
+	//å°†å³è¾¹ç»§ç»­å˜æ¢ä¸ºä¸Šä¸‰è§’
 	for (int r = m_row - 1; r >= 0; r--) {
 		for (tmpRow = r - 1; tmpRow >= 0; tmpRow--) {
 			if (mergeMatrix[tmpRow][r] == zero)continue;
@@ -417,7 +417,7 @@ matrix matrix::inverse_when_dim_lower_than3(bool t_try_pseudo_inverse) {
 			if (t_try_pseudo_inverse)
 				return matrix{ { 0,0 } };
 			else
-				throw logic_error("¸Ã¾ØÕóÎŞ·¨ÇóÄæ");
+				throw logic_error("è¯¥çŸ©é˜µæ— æ³•æ±‚é€†");
 		}
 		return matrix{ { 1 / this->operator[](0)[0] } };
 	}
@@ -426,7 +426,7 @@ matrix matrix::inverse_when_dim_lower_than3(bool t_try_pseudo_inverse) {
 		complex denominator = this->operator[](0)[0] * this->operator[](1)[1] - this->operator[](0)[1] * this->operator[](1)[0];
 		if (denominator == 0) {
 			if (t_try_pseudo_inverse) return pseudo_inverse();
-			else throw logic_error("¸Ã¾ØÕóÎŞ·¨ÇóÄæ");
+			else throw logic_error("è¯¥çŸ©é˜µæ— æ³•æ±‚é€†");
 		}
 		res[0][0] = this->operator[](1)[1] / denominator;
 		res[0][1] = -(this->operator[](0)[1]) / denominator;
@@ -438,7 +438,7 @@ matrix matrix::inverse_when_dim_lower_than3(bool t_try_pseudo_inverse) {
 
 
 matrix matrix::diag() {
-	if (m_row != m_col) throw logic_error("¸Ãº¯ÊıÖ»Ö§³Ö·½Õó");
+	if (m_row != m_col) throw logic_error("è¯¥å‡½æ•°åªæ”¯æŒæ–¹é˜µ");
 	matrix res(1, m_row);
 	for (int r = 0; r < m_row; r++) {
 		res[0][r] = this->operator[](r)[r];
@@ -448,10 +448,10 @@ matrix matrix::diag() {
 
 
 pair<matrix, matrix>  matrix::full_rank_decomposition() {
-	//Éè¾ØÕóµÄÎ¬¶ÈÎªm*n£¬ÖÈÎªr£¬rÖÁÉÙÎª1
+	//è®¾çŸ©é˜µçš„ç»´åº¦ä¸ºm*nï¼Œç§©ä¸ºrï¼Œrè‡³å°‘ä¸º1
 	matrix mergeMatrix = matrix::horizon_merge(*this, matrix::eye(m_row));
 
-	//Ê×ÏÈ½«¾ØÕó×ª»¯Îª±ê×¼ĞÍ£¬¼´ÉÏÃæÊÇr*nµÄĞĞÂúÖÈ¾ØÕó£¬ÏÂÃæÊÇ(m-r)*nµÄÁã¾ØÕó
+	//é¦–å…ˆå°†çŸ©é˜µè½¬åŒ–ä¸ºæ ‡å‡†å‹ï¼Œå³ä¸Šé¢æ˜¯r*nçš„è¡Œæ»¡ç§©çŸ©é˜µï¼Œä¸‹é¢æ˜¯(m-r)*nçš„é›¶çŸ©é˜µ
 	complex zero(0, 0);
 	int tmpRow = 0;
 	row_vector tmpRV;
@@ -459,25 +459,25 @@ pair<matrix, matrix>  matrix::full_rank_decomposition() {
 	int rank = 0;
 	for (int r = 0; r < m_row; r++) {
 		if (iterCol == m_col) break;
-		if (mergeMatrix[r][iterCol] == zero) {//Èôµ±Ç°ĞĞµÄ¶Ô½ÇÏß²¿·ÖÎª0£¬ÔòÓë²»Îª0µÄÄÇĞĞ»¥»»
+		if (mergeMatrix[r][iterCol] == zero) {//è‹¥å½“å‰è¡Œçš„å¯¹è§’çº¿éƒ¨åˆ†ä¸º0ï¼Œåˆ™ä¸ä¸ä¸º0çš„é‚£è¡Œäº’æ¢
 			tmpRow = r + 1;
 			while (tmpRow < m_row&&mergeMatrix[tmpRow][iterCol] == zero)
 				tmpRow++;
-			if (tmpRow == m_row) { //µ±¸ÃÁĞÃ»ÓĞ·ÇÁãÔªËØ£¬Ìø¹ı¼´¿É
+			if (tmpRow == m_row) { //å½“è¯¥åˆ—æ²¡æœ‰éé›¶å…ƒç´ ï¼Œè·³è¿‡å³å¯
 				iterCol++;
 				r--;
-				continue;//¼ÌĞøÔÚµ±Ç°ĞĞµÄÏÂÒ»ÁĞÑ°ÕÒ·ÇÁãÔªËØ
+				continue;//ç»§ç»­åœ¨å½“å‰è¡Œçš„ä¸‹ä¸€åˆ—å¯»æ‰¾éé›¶å…ƒç´ 
 			}
 			else {
-				//»¥»»rÓëtmpÁ½ĞĞ
+				//äº’æ¢rä¸tmpä¸¤è¡Œ
 				tmpRV = mergeMatrix[r];
 				mergeMatrix[r] = mergeMatrix[tmpRow];
 				mergeMatrix[tmpRow] = tmpRV;
 			}
 		}
-		mergeMatrix[r] = mergeMatrix[r] / mergeMatrix[r][iterCol];//½«¶Ô½ÇÏß²¿·ÖÖÃ1
+		mergeMatrix[r] = mergeMatrix[r] / mergeMatrix[r][iterCol];//å°†å¯¹è§’çº¿éƒ¨åˆ†ç½®1
 
-																  //½«¸ÃÁĞµÄÏÂ°ë²¿·ÖÖÃ0
+																  //å°†è¯¥åˆ—çš„ä¸‹åŠéƒ¨åˆ†ç½®0
 		for (tmpRow = r + 1; tmpRow < m_row; tmpRow++) {
 			if (mergeMatrix[tmpRow][iterCol] == zero)continue;
 			complex factor = -mergeMatrix[tmpRow][iterCol];
@@ -487,7 +487,7 @@ pair<matrix, matrix>  matrix::full_rank_decomposition() {
 		rank++;
 	}
 
-	if (rank == 0) throw logic_error("¸Ã¾ØÕóÖÈÎª0£¬²»Âú×ãÂúÖÈ·Ö½âµÄÌõ¼ş");
+	if (rank == 0) throw logic_error("è¯¥çŸ©é˜µç§©ä¸º0ï¼Œä¸æ»¡è¶³æ»¡ç§©åˆ†è§£çš„æ¡ä»¶");
 
 	pair<matrix, matrix> splitRes = horizon_split(mergeMatrix, mergeMatrix.m_col - m_row, m_row);
 	matrix B = splitRes.first;
@@ -510,18 +510,18 @@ matrix matrix::pseudo_inverse() {
 
 
 matrix& matrix::operator=(const matrix& t_matrix) {
-	if (m_matrix != t_matrix.m_matrix) {//¼ì²é×Ô¸³ÖµµÄÕıÈ·ĞÔ
+	if (m_matrix != t_matrix.m_matrix) {//æ£€æŸ¥è‡ªèµ‹å€¼çš„æ­£ç¡®æ€§
 		free();
 		m_row = t_matrix.m_row;
 		m_col = t_matrix.m_col;
 		m_matrix = new row_vector[m_row];
 		for (int r = 0; r < m_row; r++) {
 			/*-----------------------ATTENTION-----------------------
-			* µ÷ÓÃRowVectorµÄ¿½±´¸³ÖµÔËËã·û
-			* ÕâÀï²»ÄÜµ÷ÓÃmemcpyÀ´¿½±´matrix³ÉÔ±£¬ÒòÎªÒªÊµÏÖ¿½±´¸³ÖµµÄÓïÒå
-			* memcpy»á½«t_Matrix.matrixÄÚ´æÇøÓòµÄÖµÍêÈ«¸³ÖµÒ»·İ¸øthis->matrix
-			* µ«ÊÇ¸ÃÄÚ´æÇøÓòÊÇRowVector¶ÔÏó£¬¶ø¸Ã¶ÔÏó°üº¬ÁËÖ¸Õë
-			* ÕâÑù»áµ¼ÖÂ¸´ÖÆÇ°ºó£¬RowVectorÖĞµÄÖ¸ÕëÒ»ÖÂ
+			* è°ƒç”¨RowVectorçš„æ‹·è´èµ‹å€¼è¿ç®—ç¬¦
+			* è¿™é‡Œä¸èƒ½è°ƒç”¨memcpyæ¥æ‹·è´matrixæˆå‘˜ï¼Œå› ä¸ºè¦å®ç°æ‹·è´èµ‹å€¼çš„è¯­ä¹‰
+			* memcpyä¼šå°†t_Matrix.matrixå†…å­˜åŒºåŸŸçš„å€¼å®Œå…¨èµ‹å€¼ä¸€ä»½ç»™this->matrix
+			* ä½†æ˜¯è¯¥å†…å­˜åŒºåŸŸæ˜¯RowVectorå¯¹è±¡ï¼Œè€Œè¯¥å¯¹è±¡åŒ…å«äº†æŒ‡é’ˆ
+			* è¿™æ ·ä¼šå¯¼è‡´å¤åˆ¶å‰åï¼ŒRowVectorä¸­çš„æŒ‡é’ˆä¸€è‡´
 			*------------------------ATTENTION-----------------------*/
 			m_matrix[r].operator=(t_matrix.m_matrix[r]);
 		}
@@ -531,12 +531,12 @@ matrix& matrix::operator=(const matrix& t_matrix) {
 
 
 matrix& matrix::operator=(matrix&& t_matrix) noexcept {
-	if (m_matrix != t_matrix.m_matrix) {//¼ì²é×Ô¸³ÖµµÄÕıÈ·ĞÔ
-		free();//ÇåÀí×ÊÔ´
+	if (m_matrix != t_matrix.m_matrix) {//æ£€æŸ¥è‡ªèµ‹å€¼çš„æ­£ç¡®æ€§
+		free();//æ¸…ç†èµ„æº
 		m_row = t_matrix.m_row;
 		m_col = t_matrix.m_col;
-		m_matrix = t_matrix.m_matrix;//½Ó¹Ü×ÊÔ´
-		t_matrix.m_matrix = nullptr;//ÖÃ¿ÕÖ¸Õë
+		m_matrix = t_matrix.m_matrix;//æ¥ç®¡èµ„æº
+		t_matrix.m_matrix = nullptr;//ç½®ç©ºæŒ‡é’ˆ
 	}
 	return *this;
 }
@@ -569,7 +569,7 @@ void matrix::print(ostream&t_out, int t_num_enter) {
 
 
 matrix matrix::horizon_merge(const matrix& t_matrix1, const matrix& t_matrix2) {
-	if (t_matrix1.m_row != t_matrix2.m_row) throw logic_error("ÕâÁ½¸ö¾ØÕóÎŞ·¨ºÏ²¢");
+	if (t_matrix1.m_row != t_matrix2.m_row) throw logic_error("è¿™ä¸¤ä¸ªçŸ©é˜µæ— æ³•åˆå¹¶");
 	matrix res(t_matrix1.m_row, t_matrix1.m_col + t_matrix2.m_col);
 	for (int r = 0; r < t_matrix1.m_row; r++) {
 		for (int c = 0; c < t_matrix1.m_col; c++) {
@@ -586,7 +586,7 @@ matrix matrix::horizon_merge(const matrix& t_matrix1, const matrix& t_matrix2) {
 
 
 pair<matrix, matrix> matrix::horizon_split(const matrix& t_matrix, int t_left_col, int t_right_col) {
-	if (t_matrix.m_col != t_left_col + t_right_col) throw logic_error("¸Ã¾ØÕóÎŞ·¨·ÖÁÑ³ÉÖ¸¶¨Î¬¶È");
+	if (t_matrix.m_col != t_left_col + t_right_col) throw logic_error("è¯¥çŸ©é˜µæ— æ³•åˆ†è£‚æˆæŒ‡å®šç»´åº¦");
 	matrix left(t_matrix.m_row, t_left_col), right(t_matrix.m_row, t_right_col);
 	for (int r = 0; r < left.m_row; r++) {
 		for (int c = 0; c < left.m_col; c++) {
@@ -604,7 +604,7 @@ pair<matrix, matrix> matrix::horizon_split(const matrix& t_matrix, int t_left_co
 
 
 pair<matrix, matrix> matrix::vertical_split(const matrix& t_matrix, int t_up_row, int t_down_row) {
-	if (t_matrix.m_row != t_up_row + t_down_row) throw logic_error("¸Ã¾ØÕóÎŞ·¨·ÖÁÑ³ÉÖ¸¶¨Î¬¶È");
+	if (t_matrix.m_row != t_up_row + t_down_row) throw logic_error("è¯¥çŸ©é˜µæ— æ³•åˆ†è£‚æˆæŒ‡å®šç»´åº¦");
 	matrix up(t_up_row, t_matrix.m_col), down(t_down_row, t_matrix.m_col);
 	for (int r = 0; r < up.m_row; r++) {
 		for (int c = 0; c < up.m_col; c++) {
@@ -621,7 +621,7 @@ pair<matrix, matrix> matrix::vertical_split(const matrix& t_matrix, int t_up_row
 }
 
 matrix matrix::eye(const int t_dim) {
-	if (t_dim < 1) throw logic_error("µ¥Î»ÕóÎ¬¶ÈÖÁÉÙÎª1");
+	if (t_dim < 1) throw logic_error("å•ä½é˜µç»´åº¦è‡³å°‘ä¸º1");
 	matrix res(t_dim, t_dim);
 	for (int i = 0; i < t_dim; i++) {
 		res[i][i] = complex(1, 0);
@@ -630,7 +630,7 @@ matrix matrix::eye(const int t_dim) {
 }
 
 
-//µ¥Ä¿È¡·´ÔËËã·û
+//å•ç›®å–åè¿ç®—ç¬¦
 matrix operator-(const matrix& t_matrix) {
 	matrix res(t_matrix.m_row, t_matrix.m_col);
 	for (int r = 0; r < t_matrix.m_row; r++) {
@@ -640,9 +640,9 @@ matrix operator-(const matrix& t_matrix) {
 }
 
 
-//¾ØÕó¼äµÄÔËËã
+//çŸ©é˜µé—´çš„è¿ç®—
 matrix operator+(const matrix& t_matrix1, const matrix& t_matrix2) {
-	if (t_matrix1.m_row != t_matrix2.m_row || t_matrix1.m_col != t_matrix2.m_col) throw logic_error("¾ØÕóÎ¬¶È²»Í¬£¬ÎŞ·¨Ïà¼Ó");
+	if (t_matrix1.m_row != t_matrix2.m_row || t_matrix1.m_col != t_matrix2.m_col) throw logic_error("çŸ©é˜µç»´åº¦ä¸åŒï¼Œæ— æ³•ç›¸åŠ ");
 	matrix res(t_matrix1.m_row, t_matrix1.m_col);
 	for (int r = 0; r < t_matrix1.m_row; r++) {
 		for (int c = 0; c < t_matrix1.m_col; c++) {
@@ -654,7 +654,7 @@ matrix operator+(const matrix& t_matrix1, const matrix& t_matrix2) {
 
 
 matrix operator-(const matrix& t_matrix1, const matrix& t_matrix2) {
-	if (t_matrix1.m_row != t_matrix2.m_row || t_matrix1.m_col != t_matrix2.m_col) throw logic_error("¾ØÕóÎ¬¶È²»Í¬£¬ÎŞ·¨Ïà¼õ");
+	if (t_matrix1.m_row != t_matrix2.m_row || t_matrix1.m_col != t_matrix2.m_col) throw logic_error("çŸ©é˜µç»´åº¦ä¸åŒï¼Œæ— æ³•ç›¸å‡");
 	matrix res(t_matrix1.m_row, t_matrix1.m_col);
 	for (int r = 0; r < t_matrix1.m_row; r++) {
 		for (int c = 0; c < t_matrix1.m_col; c++) {
@@ -666,13 +666,13 @@ matrix operator-(const matrix& t_matrix1, const matrix& t_matrix2) {
 
 
 matrix operator*(const matrix& t_matrix1, const matrix& t_matrix2) {
-	if (t_matrix1.m_col != t_matrix2.m_row) throw logic_error("¾ØÕóÎ¬¶È²»Æ¥Åä£¬ÎŞ·¨Ïà³Ë");
+	if (t_matrix1.m_col != t_matrix2.m_row) throw logic_error("çŸ©é˜µç»´åº¦ä¸åŒ¹é…ï¼Œæ— æ³•ç›¸ä¹˜");
 
 	matrix res(t_matrix1.m_row, t_matrix2.m_col);
 
 	for (int r = 0; r < t_matrix1.m_row; r++) {
 		for (int c = 0; c < t_matrix2.m_col; c++) {
-			//¼ÆËãÃ¿Ò»Ïî
+			//è®¡ç®—æ¯ä¸€é¡¹
 			complex tmp(0, 0);
 			for (int idx = 0; idx < t_matrix1.m_col; idx++) {
 				tmp += t_matrix1[r][idx] * t_matrix2[idx][c];
@@ -684,7 +684,7 @@ matrix operator*(const matrix& t_matrix1, const matrix& t_matrix2) {
 }
 
 
-//¾ØÕóÓë¸´ÊıµÄÔËËã
+//çŸ©é˜µä¸å¤æ•°çš„è¿ç®—
 matrix operator+(const matrix& t_matrix, const complex& t_complex) {
 	matrix res(t_matrix.m_row, t_matrix.m_col);
 	for (int r = 0; r < t_matrix.m_row; r++) {
@@ -722,7 +722,7 @@ matrix operator*(const complex& t_complex, const matrix& t_matrix) {
 
 
 matrix operator/(const matrix& t_matrix, const complex& t_complex) {
-	if (complex::abs(t_complex) == 0) throw logic_error("³ıÊıÄ£ÖµÎª0£¬·Ç·¨£¡");
+	if (complex::abs(t_complex) == 0) throw logic_error("é™¤æ•°æ¨¡å€¼ä¸º0ï¼Œéæ³•ï¼");
 	matrix res(t_matrix.m_row, t_matrix.m_col);
 	for (int r = 0; r < t_matrix.m_row; r++) {
 		res[r] = t_matrix[r] / t_complex;
@@ -740,7 +740,7 @@ matrix operator/(const complex& t_complex, const matrix& t_matrix) {
 
 matrix element_product(const matrix& t_matrix1, const matrix& t_matrix2) {
 	if (t_matrix1.m_row != t_matrix2.m_row ||
-		t_matrix1.m_col != t_matrix2.m_col) throw logic_error("¾ØÕóÎ¬¶È²»Æ¥Åä");
+		t_matrix1.m_col != t_matrix2.m_col) throw logic_error("çŸ©é˜µç»´åº¦ä¸åŒ¹é…");
 	matrix res(t_matrix1.m_row, t_matrix1.m_col);
 	for (int r = 0; r < t_matrix1.m_row; r++) {
 		res[r] = element_product(t_matrix1[r], t_matrix2[r]);
@@ -749,7 +749,7 @@ matrix element_product(const matrix& t_matrix1, const matrix& t_matrix2) {
 }
 matrix element_divide(const matrix& t_matrix1, const matrix& t_matrix2) {
 	if (t_matrix1.m_row != t_matrix2.m_row ||
-		t_matrix1.m_col != t_matrix2.m_col) throw logic_error("¾ØÕóÎ¬¶È²»Æ¥Åä");
+		t_matrix1.m_col != t_matrix2.m_col) throw logic_error("çŸ©é˜µç»´åº¦ä¸åŒ¹é…");
 	matrix res(t_matrix1.m_row, t_matrix1.m_col);
 	for (int r = 0; r < t_matrix1.m_row; r++) {
 		res[r] = element_divide(t_matrix1[r], t_matrix2[r]);

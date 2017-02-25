@@ -3,7 +3,7 @@
 *
 *       Filename:  vue_network.cpp
 *
-*    Description:  ³µÁ¾ÀàµÄÍøÂç²ã²¿·ÖÊµÏÖ
+*    Description:  è½¦è¾†ç±»çš„ç½‘ç»œå±‚éƒ¨åˆ†å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -78,7 +78,7 @@ void vue_network::send_connection() {
 	while (it != m_sender_event_list.end()) {
 		sender_event* __sender_event = *it;
 
-		//Ñ¡Ôñ·¢ËÍÆµ¶Î
+		//é€‰æ‹©å‘é€é¢‘æ®µ
 		int pattern_idx = select_pattern();
 		__sender_event->set_pattern_idx(pattern_idx);
 
@@ -93,7 +93,7 @@ void vue_network::send_connection() {
 }
 
 int vue_network::select_pattern() {
-	//<Warn>:u(a,b),ÆäÖĞabÊÇ·ñÊÇ±ÕÇø¼ä£¬ÑéÖ¤Ò»ÏÂ
+	//<Warn>:u(a,b),å…¶ä¸­abæ˜¯å¦æ˜¯é—­åŒºé—´ï¼ŒéªŒè¯ä¸€ä¸‹
 	uniform_int_distribution<int> u(0, context::get_context()->get_rrm_config()->get_pattern_num() - 1);
 	return u(s_engine);
 }

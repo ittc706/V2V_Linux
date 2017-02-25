@@ -38,7 +38,9 @@ files=$(find . -regex ".*\.\(h\|cpp\|xml\)")
 for file in $files
 do
 	echo "Convert encoding format: "$file
-	iconv -f gbk -t utf-8 $file -o $file
+	iconv -f gbk -t utf-8 ${file} > ${file}.tmp
+	rm -f ${file}
+	mv ${file}.tmp  ${file}
 done
 
 # Commit

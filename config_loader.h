@@ -5,42 +5,42 @@
 #include<map>
 
 class config_loader {
-	/*------------------¾²Ì¬------------------*/
+	/*------------------é™æ€------------------*/
 public:
 	/*
-	* ½«string×ªÎªint
+	* å°†stringè½¬ä¸ºint
 	*/
 	static int string_to_int(std::string t_string);
 
 	/*
-	* ½«string×ªÎªdouble
+	* å°†stringè½¬ä¸ºdouble
 	*/
 	static double string_to_double(std::string t_string);
 private:
 	/*
-	* ÅäÖÃÎÄ¼ş×Ö·û´®
+	* é…ç½®æ–‡ä»¶å­—ç¬¦ä¸²
 	*/
 	std::string m_content;
 
 	/*
-	* [±êÇ©-Öµ]¶Ô
+	* [æ ‡ç­¾-å€¼]å¯¹
 	*/
 	std::map<std::string, std::string> m_tag_content_map;
 
-	/*------------------·½·¨------------------*/
+	/*------------------æ–¹æ³•------------------*/
 public:
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êı
+	* é»˜è®¤æ„é€ å‡½æ•°
 	*/
 	config_loader() {}
 
 	/*
-	* ½ÓÊÜÎÄ¼şÃûµÄ¹¹Ôìº¯Êı
+	* æ¥å—æ–‡ä»¶åçš„æ„é€ å‡½æ•°
 	*/
 	void resolv_config_file(std::string t_file);
 
 	/*
-	* ´Óm_tag_content_map¸ù¾İ±êÇ©ÃûÈ¡³öÖµ
+	* ä»m_tag_content_mapæ ¹æ®æ ‡ç­¾åå–å‡ºå€¼
 	*/
 	std::string get_param(std::string t_param);
 };

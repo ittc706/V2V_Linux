@@ -10,15 +10,15 @@ enum platform{
 class config_loader;
 
 class global_control_config {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«contextÉèÎªÓÑÔª£¬ÈİÆ÷ÒªÎªÆä×¢ÈëÒÀÀµÏî
+	* å°†contextè®¾ä¸ºå‹å…ƒï¼Œå®¹å™¨è¦ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹
 	*/
 	friend class context;
 
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* Àà¼ÓÔØÆ÷¶ÔÏó
+	* ç±»åŠ è½½å™¨å¯¹è±¡
 	*/
 private:
 	config_loader* m_config_loader;
@@ -27,7 +27,7 @@ public:
 	config_loader* get_config_loader();
 
 	/*
-	* Æ½Ì¨
+	* å¹³å°
 	*/
 private:
 	platform m_platform;
@@ -36,7 +36,7 @@ public:
 	platform get_platform();
 	
 	/*
-	* ·ÂÕæÊ±³¤
+	* ä»¿çœŸæ—¶é•¿
 	*/
 private:
 	int m_ntti;
@@ -45,7 +45,7 @@ public:
 	int get_ntti();
 
 	/*
-	* ĞÅµÀË¢ĞÂÖÜÆÚ
+	* ä¿¡é“åˆ·æ–°å‘¨æœŸ
 	*/
 private:
 	int m_fresh_period;
@@ -53,22 +53,22 @@ private:
 public:
 	int get_fresh_period();
 
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	void load();
 };
 
 
 class gtt_config {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«contextÉèÎªÓÑÔª£¬ÈİÆ÷ÒªÎªÆä×¢ÈëÒÀÀµÏî
+	* å°†contextè®¾ä¸ºå‹å…ƒï¼Œå®¹å™¨è¦ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹
 	*/
 	friend class context;
 
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* Àà¼ÓÔØÆ÷¶ÔÏó
+	* ç±»åŠ è½½å™¨å¯¹è±¡
 	*/
 private:
 	config_loader* m_config_loader;
@@ -76,16 +76,16 @@ private:
 public:
 	config_loader* get_config_loader();
 
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	virtual void load() = 0;
 };
 
 
 class gtt_highspeed_config :public gtt_config {
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* µÀÂ·ÊıÁ¿
+	* é“è·¯æ•°é‡
 	*/
 private:
 	const int m_road_num = 6;
@@ -93,7 +93,7 @@ public:
 	int get_road_num();
 
 	/*
-	* Â·³¤,µ¥Î»m
+	* è·¯é•¿,å•ä½m
 	*/
 private:
 	double m_road_length = 3464;
@@ -102,7 +102,7 @@ public:
 	double get_road_length();
 
 	/*
-	* Â·¿í£¬µ¥Î»m
+	* è·¯å®½ï¼Œå•ä½m
 	*/
 private:
 	double m_road_width = 4;
@@ -111,7 +111,7 @@ public:
 	double get_road_width();
 
 	/*
-	* ³µËÙ,km/h
+	* è½¦é€Ÿ,km/h
 	*/
 private:
 	double m_speed = 140;
@@ -120,7 +120,7 @@ public:
 	double get_speed();
 
 	/*
-	* µÀÂ·ÍØÆËÎ»ÖÃ
+	* é“è·¯æ‹“æ‰‘ä½ç½®
 	*/
 private:
 	const double m_road_topo_ratio[6 * 2]{
@@ -135,7 +135,7 @@ public:
 	const double* get_road_topo_ratio();
 
 	/*
-	* ³µÁ¾Î»ÖÃË¢ĞÂÊ±¼ä,µ¥Î»s
+	* è½¦è¾†ä½ç½®åˆ·æ–°æ—¶é—´,å•ä½s
 	*/
 private:
 	double m_freshtime = 0.1;
@@ -143,41 +143,41 @@ private:
 public:
 	double get_freshtime();
 
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	void load() override;
 };
 
 
 class gtt_urban_config :public gtt_config {
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	void load() override;
 };
 
 
 class rrm_config {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«contextÉèÎªÓÑÔª£¬ÈİÆ÷ÒªÎªÆä×¢ÈëÒÀÀµÏî
+	* å°†contextè®¾ä¸ºå‹å…ƒï¼Œå®¹å™¨è¦ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹
 	*/
 	friend class context;
 
-	/*------------------¾²Ì¬³ÉÔ±------------------*/
+	/*------------------é™æ€æˆå‘˜------------------*/
 public:
 	/*
-	* Ã¿¸öRBµÄ´ø¿í(Hz)
+	* æ¯ä¸ªRBçš„å¸¦å®½(Hz)
 	*/
 	static const int s_BANDWIDTH_OF_RB = 12 * 1000 * 15;
 
 	/*
-	* µ¥Î»(¸ö),ÓÉÓÚRB´ø¿íÎª180kHz£¬TTIÎª1ms£¬Òò´Ëµ¥Î»TTIµ¥Î»RB´«ÊäµÄ±ÈÌØÊıÎª180k*1ms=180
+	* å•ä½(ä¸ª),ç”±äºRBå¸¦å®½ä¸º180kHzï¼ŒTTIä¸º1msï¼Œå› æ­¤å•ä½TTIå•ä½RBä¼ è¾“çš„æ¯”ç‰¹æ•°ä¸º180k*1ms=180
 	*/
 	static const int s_BIT_NUM_PER_RB = 180;
 
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* Àà¼ÓÔØÆ÷¶ÔÏó
+	* ç±»åŠ è½½å™¨å¯¹è±¡
 	*/
 private:
 	config_loader* m_config_loader;
@@ -186,7 +186,7 @@ public:
 	config_loader* get_config_loader();
 
 	/*
-	* ×Ü´ø¿í
+	* æ€»å¸¦å®½
 	*/
 private:
 	int m_total_bandwidth;
@@ -195,7 +195,7 @@ public:
 	int get_total_bandwidth();
 
 	/*
-	* Ò»¸ö¿ÉÓÃ×ÊÔ´¿éµÄrbÊıÁ¿
+	* ä¸€ä¸ªå¯ç”¨èµ„æºå—çš„rbæ•°é‡
 	*/
 private:
 	int m_rb_num_per_pattern;
@@ -204,7 +204,7 @@ public:
 	int get_rb_num_per_pattern();
 
 	/*
-	* patternÊıÁ¿
+	* patternæ•°é‡
 	*/
 private:
 	int m_pattern_num;
@@ -214,7 +214,7 @@ public:
 
 
 	/*
-	* µ÷ÖÆ·½Ê½
+	* è°ƒåˆ¶æ–¹å¼
 	* 2:QOSK
 	* 4:16QAM
 	* 6:64QAM
@@ -226,7 +226,7 @@ public:
 	int get_modulation_type();
 
 	/*
-	* ĞÅµÀ±àÂëÂëÂÊ
+	* ä¿¡é“ç¼–ç ç ç‡
 	*/
 private:
 	double m_code_rate;
@@ -235,29 +235,29 @@ public:
 	double get_code_rate();
 
 	/*
-	* ¶ª°üÁÙ½çsinr
+	* ä¸¢åŒ…ä¸´ç•Œsinr
 	*/
 private:
 	double m_drop_sinr_boundary;
 	void set_drop_sinr_boundary(double t_drop_sinr_boundary);
 public:
 	double get_drop_sinr_boundary();
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	void load();
 };
 
 
 class tmc_config {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«contextÉèÎªÓÑÔª£¬ÈİÆ÷ÒªÎªÆä×¢ÈëÒÀÀµÏî
+	* å°†contextè®¾ä¸ºå‹å…ƒï¼Œå®¹å™¨è¦ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹
 	*/
 	friend class context;
 
-	/*--------------------×Ö¶Î--------------------*/
+	/*--------------------å­—æ®µ--------------------*/
 	/*
-	* Àà¼ÓÔØÆ÷¶ÔÏó
+	* ç±»åŠ è½½å™¨å¯¹è±¡
 	*/
 private:
 	config_loader* m_config_loader;
@@ -266,7 +266,7 @@ public:
 	config_loader* get_config_loader();
 
 	/*
-	* ÓµÈûµÈ¼¶ÊıÁ¿
+	* æ‹¥å¡ç­‰çº§æ•°é‡
 	*/
 private:
 	int m_congestion_level_num;
@@ -275,7 +275,7 @@ public:
 	int get_congestion_level_num();
 
 	/*
-	* ¶ÔÓ¦ÓµÈûµÈ¼¶ÏÂÖÜÆÚÊÂ¼şÖÜÆÚ
+	* å¯¹åº”æ‹¥å¡ç­‰çº§ä¸‹å‘¨æœŸäº‹ä»¶å‘¨æœŸ
 	*/
 private:
 	std::vector<int> m_periodic_event_period;
@@ -283,7 +283,7 @@ public:
 	const std::vector<int>& get_periodic_event_period();
 
 	/*
-	* ÖÜÆÚÊÂ¼ş°üÊı
+	* å‘¨æœŸäº‹ä»¶åŒ…æ•°
 	*/
 private:
 	int m_package_num;
@@ -292,13 +292,13 @@ public:
 	int get_package_num();
 
 	/*
-	* ÖÜÆÚÊÂ¼şÃ¿¸ö°ü¶ÔÓ¦µÄbitÊıÁ¿
+	* å‘¨æœŸäº‹ä»¶æ¯ä¸ªåŒ…å¯¹åº”çš„bitæ•°é‡
 	*/
 private:
 	std::vector<int> m_bit_num_per_package;
 public:
 	const std::vector<int>& get_bit_num_per_package();
-	/*--------------------½Ó¿Ú--------------------*/
+	/*--------------------æ¥å£--------------------*/
 public:
 	void load();
 };

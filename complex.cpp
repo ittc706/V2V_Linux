@@ -3,7 +3,7 @@
 *
 *       Filename:  complex.cpp
 *
-*    Description:  ¸´ÊıÀàÊµÏÖ
+*    Description:  å¤æ•°ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -49,7 +49,7 @@ complex::complex(const complex& t_c) :
 
 
 complex::complex(const initializer_list<double> t_il) {
-	if (t_il.size() > 2) throw logic_error("Complex³õÊ¼»¯ÁĞ±íÔªËØÊıÄ¿´íÎó£ºÓ¦¸ÃÎªÁ½¸ödoubleÀàĞÍµÄÔªËØ");
+	if (t_il.size() > 2) throw logic_error("Complexåˆå§‹åŒ–åˆ—è¡¨å…ƒç´ æ•°ç›®é”™è¯¯ï¼šåº”è¯¥ä¸ºä¸¤ä¸ªdoubleç±»å‹çš„å…ƒç´ ");
 	initializer_list<double>::iterator it = t_il.begin();
 	switch (t_il.size()) {
 	case 0:
@@ -95,7 +95,7 @@ complex complex::conjugate() {
 string complex::to_string() {
 	ostringstream ss;
 	ss.precision(2);
-	//ss << fixed;//±ÜÃâÓÃ¿ÆÑ§¼ÆÊı·¨£¬ÒòÎª¿ÉÄÜ»á´æÔÚ¼«Ğ¡µÄÊıÖµ
+	//ss << fixed;//é¿å…ç”¨ç§‘å­¦è®¡æ•°æ³•ï¼Œå› ä¸ºå¯èƒ½ä¼šå­˜åœ¨æå°çš„æ•°å€¼
 	ss << "[" << left << setw(2) << m_real <<"+ j"<< left << setw(2) << m_imag << "]";
 	return ss.str();
 }
@@ -133,7 +133,7 @@ complex operator*(const complex& t_c1, const complex& t_c2) {
 
 complex operator/(const complex& t_c1, const complex& t_c2) {
 	double tmp = complex::abs(t_c2);
-	double denominator = tmp*tmp;//·ÖÄ¸
+	double denominator = tmp*tmp;//åˆ†æ¯
 	if (denominator == 0) throw logic_error("Complex.cpp->Complex operator/(const Complex& c1, const Complex& c2)");
 
 	double realPart = 0;

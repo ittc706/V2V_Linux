@@ -1,9 +1,9 @@
 /*
 * =====================================================================================
 *
-*       Filename:  ÈİÆ÷Àà.cpp
+*       Filename:  å®¹å™¨ç±».cpp
 *
-*    Description:  ÏµÍ³ÀàÊµÏÖ
+*    Description:  ç³»ç»Ÿç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -43,7 +43,7 @@ void context::context_factory() {
 	context* __context = new context();
 	set_context(__context);
 
-	//³õÊ¼»¯³ÉÔ±£¬²¢ÎªÈİÆ÷³ÉÔ±×¢ÈëÒÀÀµÏî
+	//åˆå§‹åŒ–æˆå‘˜ï¼Œå¹¶ä¸ºå®¹å™¨æˆå‘˜æ³¨å…¥ä¾èµ–é¡¹
 	get_context()->dependency_injecte();
 }
 
@@ -161,16 +161,16 @@ vector<std::list<sender_event*>>& context::get_tti_event_list() {
 }
 
 void context::dependency_injecte() {
-	//³õÊ¼»¯ÅäÖÃÎÄ¼ş¼ÓÔØÆ÷
+	//åˆå§‹åŒ–é…ç½®æ–‡ä»¶åŠ è½½å™¨
 	set_config_loader(new config_loader());
 
-	//³õÊ¼»¯ÅäÖÃ²ÎÊı¶ÔÏó
+	//åˆå§‹åŒ–é…ç½®å‚æ•°å¯¹è±¡
 	set_global_control_config(new global_control_config());
 	set_gtt_config(new gtt_highspeed_config());
 	set_rrm_config(new rrm_config());
 	set_tmc_config(new tmc_config());
 
-	//ÎªÅäÖÃ²ÎÊı¶ÔÏó×¢ÈëÒÀÀµÏî(ÅäÖÃÎÄ¼ş¼ÓÔØÆ÷)£¬²¢Ö´ĞĞ³õÊ¼»¯¶¯×÷(¼ÓÔØÅäÖÃÎÄ¼ş)
+	//ä¸ºé…ç½®å‚æ•°å¯¹è±¡æ³¨å…¥ä¾èµ–é¡¹(é…ç½®æ–‡ä»¶åŠ è½½å™¨)ï¼Œå¹¶æ‰§è¡Œåˆå§‹åŒ–åŠ¨ä½œ(åŠ è½½é…ç½®æ–‡ä»¶)
 	get_global_control_config()->set_config_loader(get_config_loader());
 	get_global_control_config()->load();
 
@@ -183,24 +183,24 @@ void context::dependency_injecte() {
 	get_tmc_config()->set_config_loader(get_config_loader());
 	get_tmc_config()->load();
 
-	//³õÊ¼»¯gtt¶ÔÏó£¬²¢ÎªÆä×¢ÈëÒÀÀµÏî(ÅäÖÃ²ÎÊı¶ÔÏó)
+	//åˆå§‹åŒ–gttå¯¹è±¡ï¼Œå¹¶ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹(é…ç½®å‚æ•°å¯¹è±¡)
 	set_gtt(new gtt_highspeed());
 	get_gtt()->set_config(get_gtt_config());
 
-	//³õÊ¼»¯rrm¶ÔÏó£¬²¢ÎªÆä×¢ÈëÒÀÀµÏî(ÅäÖÃ²ÎÊı¶ÔÏó)
+	//åˆå§‹åŒ–rrmå¯¹è±¡ï¼Œå¹¶ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹(é…ç½®å‚æ•°å¯¹è±¡)
 	set_rrm(new rrm());
 	get_rrm()->set_config(get_rrm_config());
 
-	//³õÊ¼»¯tmc¶ÔÏó£¬²¢ÎªÆä×¢ÈëÒÀÀµÏî(ÅäÖÃ²ÎÊı¶ÔÏó)
+	//åˆå§‹åŒ–tmcå¯¹è±¡ï¼Œå¹¶ä¸ºå…¶æ³¨å…¥ä¾èµ–é¡¹(é…ç½®å‚æ•°å¯¹è±¡)
 	set_tmc(new tmc());
 	get_tmc()->set_config(get_tmc_config());
 
-	//³õÊ¼»¯wt¹²Ïí×ÊÔ´
+	//åˆå§‹åŒ–wtå…±äº«èµ„æº
 	set_wt(new wt());
 
-	//ÊÂ¼şÊı×é³õÊ¼»¯
+	//äº‹ä»¶æ•°ç»„åˆå§‹åŒ–
 	set_event_array();
 
-	//ÔÚÅäÖÃ¶ÔÏó³õÊ¼»¯Íê±Ïºó£¬¸Ã¶ÔÏó²Å¿ÉÒÔ½øĞĞ³õÊ¼»¯
+	//åœ¨é…ç½®å¯¹è±¡åˆå§‹åŒ–å®Œæ¯•åï¼Œè¯¥å¯¹è±¡æ‰å¯ä»¥è¿›è¡Œåˆå§‹åŒ–
 	set_tti_event_list();
 }

@@ -3,7 +3,7 @@
 *
 *       Filename:  rrm.cpp
 *
-*    Description:  ÎŞÏŞ×ÊÔ´¹ÜÀíÀàÊµÏÖ
+*    Description:  æ— é™èµ„æºç®¡ç†ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:

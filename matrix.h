@@ -7,114 +7,114 @@
 #include"complex.h"
 
 class row_vector {
-	/*------------------Óò------------------*/
+	/*------------------åŸŸ------------------*/
 private:
 	/*
-	* µ×²ãÈİÆ÷£¬ÉèÎªË½ÓĞ½ûÖ¹Ö±½Ó·ÃÎÊ
+	* åº•å±‚å®¹å™¨ï¼Œè®¾ä¸ºç§æœ‰ç¦æ­¢ç›´æ¥è®¿é—®
 	*/
 	complex* m_row_vector;
 public:
 	/*
-	* ÏòÁ¿³¤¶È£¬ÓÉÓÚÊÇĞĞÏòÁ¿£¬ÕâÀï³ÆÎªÁĞÊı
+	* å‘é‡é•¿åº¦ï¼Œç”±äºæ˜¯è¡Œå‘é‡ï¼Œè¿™é‡Œç§°ä¸ºåˆ—æ•°
 	*/
 	int m_col;
 
 
-	/*------------------·½·¨------------------*/
+	/*------------------æ–¹æ³•------------------*/
 private:
 	/*
-	* ×ÊÔ´ÇåÀí£¬¼´ÊÍ·Å¶ÑÄÚ´æ
+	* èµ„æºæ¸…ç†ï¼Œå³é‡Šæ”¾å †å†…å­˜
 	*/
 	void free();
 public:
 	/*
-	* Îö¹¹º¯Êı£¬ÓÃÓÚÊÍ·ÅrowVector
+	* ææ„å‡½æ•°ï¼Œç”¨äºé‡Šæ”¾rowVector
 	*/
 	~row_vector();
 
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êı
-	* ÏòÁ¿³¤¶ÈÎª0£¬Ö¸ÕëÎª¿Õ
+	* é»˜è®¤æ„é€ å‡½æ•°
+	* å‘é‡é•¿åº¦ä¸º0ï¼ŒæŒ‡é’ˆä¸ºç©º
 	*/
 	row_vector();
 
 	/*
-	* ½ÓÊÜÒ»¸öÏòÁ¿Î¬¶ÈµÄ²ÎÊı
-	* ³õÊ¼»¯ºó£¬ÏòÁ¿Î¬¶ÈµÈÓÚÖ¸¶¨µÄt_Col£¬ÔªËØ³õÊ¼»¯Î¢ÎªÊıÖµ(0,0)
+	* æ¥å—ä¸€ä¸ªå‘é‡ç»´åº¦çš„å‚æ•°
+	* åˆå§‹åŒ–åï¼Œå‘é‡ç»´åº¦ç­‰äºæŒ‡å®šçš„t_Colï¼Œå…ƒç´ åˆå§‹åŒ–å¾®ä¸ºæ•°å€¼(0,0)
 	*/
 	explicit row_vector(int t_col);
 
 	/*
-	* ¿½±´¹¹Ôìº¯Êı
-	* ×¢ÒâÓĞÖ¸Õë³ÉÔ±Ê±£¬¿½±´ÓïÒâµÄÊµÏÖ
+	* æ‹·è´æ„é€ å‡½æ•°
+	* æ³¨æ„æœ‰æŒ‡é’ˆæˆå‘˜æ—¶ï¼Œæ‹·è´è¯­æ„çš„å®ç°
 	*/
 	row_vector(const row_vector& t_row_vector);
 
 	/*
-	* ÒÆ¶¯¹¹Ôìº¯Êı
-	* ×¢ÒâÒÆ¶¯ºóÔ´¶ÔÏóÖ¸Õë³ÉÔ±µÄÖÃ¿Õ
-	* ÉùÃ÷Îª²»Å×³öÒì³£µÄ
+	* ç§»åŠ¨æ„é€ å‡½æ•°
+	* æ³¨æ„ç§»åŠ¨åæºå¯¹è±¡æŒ‡é’ˆæˆå‘˜çš„ç½®ç©º
+	* å£°æ˜ä¸ºä¸æŠ›å‡ºå¼‚å¸¸çš„
 	*/
 	row_vector(row_vector&& t_row_vector) noexcept;
 
 	/*
-	* ÁĞ±í¹¹Ôìº¯Êı
+	* åˆ—è¡¨æ„é€ å‡½æ•°
 	*/
 	row_vector(const std::initializer_list<complex> t_il);
 
 
 	/*
-	* ¿½±´¸³ÖµÔËËã·û
+	* æ‹·è´èµ‹å€¼è¿ç®—ç¬¦
 	*/
 	row_vector& operator=(const row_vector& t_row_vector);
 
 	/*
-	* ÒÆ¶¯¸³ÖµÔËËã·û
+	* ç§»åŠ¨èµ‹å€¼è¿ç®—ç¬¦
 	*/
 	row_vector& operator=(row_vector&& t_row_vector) noexcept;
 
 	/*
-	* ÏÂ±êÔËËã·û
+	* ä¸‹æ ‡è¿ç®—ç¬¦
 	*/
 	complex& operator[](int t_pos);
 
 	/*
-	* ³£Á¿°æ±¾µÄÏÂ±êÔËËã·û
+	* å¸¸é‡ç‰ˆæœ¬çš„ä¸‹æ ‡è¿ç®—ç¬¦
 	*/
 	const complex& operator[](int t_pos) const;
 
 	/*
-	* ÖØÖÃ´óĞ¡
-	* ÖØÖÃºóÈôÎ¬¶È±ä´ó£¬ÄÇÃ´²¹(0,0)
-	* ÖØÖÃºóÈôÎ¬¶È±äĞ¡£¬ÄÇÃ´É¾³ı¶àÓàÔªËØ
+	* é‡ç½®å¤§å°
+	* é‡ç½®åè‹¥ç»´åº¦å˜å¤§ï¼Œé‚£ä¹ˆè¡¥(0,0)
+	* é‡ç½®åè‹¥ç»´åº¦å˜å°ï¼Œé‚£ä¹ˆåˆ é™¤å¤šä½™å…ƒç´ 
 	*/
 	void resize(int t_size);
 
 	/*
-	* Éú³ÉÏòÁ¿µÄ¸ñÊ½»¯×Ö·û´®
+	* ç”Ÿæˆå‘é‡çš„æ ¼å¼åŒ–å­—ç¬¦ä¸²
 	*/
 	std::string toString();
 
 	/*
-	* ½«ÏòÁ¿´òÓ¡µ½Ö¸¶¨Êä³öÁ÷
+	* å°†å‘é‡æ‰“å°åˆ°æŒ‡å®šè¾“å‡ºæµ
 	*/
 	void print(std::ostream& t_out = std::cout);
 
 };
 
 /*
-* ÏòÁ¿µ¥Ä¿È¡·´ÔËËã·û
+* å‘é‡å•ç›®å–åè¿ç®—ç¬¦
 */
 row_vector operator-(const row_vector& t_row_vector);
 
 /*
-* ÏòÁ¿¼Ó·¨¡¢¼õ·¨ÔËËã
+* å‘é‡åŠ æ³•ã€å‡æ³•è¿ç®—
 */
 row_vector operator+(const row_vector& t_row_vector1, const row_vector& t_row_vector2);
 row_vector operator-(const row_vector& t_row_vector1, const row_vector& t_row_vector2);
 
 /*
-* ÏòÁ¿Óë¸´Êı(¸´ÊıÓëÏòÁ¿)µÄ¼Ó¼õ³Ë³ıÔËËã·û
+* å‘é‡ä¸å¤æ•°(å¤æ•°ä¸å‘é‡)çš„åŠ å‡ä¹˜é™¤è¿ç®—ç¬¦
 */
 row_vector operator+(const row_vector& t_row_vector, const complex&t_complex);
 row_vector operator+(const complex&t_complex, const row_vector& t_row_vector);
@@ -129,207 +129,207 @@ row_vector operator/(const row_vector& t_row_vector, const complex&t_complex);
 row_vector operator/(const complex&t_complex, const row_vector& t_row_vector);
 
 /*
-* ÏòÁ¿ÓëÏòÁ¿µÄ¶ÔÓ¦ÔªËØ³Ë·¨Óë³ı·¨
+* å‘é‡ä¸å‘é‡çš„å¯¹åº”å…ƒç´ ä¹˜æ³•ä¸é™¤æ³•
 */
 row_vector element_product(const row_vector& t_row_vector1, const row_vector& t_row_vector2);
 row_vector element_divide(const row_vector& t_row_vector1, const row_vector& t_row_vector2);
 
 
 class matrix {
-	/*------------------¾²Ì¬------------------*/
+	/*------------------é™æ€------------------*/
 public:
 	/*
-	* Ëæ»úÊıÒıÇæ£¬¸ÃÀà¹²Ïí
+	* éšæœºæ•°å¼•æ“ï¼Œè¯¥ç±»å…±äº«
 	*/
 	static std::default_random_engine s_engine;
 
 	/*
-	* ¾ØÕóµÄ×óÓÒºÏ²¢£¬Òò´ËĞĞÎ¬¶È±ØĞëÏàÍ¬
+	* çŸ©é˜µçš„å·¦å³åˆå¹¶ï¼Œå› æ­¤è¡Œç»´åº¦å¿…é¡»ç›¸åŒ
 	*/
 	static matrix horizon_merge(const matrix& t_matrix1, const matrix& t_matrix2);
 
 	/*
-	* ¾ØÕóµÄË®Æ½·ÖÁÑ
+	* çŸ©é˜µçš„æ°´å¹³åˆ†è£‚
 	*/
 	static std::pair<matrix, matrix> horizon_split(const matrix& t_matrix, int t_left_col, int t_right_col);
 
 	/*
-	* ¾ØÕóµÄ´¹Ö±·ÖÁÑ
+	* çŸ©é˜µçš„å‚ç›´åˆ†è£‚
 	*/
 	static std::pair<matrix, matrix> vertical_split(const matrix& t_matrix, int t_up_row, int t_down_row);
 
 	/*
-	* Éú³ÉÖ¸¶¨Î¬¶ÈµÄµ¥Î»¾ØÕó
+	* ç”ŸæˆæŒ‡å®šç»´åº¦çš„å•ä½çŸ©é˜µ
 	*/
 	static matrix eye(const int t_dim);
-	/*------------------Óò------------------*/
+	/*------------------åŸŸ------------------*/
 private:
 	/*
-	* µ×²ãÏòÁ¿ÈİÆ÷£¬ÉèÎªË½ÓĞ½ûÖ¹Ö±½Ó·ÃÎÊ
+	* åº•å±‚å‘é‡å®¹å™¨ï¼Œè®¾ä¸ºç§æœ‰ç¦æ­¢ç›´æ¥è®¿é—®
 	*/
 	row_vector* m_matrix;
 public:
 	/*
-	* ĞĞÊı
+	* è¡Œæ•°
 	*/
 	int m_row;
 
 	/*
-	* ÁĞÊı
+	* åˆ—æ•°
 	*/
 	int m_col;
 
-	/*------------------·½·¨------------------*/
+	/*------------------æ–¹æ³•------------------*/
 private:
 	/*
-	* ÇåÀí¶ÑÄÚ´æ
+	* æ¸…ç†å †å†…å­˜
 	*/
 	void free();
 public:
 	/*
-	* Îö¹¹º¯Êı
+	* ææ„å‡½æ•°
 	*/
 	~matrix();
 
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êı
-	* ĞĞÁĞ¾ùÎª0£¬Ö¸ÕëÎª¿Õ
+	* é»˜è®¤æ„é€ å‡½æ•°
+	* è¡Œåˆ—å‡ä¸º0ï¼ŒæŒ‡é’ˆä¸ºç©º
 	*/
 	matrix();
 
 	/*
-	* Ö¸¶¨Î¬¶ÈµÄ¹¹Ôìº¯Êı
+	* æŒ‡å®šç»´åº¦çš„æ„é€ å‡½æ•°
 	*/
 	matrix(int t_row, int t_col);
 
 	/*
-	* ¿½±´¹¹Ôìº¯Êı£¬×¢ÒâÓĞÖ¸ÕëÊ±¿½±´ÓïÒâµÄÊµÏÖ
+	* æ‹·è´æ„é€ å‡½æ•°ï¼Œæ³¨æ„æœ‰æŒ‡é’ˆæ—¶æ‹·è´è¯­æ„çš„å®ç°
 	*/
 	matrix(const matrix& t_matrix);
 
 	/*
-	* ÒÆ¶¯¹¹Ôìº¯Êı£¬×¢ÒâÓĞÖ¸ÕëÊ±ÒÆ¶¯ÓïÒâµÄÊµÏÖ
+	* ç§»åŠ¨æ„é€ å‡½æ•°ï¼Œæ³¨æ„æœ‰æŒ‡é’ˆæ—¶ç§»åŠ¨è¯­æ„çš„å®ç°
 	*/
 	matrix(matrix&& t_matrix) noexcept;
 
 	/*
-	* ÁĞ±í¹¹Ôìº¯Êı
-	* ÁĞ±íÖĞÃ¿ĞĞµÄÔªËØÊıÄ¿¿ÉÒÔ²»Í¬
-	* ÒÔ×î³¤µÄÒ»ĞĞµÄÎ¬¶È×÷ÎªÁĞÊı
-	* ²»×ãµÄ²¹ÉÏ(0,0)
+	* åˆ—è¡¨æ„é€ å‡½æ•°
+	* åˆ—è¡¨ä¸­æ¯è¡Œçš„å…ƒç´ æ•°ç›®å¯ä»¥ä¸åŒ
+	* ä»¥æœ€é•¿çš„ä¸€è¡Œçš„ç»´åº¦ä½œä¸ºåˆ—æ•°
+	* ä¸è¶³çš„è¡¥ä¸Š(0,0)
 	*/
 	matrix(const std::initializer_list<row_vector>& t_il);
 
-	/*---¾ØÕó¹¦ÄÜº¯Êı---*/
+	/*---çŸ©é˜µåŠŸèƒ½å‡½æ•°---*/
 public:
 	/*
-	* Ëæ»úÌî³ä¾ùÔÈ·Ö²¼µÄÊıÖµ
-	* Êµ²¿µÄ·¶Î§[t_RealLeft,t_RealRight]
-	* Ğé²¿µÄ·¶Î§[t_ImagLeft,t_ImagRight]
+	* éšæœºå¡«å……å‡åŒ€åˆ†å¸ƒçš„æ•°å€¼
+	* å®éƒ¨çš„èŒƒå›´[t_RealLeft,t_RealRight]
+	* è™šéƒ¨çš„èŒƒå›´[t_ImagLeft,t_ImagRight]
 	*/
 	void random_fill(double t_real_left, double t_real_right, double t_imag_left, double t_imag_right);
 
 	/*
-	* Çó¹²éî
+	* æ±‚å…±è½­
 	*/
 	matrix conjugate();
 
 	/*
-	* Çó×ªÖÃ
+	* æ±‚è½¬ç½®
 	*/
 	matrix transpose();
 
 	/*
-	* ¹²éî×ªÖÃ
+	* å…±è½­è½¬ç½®
 	*/
 	matrix hermitian();
 
 	/*
-	* ÇóÄæ¾ØÕó
-	* µ±²¼¶ûÖµÎªtrueÊ±£¬µ±¾ØÕóÎŞ·¨ÇóÄæ£¬»á³¢ÊÔÇóÎ±Äæ(¹ãÒåÄæ¾ØÕó)
+	* æ±‚é€†çŸ©é˜µ
+	* å½“å¸ƒå°”å€¼ä¸ºtrueæ—¶ï¼Œå½“çŸ©é˜µæ— æ³•æ±‚é€†ï¼Œä¼šå°è¯•æ±‚ä¼ªé€†(å¹¿ä¹‰é€†çŸ©é˜µ)
 	*/
 	matrix inverse(bool t_try_pseudo_inverse = false);
 
 	/*
-	* Çó¶Ô½ÇÏß¹¹³ÉµÄ¾ØÕó(ĞĞÏòÁ¿)
+	* æ±‚å¯¹è§’çº¿æ„æˆçš„çŸ©é˜µ(è¡Œå‘é‡)
 	*/
 	matrix diag();
 
 	/*
-	* ÇóÂúÖÈ·Ö½â
+	* æ±‚æ»¡ç§©åˆ†è§£
 	*/
 	std::pair<matrix, matrix> full_rank_decomposition();
 
 	/*
-	* Çó¹ãÒåÄæ¾ØÕó
+	* æ±‚å¹¿ä¹‰é€†çŸ©é˜µ
 	*/
 	matrix pseudo_inverse();
 
 
-	/*---³ÉÔ±ÔËËã·ûÖØÔØ---*/
+	/*---æˆå‘˜è¿ç®—ç¬¦é‡è½½---*/
 public:
 	/*
-	* ¿½±´¸³ÖµÔËËã·û
-	* ×¢Òâ£¬ÓĞÖ¸Õë³ÉÔ±Ê±£¬Ò²ĞèÒª¼ì²é×Ô¸³ÖµµÄÕıÈ·ĞÔ
-	* ×¢ÒâÔ­Ö¸ÕëÎö¹¹µÄÊ±»ú
+	* æ‹·è´èµ‹å€¼è¿ç®—ç¬¦
+	* æ³¨æ„ï¼Œæœ‰æŒ‡é’ˆæˆå‘˜æ—¶ï¼Œä¹Ÿéœ€è¦æ£€æŸ¥è‡ªèµ‹å€¼çš„æ­£ç¡®æ€§
+	* æ³¨æ„åŸæŒ‡é’ˆææ„çš„æ—¶æœº
 	*/
 	matrix& operator=(const matrix& t_matrix);
 
 	/*
-	* ÒÆ¶¯¸³ÖµÔËËã·û
-	* ĞèÒª¼ì²é×Ô¸³ÖµµÄÕıÈ·ĞÔ
-	* ×¢ÒâÔ­Ö¸ÕëÎö¹¹µÄÊ±»ú
-	* ÉùÃ÷Îª²»»áÅ×³öÒì³£
+	* ç§»åŠ¨èµ‹å€¼è¿ç®—ç¬¦
+	* éœ€è¦æ£€æŸ¥è‡ªèµ‹å€¼çš„æ­£ç¡®æ€§
+	* æ³¨æ„åŸæŒ‡é’ˆææ„çš„æ—¶æœº
+	* å£°æ˜ä¸ºä¸ä¼šæŠ›å‡ºå¼‚å¸¸
 	*/
 	matrix& operator=(matrix&& t_matrix) noexcept;
 
 	/*
-	* ÏÂ±êÔËËã·û(·Ç³£Á¿°æ±¾)
+	* ä¸‹æ ‡è¿ç®—ç¬¦(éå¸¸é‡ç‰ˆæœ¬)
 	*/
 	row_vector& operator[](int t_pos);
 
 	/*
-	* ÏÂ±êÔËËã·û(³£Á¿°æ±¾)
+	* ä¸‹æ ‡è¿ç®—ç¬¦(å¸¸é‡ç‰ˆæœ¬)
 	*/
 	const row_vector& operator[](int t_pos) const;
 
 
-	/*---ÆäËû¹¦ÄÜº¯Êı---*/
+	/*---å…¶ä»–åŠŸèƒ½å‡½æ•°---*/
 public:
 	/*
-	* Éú³É¸ñÊ½»¯×Ö·û´®
+	* ç”Ÿæˆæ ¼å¼åŒ–å­—ç¬¦ä¸²
 	*/
 	std::string to_string();
 
 	/*
-	* ´òÓ¡µ½Ö¸¶¨Êä³öÁ÷
+	* æ‰“å°åˆ°æŒ‡å®šè¾“å‡ºæµ
 	*/
 	void print(std::ostream& t_out = std::cout, int t_num_enter = 0);
 
 
 private:
 	/*
-	* ÓÃÓÚ¼ÆËãµ±Î¬¶ÈĞ¡ÓÚ3Ê±µÄ¾ØÕóÇóÄæÔËËã
-	* Í¬Àí£¬µ±²¼¶ûÖµÎªtrueÊ±£¬ÎŞ·¨ÇóÄæ±ã»áÇóÎ±Äæ(¹ãÒåÄæ¾ØÕó)
+	* ç”¨äºè®¡ç®—å½“ç»´åº¦å°äº3æ—¶çš„çŸ©é˜µæ±‚é€†è¿ç®—
+	* åŒç†ï¼Œå½“å¸ƒå°”å€¼ä¸ºtrueæ—¶ï¼Œæ— æ³•æ±‚é€†ä¾¿ä¼šæ±‚ä¼ªé€†(å¹¿ä¹‰é€†çŸ©é˜µ)
 	*/
 	matrix inverse_when_dim_lower_than3(bool t_try_pseudo_inverse);
 };
 
 /*
-* µ¥Ä¿È¡·´ÔËËã·û
+* å•ç›®å–åè¿ç®—ç¬¦
 */
 matrix operator-(const matrix& t_matrix);
 
 
 /*
-* ¾ØÕó¼äµÄÔËËã£¬¼´¼Ó¡¢¼õ¡¢³Ë
+* çŸ©é˜µé—´çš„è¿ç®—ï¼Œå³åŠ ã€å‡ã€ä¹˜
 */
 matrix operator+(const matrix& t_matrix1, const matrix& t_matrix2);
 matrix operator-(const matrix& t_matrix1, const matrix& t_matrix2);
 matrix operator*(const matrix& t_matrix1, const matrix& t_matrix2);
 
 /*
-* ¾ØÕóÓë¸´ÊıµÄÔËËã£¬¼´¼Ó¡¢¼õ¡¢³Ë¡¢³ı
+* çŸ©é˜µä¸å¤æ•°çš„è¿ç®—ï¼Œå³åŠ ã€å‡ã€ä¹˜ã€é™¤
 */
 matrix operator+(const matrix& t_matrix, const complex& t_complex);
 matrix operator+(const complex& t_complex, const matrix& t_matrix);
@@ -345,7 +345,7 @@ matrix operator/(const complex& t_complex, const matrix& t_matrix);
 
 
 /*
-* ¶ÔÓ¦Î»ÖÃÔªËØ¼ÆËã
+* å¯¹åº”ä½ç½®å…ƒç´ è®¡ç®—
 */
 matrix element_product(const matrix& t_matrix1, const matrix& t_matrix2);
 matrix element_divide(const matrix& t_matrix1, const matrix& t_matrix2);

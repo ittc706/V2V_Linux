@@ -3,7 +3,7 @@
 *
 *       Filename:  vue.cpp
 *
-*    Description:  ³µÁ¾ÀàÊµÏÖ
+*    Description:  è½¦è¾†ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:

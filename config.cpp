@@ -3,7 +3,7 @@
 *
 *       Filename:  config.cpp
 *
-*    Description:  ÅäÖÃÎÄ¼şÀà
+*    Description:  é…ç½®æ–‡ä»¶ç±»
 *
 *        Version:  1.0
 *        Created:
@@ -59,23 +59,23 @@ int global_control_config::get_fresh_period() {
 }
 
 void global_control_config::load() {
-	//Ê×ÏÈÏÈÅĞ¶Ïµ±Ç°µÄÆ½Ì¨£¬ÀûÓÃÂ·¾¶µÄ±íÊ¾ÔÚÁ½¸öÆ½Ì¨ÏÂµÄ²îÒìÀ´ÅĞ¶Ï
+	//é¦–å…ˆå…ˆåˆ¤æ–­å½“å‰çš„å¹³å°ï¼Œåˆ©ç”¨è·¯å¾„çš„è¡¨ç¤ºåœ¨ä¸¤ä¸ªå¹³å°ä¸‹çš„å·®å¼‚æ¥åˆ¤æ–­
 	ifstream inPlatformWindows("config\\global_control_config.xml"),
 		inPlatformLinux("config/global_control_config.xml");
 
 	if (inPlatformWindows.is_open()) {
 		set_platform(Windows);
-		cout << "Äúµ±Ç°µÄÆ½Ì¨Îª£ºWindows" << endl;
+		cout << "æ‚¨å½“å‰çš„å¹³å°ä¸ºï¼šWindows" << endl;
 	}
 	else if (inPlatformLinux.is_open()) {
 		set_platform(Linux);
-		cout << "Äúµ±Ç°µÄÆ½Ì¨Îª£ºLinux" << endl;
+		cout << "æ‚¨å½“å‰çš„å¹³å°ä¸ºï¼šLinux" << endl;
 	}
 	else
 		throw logic_error("PlatformError");
 
 
-	//¿ªÊ¼½âÎöÅäÖÃÎÄ¼ş
+	//å¼€å§‹è§£æé…ç½®æ–‡ä»¶
 	switch (get_platform()) {
 	case Windows:
 		get_config_loader()->resolv_config_file("config\\global_control_config.xml");
@@ -97,7 +97,7 @@ void global_control_config::load() {
 		int t_ntti;
 		ss >> t_ntti;
 		set_ntti(t_ntti);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -108,7 +108,7 @@ void global_control_config::load() {
 		int t_fresh_period;
 		ss >> t_fresh_period;
 		set_fresh_period(t_fresh_period);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -168,7 +168,7 @@ double gtt_highspeed_config::get_freshtime() {
 
 void gtt_highspeed_config::load() {
 
-	//¿ªÊ¼½âÎöÏµÍ³ÅäÖÃÎÄ¼ş
+	//å¼€å§‹è§£æç³»ç»Ÿé…ç½®æ–‡ä»¶
 	switch (context::get_context()->get_global_control_config()->get_platform()) {
 	case Windows:
 		get_config_loader()->resolv_config_file("config\\gtt_highspeed_config.xml");
@@ -190,7 +190,7 @@ void gtt_highspeed_config::load() {
 		double t_road_length;
 		ss >> t_road_length;
 		set_road_length(t_road_length);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -202,7 +202,7 @@ void gtt_highspeed_config::load() {
 		double t_road_width;
 		ss >> t_road_width;
 		set_road_width(t_road_width);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -213,7 +213,7 @@ void gtt_highspeed_config::load() {
 		double t_speed;
 		ss >> t_speed;
 		set_speed(t_speed);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -285,7 +285,7 @@ double rrm_config::get_drop_sinr_boundary() {
 }
 
 void rrm_config::load() {
-	//¿ªÊ¼½âÎöÏµÍ³ÅäÖÃÎÄ¼ş
+	//å¼€å§‹è§£æç³»ç»Ÿé…ç½®æ–‡ä»¶
 	switch (context::get_context()->get_global_control_config()->get_platform()) {
 	case Windows:
 		get_config_loader()->resolv_config_file("config\\rrm_config.xml");
@@ -308,7 +308,7 @@ void rrm_config::load() {
 		ss >> t_total_bandwidth;
 		t_total_bandwidth *= 1000 * 1000;
 		set_total_bandwidth(t_total_bandwidth);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -319,7 +319,7 @@ void rrm_config::load() {
 		int t_rb_num_per_pattern;
 		ss >> t_rb_num_per_pattern;
 		set_rb_num_per_pattern(t_rb_num_per_pattern);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -330,7 +330,7 @@ void rrm_config::load() {
 		int t_modulation_type;
 		ss >> t_modulation_type;
 		set_modulation_type(t_modulation_type);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -341,7 +341,7 @@ void rrm_config::load() {
 		double t_code_rate;
 		ss >> t_code_rate;
 		set_code_rate(t_code_rate);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -352,7 +352,7 @@ void rrm_config::load() {
 		double t_drop_sinr_boundary;
 		ss >> t_drop_sinr_boundary;
 		set_drop_sinr_boundary(t_drop_sinr_boundary);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -401,7 +401,7 @@ const std::vector<int>& tmc_config::get_bit_num_per_package() {
 }
 
 void tmc_config::load() {
-	//¿ªÊ¼½âÎöÏµÍ³ÅäÖÃÎÄ¼ş
+	//å¼€å§‹è§£æç³»ç»Ÿé…ç½®æ–‡ä»¶
 	switch (context::get_context()->get_global_control_config()->get_platform()) {
 	case Windows:
 		get_config_loader()->resolv_config_file("config\\tmc_config.xml");
@@ -423,7 +423,7 @@ void tmc_config::load() {
 		int t_congestion_level_num;
 		ss >> t_congestion_level_num;
 		set_congestion_level_num(t_congestion_level_num);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -435,7 +435,7 @@ void tmc_config::load() {
 		while (ss >> temp2) {
 			m_periodic_event_period.push_back(config_loader::string_to_int(temp2));
 		}
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -446,7 +446,7 @@ void tmc_config::load() {
 		int t_package_num;
 		ss >> t_package_num;
 		set_package_num(t_package_num);
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else
@@ -458,7 +458,7 @@ void tmc_config::load() {
 		while (ss >> temp2) {
 			m_bit_num_per_package.push_back(config_loader::string_to_int(temp2));
 		}
-		ss.clear();//Çå³ı±êÖ¾Î»
+		ss.clear();//æ¸…é™¤æ ‡å¿—ä½
 		ss.str("");
 	}
 	else

@@ -2,7 +2,7 @@
 
 
 /*
-* Ç°ÖÃÉùÃ÷
+* å‰ç½®å£°æ˜Ž
 */
 class vue_physics;
 class vue_link;
@@ -10,69 +10,69 @@ class vue_network;
 
 
 class vue {
-	/*------------------Ë½ÓÐ×Ö¶Î------------------*/
+	/*------------------ç§æœ‰å­—æ®µ------------------*/
 private:
 	/*
-	* Ö¸Ïò³µÁ¾ÀàÎïÀí²ãµÄÊµÌå
+	* æŒ‡å‘è½¦è¾†ç±»ç‰©ç†å±‚çš„å®žä½“
 	*/
 	vue_physics* m_physics_level = nullptr;
 
 	/*
-	* Ö¸Ïò³µÁ¾ÀàÁ´Â·²ãµÄÊµÌå
+	* æŒ‡å‘è½¦è¾†ç±»é“¾è·¯å±‚çš„å®žä½“
 	*/
 	vue_link* m_link_level = nullptr;
 
 	/*
-	* Ö¸Ïò³µÁ¾ÀàÍøÂç²ãµÄÊµÌå
+	* æŒ‡å‘è½¦è¾†ç±»ç½‘ç»œå±‚çš„å®žä½“
 	*/
 	vue_network* m_network_level = nullptr;
 
-	/*----------------¿½±´¿ØÖÆ³ÉÔ±----------------*/
+	/*----------------æ‹·è´æŽ§åˆ¶æˆå‘˜----------------*/
 public: 
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êý£¬¿ØÖÆÈý²ãÊµÌåÖ¸ÕëµÄ³õÊ¼»¯
+	* é»˜è®¤æž„é€ å‡½æ•°ï¼ŒæŽ§åˆ¶ä¸‰å±‚å®žä½“æŒ‡é’ˆçš„åˆå§‹åŒ–
 	*/
 	vue();
 
 	/*
-	* Îö¹¹º¯Êý£¬¸ºÔðÇåÀí×ÊÔ´
+	* æžæž„å‡½æ•°ï¼Œè´Ÿè´£æ¸…ç†èµ„æº
 	*/
 	~vue();
 
 	/*
-	* ½«¿½±´¹¹Ôìº¯Êý¶¨ÒåÎªÉ¾³ý
+	* å°†æ‹·è´æž„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	vue(const vue& t_vue) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¹¹Ôìº¯Êý¶¨ÒåÎªÉ¾³ý
+	* å°†ç§»åŠ¨æž„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	vue(vue&& t_vue) = delete;
 
 	/*
-	* ½«¿½±´¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ý
+	* å°†æ‹·è´èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	vue& operator=(const vue& t_vue) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ý
+	* å°†ç§»åŠ¨èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	vue& operator=(vue&& t_vue) = delete;
 
-	/*----------------·ÃÎÊÓë±à¼­Æ÷----------------*/
+	/*----------------è®¿é—®ä¸Žç¼–è¾‘å™¨----------------*/
 public:
 	/*
-	* ³µÁ¾ÎïÀí²ã²¿·Ö·ÃÎÊÆ÷
+	* è½¦è¾†ç‰©ç†å±‚éƒ¨åˆ†è®¿é—®å™¨
 	*/
 	vue_physics* get_physics_level();
 
 	/*
-	* ³µÁ¾Á´Â·²ã²¿·Ö·ÃÎÊÆ÷
+	* è½¦è¾†é“¾è·¯å±‚éƒ¨åˆ†è®¿é—®å™¨
 	*/
 	vue_link* get_link_level();
 
 	/*
-	* ³µÁ¾ÍøÂç²ã²¿·Ö·ÃÎÊÆ÷
+	* è½¦è¾†ç½‘ç»œå±‚éƒ¨åˆ†è®¿é—®å™¨
 	*/
 	vue_network* get_network_level();
 };

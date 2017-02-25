@@ -3,7 +3,7 @@
 *
 *       Filename:  gtt_highspeed.cpp
 *
-*    Description:  ¸ßËÙ³¡¾°ÀàÊµÏÖ
+*    Description:  é«˜é€Ÿåœºæ™¯ç±»å®ç°
 *
 *        Version:  1.0
 *        Created:
@@ -30,13 +30,13 @@ using namespace std;
 
 void gtt_highspeed::initialize() {
 	gtt_highspeed_config* __config = get_precise_config();
-	int* m_pupr = new int[__config->get_road_num()];//Ã¿ÌõÂ·ÉÏµÄ³µÁ¾Êı
-	double* TotalTime = new double[__config->get_road_num()];//Ã¿ÌõµÀÂ·³õÊ¼²´ËÉÈöµã¹ı³ÌÖĞËùÓĞ³µÁ¾¶¼ÒÑÈö½øÇøÓòÄÚËùÓÃµÄ×ÜÊ±¼ä
-	std::list<double>* possion = new std::list<double>[__config->get_road_num()];//Ã¿ÌõµÀÂ·³õÊ¼²´ËÉÈöµãµÄ³µÁ¾µ½´ïÊ±¼ä¼ä¸ôlist£¬µ¥Î»s
+	int* m_pupr = new int[__config->get_road_num()];//æ¯æ¡è·¯ä¸Šçš„è½¦è¾†æ•°
+	double* TotalTime = new double[__config->get_road_num()];//æ¯æ¡é“è·¯åˆå§‹æ³Šæ¾æ’’ç‚¹è¿‡ç¨‹ä¸­æ‰€æœ‰è½¦è¾†éƒ½å·²æ’’è¿›åŒºåŸŸå†…æ‰€ç”¨çš„æ€»æ—¶é—´
+	std::list<double>* possion = new std::list<double>[__config->get_road_num()];//æ¯æ¡é“è·¯åˆå§‹æ³Šæ¾æ’’ç‚¹çš„è½¦è¾†åˆ°è¾¾æ—¶é—´é—´éš”listï¼Œå•ä½s
 
-	//Éú³É¸ºÖ¸Êı·Ö²¼µÄ³µÁ¾µ½´ï¼ä¸ô
+	//ç”Ÿæˆè´ŸæŒ‡æ•°åˆ†å¸ƒçš„è½¦è¾†åˆ°è¾¾é—´éš”
 	int tempVeUENum = 0;
-	double lambda = 1 / 5.0;//¾ùÖµÎª1/lambda£¬ÒÀÕÕĞ­Òé³µÁ¾µ½´ïÊ±¼ä¼ä¸ôµÄ¾ùÖµÎª2.5s
+	double lambda = 1 / 5.0;//å‡å€¼ä¸º1/lambdaï¼Œä¾ç…§åè®®è½¦è¾†åˆ°è¾¾æ—¶é—´é—´éš”çš„å‡å€¼ä¸º2.5s
 	for (int roadId = 0; roadId != __config->get_road_num(); roadId++) {
 		TotalTime[roadId] = 0;
 		while (TotalTime[roadId] * (__config->get_speed() / 3.6) < __config->get_road_length()) {
@@ -54,11 +54,11 @@ void gtt_highspeed::initialize() {
 			TotalTime[roadId] += pV;
 			double check = TotalTime[roadId];
 		}
-		m_pupr[roadId] = static_cast<int>(possion[roadId].size());//Íê³Éµ±Ç°µÀÂ·ÏÂ×Ü³µÁ¾ÊıµÄ¸³Öµ
+		m_pupr[roadId] = static_cast<int>(possion[roadId].size());//å®Œæˆå½“å‰é“è·¯ä¸‹æ€»è½¦è¾†æ•°çš„èµ‹å€¼
 		tempVeUENum += m_pupr[roadId];
 	}
 
-	//½øĞĞ³µÁ¾µÄÈöµã
+	//è¿›è¡Œè½¦è¾†çš„æ’’ç‚¹
 	context::get_context()->set_vue_array(new vue[tempVeUENum]);
 	int vue_id = 0;
 
@@ -118,7 +118,7 @@ void gtt_highspeed::update_channel() {
 
 			angle = atan2(vuei->m_absy - vuej->m_absy, vuei->m_absx - vuej->m_absx) / imta::s_DEGREE_TO_PI;
 
-			imta::randomGaussian(_location.posCor, 5, 0.0f, 1.0f);//²úÉú¸ßË¹Ëæ»úÊı£¬ÎªºóÃæĞÅµÀÏµÊıÊ¹ÓÃ
+			imta::randomGaussian(_location.posCor, 5, 0.0f, 1.0f);//äº§ç”Ÿé«˜æ–¯éšæœºæ•°ï¼Œä¸ºåé¢ä¿¡é“ç³»æ•°ä½¿ç”¨
 
 			double m_FantennaAnglei;
 			double m_FantennaAnglej;
@@ -141,7 +141,7 @@ void gtt_highspeed::update_channel() {
 
 			double t_Pl = 0;
 
-			__imta[imta_id].build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//¼ÆËãÁË½á¹û´úÈëĞÅµÀÄ£ĞÍ¼ÆËãUEÖ®¼äĞÅµÀÏµÊı
+			__imta[imta_id].build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//è®¡ç®—äº†ç»“æœä»£å…¥ä¿¡é“æ¨¡å‹è®¡ç®—UEä¹‹é—´ä¿¡é“ç³»æ•°
 
 			vue_physics::set_pl(vue_id_i, vue_id_j, t_Pl);
 

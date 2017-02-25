@@ -7,7 +7,7 @@
 class memory_clean {
 public:
 	/*
-	* É¾³ıº¯Êı£¬É¾³ıºó»áÖÃ¿ÕÖ¸Õë
+	* åˆ é™¤å‡½æ•°ï¼Œåˆ é™¤åä¼šç½®ç©ºæŒ‡é’ˆ
 	*/
 	template<typename T>
 	static void safe_delete(T*&t_point, bool t_is_array = false) {

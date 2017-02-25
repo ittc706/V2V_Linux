@@ -15,74 +15,74 @@ class vue;
 class sender_event;
 
 class context {
-	/*------------------ÓÑÔªÉùÃ÷------------------*/
+	/*------------------å‹å…ƒå£°æ˜------------------*/
 	/*
-	* ½«system_controlÉèÎªcontextµÄÓÑÔª£¬Ìá¹©Æä¹¹ÔìÈİÆ÷ÀàÎ¨Ò»ÊµÀıµÄÈ¨ÏŞ
+	* å°†system_controlè®¾ä¸ºcontextçš„å‹å…ƒï¼Œæä¾›å…¶æ„é€ å®¹å™¨ç±»å”¯ä¸€å®ä¾‹çš„æƒé™
 	*/
 	friend class system_control;
 	friend class gtt_highspeed;
 	friend class tmc;
-	/*------------------¾²Ì¬³ÉÔ±×Ö¶Î------------------*/
+	/*------------------é™æ€æˆå‘˜å­—æ®µ------------------*/
 private:
 	/*
-	* µ¥ÀıÄ£Ê½ÏÂ£¬Î¨Ò»ÊµÌåµÄÖ¸Õë
+	* å•ä¾‹æ¨¡å¼ä¸‹ï¼Œå”¯ä¸€å®ä½“çš„æŒ‡é’ˆ
 	*/
 	static context* s_singleton_context;
 
 public:
 	/*
-	* µ¥ÀıÄ£Ê½ÏÂ£¬»ñÈ¡Î¨Ò»ÊµÌåµÄÖ¸Õë
+	* å•ä¾‹æ¨¡å¼ä¸‹ï¼Œè·å–å”¯ä¸€å®ä½“çš„æŒ‡é’ˆ
 	*/
 	static context* get_context();
 
 private:
 	/*
-	* µ¥ÀıÄ£Ê½ÏÂ£¬ÉèÖÃÎ¨Ò»ÊµÌåµÄÖ¸Õë
+	* å•ä¾‹æ¨¡å¼ä¸‹ï¼Œè®¾ç½®å”¯ä¸€å®ä½“çš„æŒ‡é’ˆ
 	*/
 	static void set_context(context* t_singleton_context);
 
 private:
 	/*
-	* µ¥ÀıÄ£Ê½ÏÂ£¬Éú³ÉÎ¨Ò»ÊµÌå
+	* å•ä¾‹æ¨¡å¼ä¸‹ï¼Œç”Ÿæˆå”¯ä¸€å®ä½“
 	*/
 	static void context_factory();
 
-	/*----------------¿½±´¿ØÖÆ³ÉÔ±----------------*/
+	/*----------------æ‹·è´æ§åˆ¶æˆå‘˜----------------*/
 private:
 	/*
-	* Ä¬ÈÏ¹¹Ôìº¯Êı
+	* é»˜è®¤æ„é€ å‡½æ•°
 	*/
 	context();
 
 public:
 	/*
-	* Îö¹¹º¯Êı£¬¸ºÔğÇåÀí×ÊÔ´
+	* ææ„å‡½æ•°ï¼Œè´Ÿè´£æ¸…ç†èµ„æº
 	*/
 	~context();
 
 	/*
-	* ½«¿½±´¹¹Ôìº¯Êı¶¨ÒåÎªÉ¾³ı
+	* å°†æ‹·è´æ„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	context(const context& t_context) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¹¹Ôìº¯Êı¶¨ÒåÎªÉ¾³ı
+	* å°†ç§»åŠ¨æ„é€ å‡½æ•°å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	context(context&& t_context) = delete;
 
 	/*
-	* ½«¿½±´¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ı
+	* å°†æ‹·è´èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	context& operator=(const context& t_context) = delete;
 
 	/*
-	* ½«ÒÆ¶¯¸³ÖµÔËËã·û¶¨ÒåÎªÉ¾³ı
+	* å°†ç§»åŠ¨èµ‹å€¼è¿ç®—ç¬¦å®šä¹‰ä¸ºåˆ é™¤
 	*/
 	context& operator=(context&& t_context) = delete;
 
-	/*------------------ÈİÆ÷³ÉÔ±------------------*/
+	/*------------------å®¹å™¨æˆå‘˜------------------*/
 	/*
-	* ÅäÖÃÎÄ¼ş¼ÓÔØ¶ÔÏó¡¢±à¼­Æ÷¡¢·ÃÎÊÆ÷
+	* é…ç½®æ–‡ä»¶åŠ è½½å¯¹è±¡ã€ç¼–è¾‘å™¨ã€è®¿é—®å™¨
 	*/
 private:
 	config_loader* m_config_loader = nullptr;
@@ -91,7 +91,7 @@ public:
 	config_loader* get_config_loader();
 
 	/*
-	* global_controlÅäÖÃ²ÎÊı¶ÔÏó
+	* global_controlé…ç½®å‚æ•°å¯¹è±¡
 	*/
 private:
 	global_control_config* m_global_control_config = nullptr;
@@ -100,7 +100,7 @@ public:
 	global_control_config* get_global_control_config();
 
 	/*
-	* gttÅäÖÃ²ÎÊı¶ÔÏó
+	* gtté…ç½®å‚æ•°å¯¹è±¡
 	*/
 private:
 	gtt_config* m_gtt_config = nullptr;
@@ -109,7 +109,7 @@ public:
 	gtt_config* get_gtt_config();
 
 	/*
-	* rrmÅäÖÃ²ÎÊı¶ÔÏó
+	* rrmé…ç½®å‚æ•°å¯¹è±¡
 	*/
 private:
 	rrm_config* m_rrm_config = nullptr;
@@ -118,7 +118,7 @@ public:
 	rrm_config* get_rrm_config();
 
 	/*
-	* tmcÅäÖÃ²ÎÊı¶ÔÏó
+	* tmcé…ç½®å‚æ•°å¯¹è±¡
 	*/
 private:
 	tmc_config* m_tmc_config = nullptr;
@@ -127,7 +127,7 @@ public:
 	tmc_config* get_tmc_config();
 
 	/*
-	* tti,·ÂÕæÊ±¿Ì
+	* tti,ä»¿çœŸæ—¶åˆ»
 	*/
 private:
 	int m_tti = 0;
@@ -136,7 +136,7 @@ public:
 	int get_tti();
 
 	/*
-	* gttÊµÌåÖ¸Õë
+	* gttå®ä½“æŒ‡é’ˆ
 	*/
 private:
 	gtt* m_gtt = nullptr;
@@ -145,7 +145,7 @@ public:
 	gtt* get_gtt();
 
 	/*
-	* rrmÊµÌåÖ¸Õë
+	* rrmå®ä½“æŒ‡é’ˆ
 	*/
 private:
 	rrm* m_rrm = nullptr;
@@ -154,7 +154,7 @@ public:
 	rrm* get_rrm();
 
 	/*
-	* tmcÊµÌåÖ¸Õë
+	* tmcå®ä½“æŒ‡é’ˆ
 	*/
 private:
 	tmc* m_tmc = nullptr;
@@ -163,7 +163,7 @@ public:
 	tmc* get_tmc();
 
 	/*
-	* wt¶ÔÏó£¬Îª·Çµ¥ÀıÄ£Ê½£¬¿ÉÒÔÇëÇóÊı¸öwtÀàĞÍµÄ¶ÔÏó
+	* wtå¯¹è±¡ï¼Œä¸ºéå•ä¾‹æ¨¡å¼ï¼Œå¯ä»¥è¯·æ±‚æ•°ä¸ªwtç±»å‹çš„å¯¹è±¡
 	*/
 private:
 	wt* m_wt = nullptr;
@@ -172,7 +172,7 @@ public:
 	wt* get_wt();
 
 	/*
-	* ³µÁ¾ÀàÊı×éÖ¸Õë
+	* è½¦è¾†ç±»æ•°ç»„æŒ‡é’ˆ
 	*/
 private:
 	vue* m_vue_array = nullptr;
@@ -181,7 +181,7 @@ public:
 	vue* get_vue_array();
 
 	/*
-	* ÊÂ¼şÀàÊı×é
+	* äº‹ä»¶ç±»æ•°ç»„
 	*/
 private:
 	std::vector<sender_event*> m_event_array;
@@ -190,8 +190,8 @@ public:
 	std::vector<sender_event*>& get_event_array();
 
 	/*
-	* ttiÊÂ¼şÊı×é£¬
-	* Íâ²ãÏÂ±ê´ú±íttiÊ±¿Ì
+	* ttiäº‹ä»¶æ•°ç»„ï¼Œ
+	* å¤–å±‚ä¸‹æ ‡ä»£è¡¨ttiæ—¶åˆ»
 	*/
 private:
 	std::vector<std::list<sender_event*>> m_tti_event_list;
@@ -199,10 +199,10 @@ private:
 public:
 	std::vector<std::list<sender_event*>>& get_tti_event_list();
 
-	/*--------------------ÊµÏÖ--------------------*/
+	/*--------------------å®ç°--------------------*/
 private:
 	/*
-	* ÎªÈİÆ÷µÄ³ÉÔ±×¢ÈëÒÀÀµÏî£¬²¢Ö´ĞĞÏàÓ¦µÄ³õÊ¼»¯¶¯×÷
+	* ä¸ºå®¹å™¨çš„æˆå‘˜æ³¨å…¥ä¾èµ–é¡¹ï¼Œå¹¶æ‰§è¡Œç›¸åº”çš„åˆå§‹åŒ–åŠ¨ä½œ
 	*/
 	void dependency_injecte();
 };
