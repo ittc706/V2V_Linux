@@ -46,15 +46,6 @@ public:
 	* 信道刷新周期
 	*/
 private:
-	int m_fresh_period;
-	void set_fresh_period(int t_fresh_period);
-public:
-	int get_fresh_period();
-
-	/*
-	* 信道刷新周期
-	*/
-private:
 	gtt_mode m_gtt_mode;
 	void set_gtt_mode(gtt_mode t_gtt_mode);
 public:
@@ -151,10 +142,10 @@ public:
 	* 车辆位置刷新时间,单位s
 	*/
 private:
-	double m_freshtime = INVALID;
-	void set_freshtime(double t_freshtime);
+	int m_freshtime = INVALID;
+	void set_freshtime(int t_freshtime);
 public:
-	double get_freshtime();
+	int get_freshtime();
 
 	/*--------------------接口--------------------*/
 public:
@@ -251,10 +242,10 @@ public:
 	* 车辆位置刷新时间,单位s
 	*/
 private:
-	double m_freshtime = INVALID;
-	void set_freshtime(double t_freshtime);
+	int m_freshtime = INVALID;
+	void set_freshtime(int t_freshtime);
 public:
-	double get_freshtime();
+	int get_freshtime();
 
 };
 
@@ -381,9 +372,9 @@ public:
 	* 对应拥塞等级下周期事件周期
 	*/
 private:
-	std::vector<int> m_periodic_event_period;
+	std::vector<int> m_periodic_event_period_per_congestion_level;
 public:
-	const std::vector<int>& get_periodic_event_period();
+	const std::vector<int>& get_periodic_event_period_per_congestion_level();
 
 	/*
 	* 周期事件包数

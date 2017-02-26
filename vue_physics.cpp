@@ -109,31 +109,33 @@ int vue_physics::get_congestion_level() {
 	return m_congestion_level;
 }
 
-void vue_physics::update_location() {
+void vue_physics::update_location_highspeed() {
 	auto p = (gtt_highspeed*)context::get_context()->get_gtt();
+	//get_freshtime()的单位是TTI，这里转换成s
+	double freshtime_second = static_cast<double>(p->get_precise_config()->get_freshtime()) / 1000.0;
 	if (m_vangle == 0)
 	{
-		if ((m_absx + p->get_precise_config()->get_freshtime()*m_speed)>(p->get_precise_config()->get_road_length() / 2))
+		if ((m_absx + freshtime_second*m_speed)>(p->get_precise_config()->get_road_length() / 2))
 		{
-			m_absx = (m_absx + p->get_precise_config()->get_freshtime()*m_speed) - p->get_precise_config()->get_road_length();
+			m_absx = (m_absx + freshtime_second*m_speed) - p->get_precise_config()->get_road_length();
 			m_relx = m_absx;
 		}
 		else
 		{
-			m_absx = m_absx + p->get_precise_config()->get_freshtime()*m_speed;
+			m_absx = m_absx + freshtime_second*m_speed;
 			m_relx = m_absx;
 		}
 	}
 	else
 	{
-		if ((m_absx - p->get_precise_config()->get_freshtime()*m_speed)<(-p->get_precise_config()->get_road_length() / 2))
+		if ((m_absx - freshtime_second*m_speed)<(-p->get_precise_config()->get_road_length() / 2))
 		{
-			m_absx = m_absx - p->get_precise_config()->get_freshtime()*m_speed + p->get_precise_config()->get_road_length();
+			m_absx = m_absx - freshtime_second*m_speed + p->get_precise_config()->get_road_length();
 			m_relx = m_absx;
 		}
 		else
 		{
-			m_absx = m_absx - p->get_precise_config()->get_freshtime()*m_speed;
+			m_absx = m_absx - freshtime_second*m_speed;
 			m_relx = m_absx;
 		}
 	}
@@ -141,109 +143,111 @@ void vue_physics::update_location() {
 
 void vue_physics::update_location_urban() {
 	auto p = (gtt_urban*)context::get_context()->get_gtt();
+	//get_freshtime()的单位是TTI，这里转换成s
+	double freshtime_second = static_cast<double>(p->get_precise_config()->get_freshtime()) / 1000.0;
 	bool RoadChangeFlag = false;
 	int temp;
 	if (m_vangle == 90) {//left
-		if ((m_rely + p->get_precise_config()->get_freshtime()*m_speed) > (p->get_precise_config()->get_road_length_ew() / 2)) {//top left
+		if ((m_rely + freshtime_second*m_speed) > (p->get_precise_config()->get_road_length_ew() / 2)) {//top left
 			temp = rand() % 4;
 			if (temp == 0) {//turn left
 				RoadChangeFlag = true;
-				m_relx = p->get_precise_config()->get_road_length_sn() / 2 - (m_rely + p->get_precise_config()->get_freshtime()*m_speed - p->get_precise_config()->get_road_length_ew() / 2);
+				m_relx = p->get_precise_config()->get_road_length_sn() / 2 - (m_rely + freshtime_second*m_speed - p->get_precise_config()->get_road_length_ew() / 2);
 				m_rely = -(p->get_precise_config()->get_road_length_ew() + p->get_precise_config()->get_road_width()) / 2;
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][6];
 				m_vangle = -180;
 			}
 			else if (temp == 2) {//turn right
-				m_relx = (m_rely + p->get_precise_config()->get_freshtime()*m_speed - p->get_precise_config()->get_road_length_ew() / 2) - p->get_precise_config()->get_road_length_sn() / 2;
+				m_relx = (m_rely + freshtime_second*m_speed - p->get_precise_config()->get_road_length_ew() / 2) - p->get_precise_config()->get_road_length_sn() / 2;
 				m_rely = (p->get_precise_config()->get_road_length_ew() + p->get_precise_config()->get_road_width()) / 2;
 				m_vangle = 0;
 			}
 			else {//go straight
 				RoadChangeFlag = true;
-				m_rely = (m_rely + p->get_precise_config()->get_freshtime()*m_speed - p->get_precise_config()->get_road_length_ew() / 2) - p->get_precise_config()->get_road_length_ew() / 2;
+				m_rely = (m_rely + freshtime_second*m_speed - p->get_precise_config()->get_road_length_ew() / 2) - p->get_precise_config()->get_road_length_ew() / 2;
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][7];
 			}
 		}
 		else {
-			m_rely = m_rely + p->get_precise_config()->get_freshtime()*m_speed;
+			m_rely = m_rely + freshtime_second*m_speed;
 		}
 	}
 
 	else if (m_vangle == 0) {//top
-		if ((m_relx + p->get_precise_config()->get_freshtime()*m_speed) > (p->get_precise_config()->get_road_length_sn() / 2)) {//top right
+		if ((m_relx + freshtime_second*m_speed) > (p->get_precise_config()->get_road_length_sn() / 2)) {//top right
 			temp = rand() % 4;
 			if (temp == 0) {//turn left
 				RoadChangeFlag = true;
-				m_rely = (m_relx + p->get_precise_config()->get_freshtime()*m_speed - p->get_precise_config()->get_road_length_sn() / 2) - p->get_precise_config()->get_road_length_ew() / 2;
+				m_rely = (m_relx + freshtime_second*m_speed - p->get_precise_config()->get_road_length_sn() / 2) - p->get_precise_config()->get_road_length_ew() / 2;
 				m_relx = -(p->get_precise_config()->get_road_length_sn() + p->get_precise_config()->get_road_width()) / 2;
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][8];
 				m_vangle = 90;
 			}
 			else if (temp == 2) {//turn right
-				m_rely = p->get_precise_config()->get_road_length_ew() / 2 - (m_relx + p->get_precise_config()->get_freshtime()*m_speed - p->get_precise_config()->get_road_length_sn() / 2);
+				m_rely = p->get_precise_config()->get_road_length_ew() / 2 - (m_relx + freshtime_second*m_speed - p->get_precise_config()->get_road_length_sn() / 2);
 				m_relx = (p->get_precise_config()->get_road_length_sn() + p->get_precise_config()->get_road_width()) / 2;
 				m_vangle = -90;
 			}
 			else {//go straight
 				RoadChangeFlag = true;
-				m_relx = (m_relx + p->get_precise_config()->get_freshtime()*m_speed - p->get_precise_config()->get_road_length_sn() / 2) - p->get_precise_config()->get_road_length_sn() / 2;
+				m_relx = (m_relx + freshtime_second*m_speed - p->get_precise_config()->get_road_length_sn() / 2) - p->get_precise_config()->get_road_length_sn() / 2;
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][1];
 			}
 		}
 		else {
-			m_relx = m_relx + p->get_precise_config()->get_freshtime()*m_speed;
+			m_relx = m_relx + freshtime_second*m_speed;
 		}
 	}
 
 	else if (m_vangle == -90) {//right
-		if ((m_rely - p->get_precise_config()->get_freshtime()*m_speed) < -(p->get_precise_config()->get_road_length_ew() / 2)) {//bottom right
+		if ((m_rely - freshtime_second*m_speed) < -(p->get_precise_config()->get_road_length_ew() / 2)) {//bottom right
 			temp = rand() % 4;
 			if (temp == 0) {//turn left
 				RoadChangeFlag = true;
-				m_relx = (-p->get_precise_config()->get_road_length_ew() / 2 - (m_rely - p->get_precise_config()->get_freshtime()*m_speed)) - p->get_precise_config()->get_road_length_sn() / 2;
+				m_relx = (-p->get_precise_config()->get_road_length_ew() / 2 - (m_rely - freshtime_second*m_speed)) - p->get_precise_config()->get_road_length_sn() / 2;
 				m_rely = (p->get_precise_config()->get_road_length_ew() + p->get_precise_config()->get_road_width()) / 2;
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][2];
 				m_vangle = 0;
 			}
 			else if (temp == 2) {//turn right
-				m_relx = p->get_precise_config()->get_road_length_sn() / 2 - (-p->get_precise_config()->get_road_length_ew() / 2 - (m_rely - p->get_precise_config()->get_freshtime()*m_speed));
+				m_relx = p->get_precise_config()->get_road_length_sn() / 2 - (-p->get_precise_config()->get_road_length_ew() / 2 - (m_rely - freshtime_second*m_speed));
 				m_rely = -(p->get_precise_config()->get_road_length_ew() + p->get_precise_config()->get_road_width()) / 2;
 				m_vangle = -180;
 			}
 			else {//go straight
 				RoadChangeFlag = true;
-				m_rely = p->get_precise_config()->get_road_length_ew() / 2 - (-p->get_precise_config()->get_road_length_ew() / 2 - (m_rely - p->get_precise_config()->get_freshtime()*m_speed));
+				m_rely = p->get_precise_config()->get_road_length_ew() / 2 - (-p->get_precise_config()->get_road_length_ew() / 2 - (m_rely - freshtime_second*m_speed));
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][3];
 			}
 		}
 		else {
-			m_rely = m_rely - p->get_precise_config()->get_freshtime()*m_speed;
+			m_rely = m_rely - freshtime_second*m_speed;
 		}
 	}
 
 	else {//bottom
-		if ((m_relx - p->get_precise_config()->get_freshtime()*m_speed) < -(p->get_precise_config()->get_road_length_sn() / 2)) {//bottom left
+		if ((m_relx - freshtime_second*m_speed) < -(p->get_precise_config()->get_road_length_sn() / 2)) {//bottom left
 			temp = rand() % 4;
 			if (temp == 0) {//turn left
 				RoadChangeFlag = true;
-				m_rely = p->get_precise_config()->get_road_length_ew() / 2 - (-p->get_precise_config()->get_road_length_sn() / 2 - (m_relx - p->get_precise_config()->get_freshtime()*m_speed));
+				m_rely = p->get_precise_config()->get_road_length_ew() / 2 - (-p->get_precise_config()->get_road_length_sn() / 2 - (m_relx - freshtime_second*m_speed));
 				m_relx = (p->get_precise_config()->get_road_length_sn() + p->get_precise_config()->get_road_width()) / 2;
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][4];
 				m_vangle = -90;
 			}
 			else if (temp == 2) {//turn right
-				m_rely = (-p->get_precise_config()->get_road_length_sn() / 2 - (m_relx - p->get_precise_config()->get_freshtime()*m_speed)) - p->get_precise_config()->get_road_length_ew() / 2;
+				m_rely = (-p->get_precise_config()->get_road_length_sn() / 2 - (m_relx - freshtime_second*m_speed)) - p->get_precise_config()->get_road_length_ew() / 2;
 				m_relx = -(p->get_precise_config()->get_road_length_sn() + p->get_precise_config()->get_road_width()) / 2;
 				m_vangle = 90;
 			}
 			else {//go straight
 				RoadChangeFlag = true;
-				m_relx = p->get_precise_config()->get_road_length_sn() / 2 - (-p->get_precise_config()->get_road_length_sn() / 2 - (m_relx - p->get_precise_config()->get_freshtime()*m_speed));
+				m_relx = p->get_precise_config()->get_road_length_sn() / 2 - (-p->get_precise_config()->get_road_length_sn() / 2 - (m_relx - freshtime_second*m_speed));
 				m_road_id = p->get_precise_config()->get_wrap_around_road()[m_road_id][5];
 			}
 		}
 		else {
-			m_relx = m_relx - p->get_precise_config()->get_freshtime()*m_speed;
+			m_relx = m_relx - freshtime_second*m_speed;
 		}
 	}
 	m_absx = p->get_precise_config()->get_road_topo_ratio()[m_road_id * 2 + 0] * (p->get_precise_config()->get_road_length_sn() + 2 * p->get_precise_config()->get_road_width()) + m_relx;

@@ -96,6 +96,10 @@ int gtt_urban::get_vue_num() {
 }
 
 void gtt_urban::update_channel() {
+	if (context::get_context()->get_tti() % get_precise_config()->get_freshtime() != 0) {
+		return;
+	}
+
 	location _location;
 	_location.eNBAntH = 5;
 	_location.VeUEAntH = 1.5;

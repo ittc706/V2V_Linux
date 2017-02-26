@@ -50,11 +50,13 @@ void system_control::process() {
 	while (m_context->get_tti() < m_context->get_global_control_config()->get_ntti()) {
 		cout << "TTI: " << m_context->get_tti() << endl;
 
-		if (m_context->get_tti() % m_context->get_global_control_config()->get_fresh_period() == 0) {
-			m_context->get_gtt()->update_channel();
-		}
+		//更新信道
+		m_context->get_gtt()->update_channel();
+
+		//更新该时刻触发的事件
 		m_context->get_tmc()->event_trigger();
 
+		//开始传输
 		m_context->get_rrm()->schedule();
 
 		m_context->increase_tti();

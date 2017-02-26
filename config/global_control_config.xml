@@ -8,10 +8,6 @@
 <ntti>100</ntti>
 
 
-<!--地理位置更新周期，单位TTI(毫秒)-->
-<fresh_period>100</fresh_period>
-
-
 
 
 

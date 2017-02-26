@@ -158,6 +158,6 @@ public:
 
 	/*--------------------方法--------------------*/
 public:
-	void update_location();
+	void update_location_highspeed();
 	void update_location_urban();
 };

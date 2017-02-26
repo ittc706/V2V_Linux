@@ -12,5 +12,5 @@
 <speed>30</speed>
 
 
-<!--车辆位置刷新时间,单位s-->	
-<freshtime>0.1</freshtime>
+<!--车辆位置刷新时间,单位TTI-->	
+<freshtime>100</freshtime>

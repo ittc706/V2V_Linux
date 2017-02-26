@@ -50,14 +50,6 @@ int global_control_config::get_ntti() {
 	return m_ntti;
 }
 
-void global_control_config::set_fresh_period(int t_fresh_period) {
-	m_fresh_period = t_fresh_period;
-}
-
-int global_control_config::get_fresh_period() {
-	return m_fresh_period;
-}
-
 void global_control_config::set_gtt_mode(gtt_mode t_gtt_mode) {
 	m_gtt_mode = t_gtt_mode;
 }
@@ -95,19 +87,11 @@ void global_control_config::load() {
 		throw logic_error("Platform Config Error!");
 	}
 
-	stringstream ss;
-
 	const string nullString("");
 	string temp;
 
 	if ((temp = get_config_loader()->get_param("ntti")) != nullString) {
 		set_ntti(stoi(temp));
-	}
-	else
-		throw logic_error("ConfigLoaderError");
-
-	if ((temp = get_config_loader()->get_param("fresh_period")) != nullString) {
-		set_fresh_period(stoi(temp));
 	}
 	else
 		throw logic_error("ConfigLoaderError");
@@ -124,7 +108,6 @@ void global_control_config::load() {
 		throw logic_error("ConfigLoaderError");
 
 	cout << "ntti: " << get_ntti() << endl;
-	cout << "fresh_period: " << get_fresh_period() << endl;
 	cout << "gtt_mode: " << (get_gtt_mode() == URBAN ? "URBAN" : "HIGHSPEED") << endl;
 	cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 }
@@ -178,11 +161,11 @@ const double* gtt_highspeed_config::get_road_topo_ratio() {
 	return m_road_topo_ratio;
 }
 
-void gtt_highspeed_config::set_freshtime(double t_freshtime) {
+void gtt_highspeed_config::set_freshtime(int t_freshtime) {
 	m_freshtime = t_freshtime;
 }
 
-double gtt_highspeed_config::get_freshtime() {
+int gtt_highspeed_config::get_freshtime() {
 	return m_freshtime;
 }
 
@@ -223,7 +206,7 @@ void gtt_highspeed_config::load() {
 		throw logic_error("ConfigLoaderError");
 
 	if ((temp = get_config_loader()->get_param("freshtime")) != nullString) {
-		set_freshtime(stod(temp));
+		set_freshtime(stoi(temp));
 	}
 	else
 		throw logic_error("ConfigLoaderError");
@@ -277,7 +260,7 @@ void gtt_urban_config::load() {
 		throw logic_error("ConfigLoaderError");
 
 	if ((temp = get_config_loader()->get_param("freshtime")) != nullString) {
-		set_freshtime(stod(temp));
+		set_freshtime(stoi(temp));
 	}
 	else
 		throw logic_error("ConfigLoaderError");
@@ -333,11 +316,11 @@ const int(*gtt_urban_config::get_wrap_around_road())[9] {
 	return m_wrap_around_road;
 }
 
-void gtt_urban_config::set_freshtime(double t_freshtime) {
+void gtt_urban_config::set_freshtime(int t_freshtime) {
 	m_freshtime = t_freshtime;
 }
 
-double gtt_urban_config::get_freshtime() {
+int gtt_urban_config::get_freshtime() {
 	return m_freshtime;
 }
 
@@ -473,8 +456,8 @@ int tmc_config::get_congestion_level_num() {
 	return m_congestion_level_num;
 }
 
-const std::vector<int>& tmc_config::get_periodic_event_period() {
-	return m_periodic_event_period;
+const std::vector<int>& tmc_config::get_periodic_event_period_per_congestion_level() {
+	return m_periodic_event_period_per_congestion_level;
 }
 
 void tmc_config::set_package_num(int t_package_num) {
@@ -516,7 +499,7 @@ void tmc_config::load() {
 		ss << temp;
 		string temp2;
 		while (ss >> temp2) {
-			m_periodic_event_period.push_back(stoi(temp));
+			m_periodic_event_period_per_congestion_level.push_back(stoi(temp));
 		}
 	}
 	else
@@ -540,7 +523,7 @@ void tmc_config::load() {
 		throw logic_error("ConfigLoaderError");
 
 	cout << "congestion_level_num: " << get_congestion_level_num() << endl;
-	cout << "periodic_event_period: "; array_print::print_vector_dim1(get_periodic_event_period());
+	cout << "periodic_event_period_per_congestion_level: "; array_print::print_vector_dim1(get_periodic_event_period_per_congestion_level());
 	cout << "package_num: " << get_package_num() << endl;
 	cout << "bit_num_per_package: "; array_print::print_vector_dim1(get_bit_num_per_package());
 	cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;

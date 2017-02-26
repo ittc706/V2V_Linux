@@ -36,7 +36,7 @@ void gtt_highspeed::initialize() {
 
 	//生成负指数分布的车辆到达间隔
 	int tempVeUENum = 0;
-	double lambda = 1 / 5.0;//均值为1/lambda，依照协议车辆到达时间间隔的均值为2.5s
+	double lambda = 1 / 2.5;//均值为1/lambda，依照协议车辆到达时间间隔的均值为2.5s
 	for (int roadId = 0; roadId != __config->get_road_num(); roadId++) {
 		TotalTime[roadId] = 0;
 		while (TotalTime[roadId] * (__config->get_speed() / 3.6) < __config->get_road_length()) {
@@ -87,6 +87,10 @@ int gtt_highspeed::get_vue_num() {
 }
 
 void gtt_highspeed::update_channel() {
+	if (context::get_context()->get_tti() % get_precise_config()->get_freshtime() != 0) {
+		return;
+	}
+
 	location _location;
 	_location.eNBAntH = 5;
 	_location.VeUEAntH = 1.5;

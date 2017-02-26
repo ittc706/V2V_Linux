@@ -58,7 +58,7 @@ void tmc::initialize() {
 		
 		//为每辆车配置初始化事件触发时刻
 		for (int congestion_level = 0; congestion_level < __context->get_tmc_config()->get_congestion_level_num(); congestion_level++) {
-			uniform_int_distribution<int> u(0, get_config()->get_periodic_event_period()[congestion_level]);
+			uniform_int_distribution<int> u(0, get_config()->get_periodic_event_period_per_congestion_level()[congestion_level]);
 			__context->get_vue_array()[vue_id].get_network_level()->m_periodic_event_next_trigger_tti[congestion_level] = u(e);
 		}	
 	}
@@ -83,7 +83,7 @@ void tmc::event_trigger() {
 		__context->get_vue_array()[vue_id].get_network_level()->add_sender_event(__sender_event);
 
 		for (int congestion_level = 0; congestion_level < __context->get_tmc_config()->get_congestion_level_num(); congestion_level++) {
-			__context->get_vue_array()[vue_id].get_network_level()->m_periodic_event_next_trigger_tti[congestion_level] = tti + __context->get_tmc_config()->get_periodic_event_period()[congestion_level];
+			__context->get_vue_array()[vue_id].get_network_level()->m_periodic_event_next_trigger_tti[congestion_level] = tti + __context->get_tmc_config()->get_periodic_event_period_per_congestion_level()[congestion_level];
 		}
 	}
 }
