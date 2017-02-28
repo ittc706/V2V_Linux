@@ -147,6 +147,8 @@ void gtt_highspeed::update_channel() {
 
 			__imta[imta_id].build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//计算了结果代入信道模型计算UE之间信道系数
 
+			//cout << "(" << vue_physics::get_distance(vue_id_i, vue_id_j) << "," << t_Pl << ")" << endl;
+
 			vue_physics::set_pl(vue_id_i, vue_id_j, t_Pl);
 
 			bool *flag = new bool();

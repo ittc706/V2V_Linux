@@ -73,6 +73,7 @@ void vue_link::receive() {
 
 		//计算SINR
 		pair<int, int> subcarrier_interval = get_subcarrier_interval(__cur_event->get_pattern_idx());
+
 		wt* __wt = context::get_context()->get_wt();
 		
 
@@ -80,6 +81,9 @@ void vue_link::receive() {
 			__cur_event->get_receive_vue_id(),
 			subcarrier_interval,
 			vue_network::s_vue_id_per_pattern[__cur_event->get_pattern_idx()]);
+
+		/*if (vue_physics::get_distance(__cur_event->get_send_vue_id(), __cur_event->get_receive_vue_id()) > 2000 && sinr > 0)
+			cout << "(" << vue_physics::get_distance(__cur_event->get_send_vue_id(), __cur_event->get_receive_vue_id()) << "," << sinr << ")" << endl;*/
 
 		if (sinr < __context->get_rrm_config()->get_drop_sinr_boundary()) {
 			__cur_event->set_is_loss();//记录丢包
@@ -104,5 +108,5 @@ void vue_link::receive() {
 
 pair<int, int> vue_link::get_subcarrier_interval(int t_pattern_idx) {
 	int subcarrier_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
-	return pair<int, int>(subcarrier_num_per_pattern*t_pattern_idx, subcarrier_num_per_pattern*(t_pattern_idx + 1));
+	return pair<int, int>(subcarrier_num_per_pattern*t_pattern_idx, subcarrier_num_per_pattern*(t_pattern_idx + 1) - 1);
 }

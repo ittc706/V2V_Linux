@@ -364,7 +364,7 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 	double fSFSTD;
 	double fPL1;
 	double fPL2;
-	double fDistanceBP = 4 * (t_eLocation.VeUEAntH - 1)*(t_eLocation.RSUAntH - 1)*t_fFrequency / s_C;
+	double fDistanceBP = 4 * (t_eLocation.VeUEAntH - 1)*(t_eLocation.VeUEAntH - 1)*t_fFrequency / s_C;
 
 	switch (t_eLocation.locationType)
 	{
@@ -377,7 +377,7 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 		{
 			if (fDistanceBP < t_eLocation.distance&&t_eLocation.distance < 5000)
 			{
-				m_PLSF = 40.0f * log10(t_eLocation.distance) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.RSUAntH -1) + 2.7f *(log10(t_fFrequency) - 9.0f);
+				m_PLSF = 40.0f * log10(t_eLocation.distance) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.VeUEAntH -1) + 2.7f *(log10(t_fFrequency) - 9.0f);
 			}
 			else if (t_eLocation.distance<3)
 			{
