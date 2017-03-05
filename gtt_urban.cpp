@@ -18,6 +18,7 @@
 
 #include<fstream>
 #include<utility>
+#include<random>
 #include"context.h"
 #include"config.h"
 #include"gtt_urban.h"
@@ -53,8 +54,9 @@ void gtt_urban::initialize() {
 	//进行车辆的撒点
 	context::get_context()->set_vue_array(new vue[tempVeUENum]);
 	cout << "vuenum: " << tempVeUENum << endl;
+
 	int vue_id = 0;
-	int DistanceFromBottomLeft = 0;
+	double DistanceFromBottomLeft = 0;
 
 	ofstream vue_coordinate;
 
@@ -65,10 +67,13 @@ void gtt_urban::initialize() {
 	vue_coordinate.open("log/vue_coordinate.txt");
 	}
 
+	default_random_engine e((unsigned)time(0));
+	uniform_real_distribution<double> u(0, 2 * (__config->get_road_length_ew() + __config->get_road_length_sn()));
+
 	for (int RoadIdx = 0; RoadIdx != __config->get_road_num(); RoadIdx++) {
 		for (int uprIdx = 0; uprIdx != m_pupr[RoadIdx]; uprIdx++) {
 			auto p = context::get_context()->get_vue_array()[vue_id++].get_physics_level();
-			DistanceFromBottomLeft = rand() % (2 * int((__config->get_road_length_ew() + __config->get_road_length_sn())));
+			DistanceFromBottomLeft = u(e);
 			if (DistanceFromBottomLeft <= __config->get_road_length_ew()) {
 				p->m_relx = -(__config->get_road_length_sn() + __config->get_road_width()) / 2;
 				p->m_rely = DistanceFromBottomLeft - __config->get_road_length_ew() / 2;
