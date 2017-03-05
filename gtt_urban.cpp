@@ -116,7 +116,27 @@ int gtt_urban::get_vue_num() {
 	return vue_physics::get_vue_num();
 }
 
+void gtt_urban::fresh_location() {
+	//<Warn>:将信道刷新时间和位置刷新时间分开
+	if (context::get_context()->get_tti() % get_precise_config()->get_freshtime() != 0) {
+		return;
+	}
+
+	for (int vue_id = 0; vue_id < get_vue_num(); vue_id++) {
+		context::get_context()->get_vue_array()[vue_id].get_physics_level()->update_location_urban();
+	}
+
+	for (int vue_id1 = 0; vue_id1 < get_vue_num(); vue_id1++) {
+		for (int vue_id2 = 0; vue_id2 < vue_id1; vue_id2++) {
+			auto vuei = context::get_context()->get_vue_array()[vue_id1].get_physics_level();
+			auto vuej = context::get_context()->get_vue_array()[vue_id2].get_physics_level();
+			vue_physics::set_distance(vue_id2, vue_id1, sqrt(pow((vuei->m_absx - vuej->m_absx), 2.0f) + pow((vuei->m_absy - vuej->m_absy), 2.0f)));
+		}
+	}
+}
+
 void gtt_urban::clean_channel() {
+	//<Warn>:将信道刷新时间和位置刷新时间分开
 	if (context::get_context()->get_tti() % get_precise_config()->get_freshtime() != 0) {
 		return;
 	}
@@ -156,9 +176,7 @@ void gtt_urban::calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_id
 	_location.manhattan = false;
 
 	double angle = 0;
-	_location.distance = sqrt(pow((vuei->m_absx - vuej->m_absx), 2.0f) + pow((vuei->m_absy - vuej->m_absy), 2.0f));
-
-	vue_physics::set_distance(t_vue_id1, t_vue_id2, _location.distance);
+	_location.distance = vue_physics::get_distance(t_vue_id1, t_vue_id2);
 
 	angle = atan2(vuei->m_absy - vuej->m_absy, vuei->m_absx - vuej->m_absx) / imta::s_DEGREE_TO_PI;
 

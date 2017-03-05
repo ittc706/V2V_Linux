@@ -36,6 +36,11 @@ public:
 	virtual int get_vue_num() = 0;
 
 	/*
+	* 用于更新车辆位置
+	*/
+	virtual void fresh_location() = 0;
+
+	/*
 	* 用于清空上一次的信道响应
 	*/
 	virtual void clean_channel() = 0;

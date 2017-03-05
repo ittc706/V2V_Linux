@@ -11,6 +11,8 @@ public:
 
 	int get_vue_num() override;
 
+	void fresh_location() override;
+
 	void clean_channel() override;
 
 	void calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_idx) override;
