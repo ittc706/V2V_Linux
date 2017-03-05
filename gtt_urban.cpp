@@ -16,7 +16,7 @@
 * =====================================================================================
 */
 
-
+#include<fstream>
 #include"context.h"
 #include"config.h"
 #include"gtt_urban.h"
@@ -33,7 +33,7 @@ void gtt_urban::initialize() {
 	int* m_pupr = new int[__config->get_road_num()];//每条路上的车辆数
 	
 	int tempVeUENum = 0;
-	int Lambda = static_cast<int>((__config->get_road_length_ew() + __config->get_road_length_sn()) * 2 * 3.6 / (2.5 * 15));
+	int Lambda = static_cast<int>((__config->get_road_length_ew() + __config->get_road_length_sn()) * 2 * 3.6 / (8 * __config->get_speed()));
 	for (int temp = 0; temp != __config->get_road_num(); ++temp)
 	{
 		int k = 0;
@@ -51,8 +51,18 @@ void gtt_urban::initialize() {
 
 	//进行车辆的撒点
 	context::get_context()->set_vue_array(new vue[tempVeUENum]);
+	cout << "vuenum: " << tempVeUENum << endl;
 	int vue_id = 0;
 	int DistanceFromBottomLeft = 0;
+
+	//ofstream vue_coordinate;
+
+	//if (context::get_context()->get_global_control_config()->get_platform() == Windows) {
+	//vue_coordinate.open("log\\vue_coordinate.txt");
+	//}
+	//else {
+	//vue_coordinate.open("log/vue_coordinate.txt");
+	//}
 
 	for (int RoadIdx = 0; RoadIdx != __config->get_road_num(); RoadIdx++) {
 		for (int uprIdx = 0; uprIdx != m_pupr[RoadIdx]; uprIdx++) {
@@ -82,9 +92,15 @@ void gtt_urban::initialize() {
 			p->m_absx = __config->get_road_topo_ratio()[RoadIdx * 2 + 0] * (__config->get_road_length_sn() + 2 * __config->get_road_width()) + p->m_relx;
 			p->m_absy = __config->get_road_topo_ratio()[RoadIdx * 2 + 1] * (__config->get_road_length_ew() + 2 * __config->get_road_width()) + p->m_rely;
 			p->m_speed = __config->get_speed()/3.6;
+			//将撒点后的坐标输出到txt文件
+			//vue_coordinate << p->m_absx << " ";
+			//vue_coordinate << p->m_absy << " ";
+			//vue_coordinate << endl;
 		}
 	}
 	memory_clean::safe_delete(m_pupr, true);
+
+	//vue_coordinate.close();
 
 	vue_physics::s_channel_all.assign(get_vue_num(), std::vector<double*>(get_vue_num(), nullptr));
 	vue_physics::s_pl_all.assign(get_vue_num(), std::vector<double>(get_vue_num(), 0));
@@ -116,12 +132,15 @@ void gtt_urban::update_channel() {
 
 	imta* __imta = new imta[vue_physics::s_vue_count*(vue_physics::s_vue_count - 1) / 2];
 	int imta_id = 0;
+
+	//清空上一次的信道
+	vue_physics::clean_channel();
 	for (int vue_id_i = 0; vue_id_i < vue_physics::s_vue_count; vue_id_i++) {
 		for (int vue_id_j = vue_id_i + 1; vue_id_j < vue_physics::s_vue_count; vue_id_j++) {
 			auto vuei = context::get_context()->get_vue_array()[vue_id_i].get_physics_level();
 			auto vuej = context::get_context()->get_vue_array()[vue_id_j].get_physics_level();
 
-			_location.locationType = Los;
+			_location.locationType = Nlos;
 			_location.manhattan = false;
 
 			double angle = 0;
@@ -157,32 +176,34 @@ void gtt_urban::update_channel() {
 			__imta[imta_id].build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//计算了结果代入信道模型计算UE之间信道系数
 
 			vue_physics::set_pl(vue_id_i, vue_id_j, t_Pl);
+			if (true)
+			{
+				bool *flag = new bool();
+				*flag = true;
+				__imta[imta_id].enable(flag);
 
-			bool *flag = new bool();
-			*flag = true;
-			__imta[imta_id].enable(flag);
+				double *H = new double[1 * 2 * 19 * 2];
+				double *FFT = new double[1 * 2 * 1024 * 2];
+				double *ch_buffer = new double[1 * 2 * 19 * 20];
+				double *ch_sin = new double[1 * 2 * 19 * 20];
+				double *ch_cos = new double[1 * 2 * 19 * 20];
 
-			double *H = new double[1 * 2 * 19 * 2];
-			double *FFT = new double[1 * 2 * 1024 * 2];
-			double *ch_buffer = new double[1 * 2 * 19 * 20];
-			double *ch_sin = new double[1 * 2 * 19 * 20];
-			double *ch_cos = new double[1 * 2 * 19 * 20];
+				double *t_HAfterFFT = new double[2 * 1024 * 2];
 
-			double *t_HAfterFFT = new double[2 * 1024 * 2];
-
-			__imta[imta_id].calculate(t_HAfterFFT, 0.01f, ch_buffer, ch_sin, ch_cos, H, FFT);
-			vue_physics::set_channel(vue_id_i, vue_id_j, t_HAfterFFT);
-
-			memory_clean::safe_delete(flag);
-			memory_clean::safe_delete(H, true);
-			memory_clean::safe_delete(ch_buffer, true);
-			memory_clean::safe_delete(ch_sin, true);
-			memory_clean::safe_delete(ch_cos, true);
+				__imta[imta_id].calculate(t_HAfterFFT, 0.01f, ch_buffer, ch_sin, ch_cos, H, FFT);
+				vue_physics::set_channel(vue_id_i, vue_id_j, t_HAfterFFT);
+				
+				memory_clean::safe_delete(flag);
+				memory_clean::safe_delete(H, true);
+				memory_clean::safe_delete(ch_buffer, true);
+				memory_clean::safe_delete(ch_sin, true);
+				memory_clean::safe_delete(ch_cos, true);
+				memory_clean::safe_delete(FFT, true);
+			}
 			memory_clean::safe_delete(_antenna.TxSlantAngle, true);
 			memory_clean::safe_delete(_antenna.TxAntSpacing, true);
 			memory_clean::safe_delete(_antenna.RxSlantAngle, true);
 			memory_clean::safe_delete(_antenna.RxAntSpacing, true);
-			memory_clean::safe_delete(FFT, true);
 		}
 	}
 	memory_clean::safe_delete(__imta, true);

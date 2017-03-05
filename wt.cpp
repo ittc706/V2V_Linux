@@ -131,6 +131,7 @@ std::vector<matrix> wt::read_inter_h(const std::set<int>& t_sending_vue_id_set, 
 		if (inter_vue_id == t_receive_vue_id) continue;
 		
 		double* p = vue_physics::get_channel(inter_vue_id, t_receive_vue_id);
+		if (p == nullptr) continue;//该信道响应矩阵没有计算，即该信道强度很弱，已被忽略
 
 		matrix m(m_nr, m_nt);
 		for (int row = 0; row < m_nr; row++) {

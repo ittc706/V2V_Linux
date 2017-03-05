@@ -377,51 +377,55 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 		{
 			if (fDistanceBP < t_eLocation.distance&&t_eLocation.distance < 5000)
 			{
-				m_PLSF = 40.0f * log10(t_eLocation.distance) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.VeUEAntH -1) + 2.7f *(log10(t_fFrequency) - 9.0f);
+				m_PLSF = 40.0f * log10(t_eLocation.distance) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.VeUEAntH - 1) + 2.7f *(log10(t_fFrequency) - 9.0f);
 			}
-			else if (t_eLocation.distance<3)
+			else if (t_eLocation.distance < 3)
 			{
 				m_PLSF = 22.7f * log10(3) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);
 			}
 		}
 		break;
 	case Nlos:
-		fTemp = (2.8f - 0.0024f * t_eLocation.distance1) > 1.84f ? (2.8f - 0.0024f * t_eLocation.distance1) : 1.84f;
-		if (3 < t_eLocation.distance1&&t_eLocation.distance1 < fDistanceBP)
-		{
-			fPL1 = 22.7f * log10(t_eLocation.distance1) + 27.0f + 20.0f *(log10(t_fFrequency) - 9.0f);
-		}
-		else
-		{
-			if (fDistanceBP < t_eLocation.distance1&&t_eLocation.distance1 < 5000)
+		if (t_eLocation.manhattan) {
+			fTemp = (2.8f - 0.0024f * t_eLocation.distance1) > 1.84f ? (2.8f - 0.0024f * t_eLocation.distance1) : 1.84f;
+			if (3 < t_eLocation.distance1&&t_eLocation.distance1 < fDistanceBP)
 			{
-				fPL1 = 40.0f * log10(t_eLocation.distance1) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.RSUAntH - 1) + 2.7f * (log10(t_fFrequency) - 9.0f);
+				fPL1 = 22.7f * log10(t_eLocation.distance1) + 27.0f + 20.0f *(log10(t_fFrequency) - 9.0f);
 			}
-			else if (t_eLocation.distance1<3)
+			else
 			{
-				fPL1 = 22.7f * log10(3) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);
+				if (fDistanceBP < t_eLocation.distance1&&t_eLocation.distance1 < 5000)
+				{
+					fPL1 = 40.0f * log10(t_eLocation.distance1) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.RSUAntH - 1) + 2.7f * (log10(t_fFrequency) - 9.0f);
+				}
+				else if (t_eLocation.distance1 < 3)
+				{
+					fPL1 = 22.7f * log10(3) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);
+				}
 			}
-		}
-		fPL1 = fPL1 + 17.3f - 12.5f*fTemp + 10 * fTemp * log10(t_eLocation.distance2) + 3 * (log10(t_fFrequency) - 9.0f);
-		fTemp = (2.8f - 0.0024f * t_eLocation.distance2) > 1.84f ? (2.8f - 0.0024f * t_eLocation.distance2) : 1.84f;
-		if (3 < t_eLocation.distance2&&t_eLocation.distance2 < fDistanceBP)
-		{
-			fPL2 = 22.7f * log10(t_eLocation.distance2) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);
-		}
-		else
-		{
-			if (fDistanceBP < t_eLocation.distance2&&t_eLocation.distance2 < 5000)
+			fPL1 = fPL1 + 17.3f - 12.5f*fTemp + 10 * fTemp * log10(t_eLocation.distance2) + 3 * (log10(t_fFrequency) - 9.0f);
+			fTemp = (2.8f - 0.0024f * t_eLocation.distance2) > 1.84f ? (2.8f - 0.0024f * t_eLocation.distance2) : 1.84f;
+			if (3 < t_eLocation.distance2&&t_eLocation.distance2 < fDistanceBP)
 			{
-				fPL2 = 40.0f * log10(t_eLocation.distance2) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.RSUAntH - 1) + 2.7f * (log10(t_fFrequency) - 9.0f);
+				fPL2 = 22.7f * log10(t_eLocation.distance2) + 27.0f + 20.0f * (log10(t_fFrequency) - 9.0f);
 			}
-			else if (t_eLocation.distance2 < 3)
+			else
 			{
-				fPL2 = 22.7f * log10(3) + 27.0f + 20.0f *(log10(t_fFrequency) - 9.0f);
+				if (fDistanceBP < t_eLocation.distance2&&t_eLocation.distance2 < 5000)
+				{
+					fPL2 = 40.0f * log10(t_eLocation.distance2) + 7.56f - 17.3f * log10(t_eLocation.VeUEAntH - 1) - 17.3 * log10(t_eLocation.RSUAntH - 1) + 2.7f * (log10(t_fFrequency) - 9.0f);
+				}
+				else if (t_eLocation.distance2 < 3)
+				{
+					fPL2 = 22.7f * log10(3) + 27.0f + 20.0f *(log10(t_fFrequency) - 9.0f);
+				}
 			}
+			fPL2 = fPL2 + 17.3f - 12.5f*fTemp + 10 * fTemp * log10(t_eLocation.distance1) + 3 * (log10(t_fFrequency) - 9.0f);
+			m_PLSF = fPL1 < fPL2 ? fPL1 : fPL2;
 		}
-		fPL2 = fPL2 + 17.3f - 12.5f*fTemp + 10 * fTemp * log10(t_eLocation.distance1) + 3 * (log10(t_fFrequency) - 9.0f);
-		m_PLSF = fPL1 < fPL2 ? fPL1 : fPL2;
-	default:
+		else {
+			m_PLSF = (44.9 - 6.55*log10(t_eLocation.VeUEAntH))*log10(t_eLocation.distance) + 5.83*log10(t_eLocation.VeUEAntH) + 18.38 + 23 * log10(t_fFrequency);
+		}
 		break;
 	}
 
@@ -436,26 +440,6 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 	double fKSTD;
 	const double *cpfConstant;
 
-	if (t_eLocation.manhattan)
-	{
-		fDSMean = -7.19f;
-		fDSSTD = 0.40f;
-		fASDMean = 1.20f;
-		fASDSTD = 0.43f;
-		fASAMean = 1.75f;
-		fASASTD = 0.19f;
-		fKMean = 9.0f;
-		fKSTD = 5.0f;
-		cpfConstant = s_ConstantUMiLoS;
-		m_DSRatio = 3.2f;
-		m_XPR = 9.0f;
-		m_PathNum = 12;
-		m_AoDRatio = 3.0f;
-		m_AoARatio = 17.0f;
-		m_PathShadowSTD = 3.0f;
-		m_C = 1.146f;
-	}
-	else
 	{
 		fDSMean = -6.89f;
 		fDSSTD = 0.54f;

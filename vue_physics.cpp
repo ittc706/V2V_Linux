@@ -43,12 +43,18 @@ int vue_physics::get_vue_num() {
 
 void vue_physics::set_channel(int i, int j, double* t_channel) {
 	if (i < j) {
-		memory_clean::safe_delete(s_channel_all[i][j], true);
 		s_channel_all[i][j] = t_channel;
 	}
 	else {
-		memory_clean::safe_delete(s_channel_all[j][i], true);
 		s_channel_all[j][i] = t_channel;
+	}
+}
+
+void vue_physics::clean_channel() {
+	for (int i = 0; i < s_vue_count; i++) {
+		for (int j = 0; j < i; j++) {
+			memory_clean::safe_delete(s_channel_all[j][i], true);
+		}
 	}
 }
 

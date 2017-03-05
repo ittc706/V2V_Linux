@@ -64,6 +64,7 @@ public:
 private:
 	static std::vector<std::vector<double*>> s_channel_all;
 	static void set_channel(int i, int j, double* t_channel);
+	static void clean_channel();
 public:
 	static double* get_channel(int i, int j);
 

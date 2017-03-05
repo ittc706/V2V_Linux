@@ -16,7 +16,7 @@
 * =====================================================================================
 */
 
-
+#include<fstream>
 #include"context.h"
 #include"config.h"
 #include"gtt_highspeed.h"
@@ -26,6 +26,7 @@
 #include"function.h"
 
 
+
 using namespace std;
 
 void gtt_highspeed::initialize() {
@@ -33,6 +34,8 @@ void gtt_highspeed::initialize() {
 	int* m_pupr = new int[__config->get_road_num()];//每条路上的车辆数
 	double* TotalTime = new double[__config->get_road_num()];//每条道路初始泊松撒点过程中所有车辆都已撒进区域内所用的总时间
 	std::list<double>* possion = new std::list<double>[__config->get_road_num()];//每条道路初始泊松撒点的车辆到达时间间隔list，单位s
+
+	srand((unsigned)time(0));
 
 	//生成负指数分布的车辆到达间隔
 	int tempVeUENum = 0;
@@ -62,16 +65,33 @@ void gtt_highspeed::initialize() {
 	context::get_context()->set_vue_array(new vue[tempVeUENum]);
 	int vue_id = 0;
 
+	/*ofstream vue_coordinate;
+
+	if (context::get_context()->get_global_control_config()->get_platform() == Windows) {
+		vue_coordinate.open("log\\vue_coordinate.txt");
+	}
+	else {
+		vue_coordinate.open("log/vue_coordinate.txt");
+	}*/
+
 	for (int roadId = 0; roadId != __config->get_road_num(); roadId++) {
 		for (int uprIdx = 0; uprIdx != m_pupr[roadId]; uprIdx++) {
 			auto p = context::get_context()->get_vue_array()[vue_id++].get_physics_level();
 			p->m_speed = __config->get_speed()/3.6;
 		    p->m_absx = -1732 + (TotalTime[roadId] - possion[roadId].back())*(p->m_speed);
 			p->m_absy = __config->get_road_topo_ratio()[roadId * 2 + 1]* __config->get_road_width();
+			//将撒点后的坐标输出到txt文件
+			//vue_coordinate << p->m_absx << " ";
+			//vue_coordinate << p->m_absy << " ";
+			//vue_coordinate << endl;
+
 			TotalTime[roadId] = TotalTime[roadId] - possion[roadId].back();
 			possion[roadId].pop_back();
 		}
 	}
+
+	//vue_coordinate.close();
+
 	memory_clean::safe_delete(m_pupr, true);
 	memory_clean::safe_delete(TotalTime, true);
 	memory_clean::safe_delete(possion, true);
@@ -107,6 +127,9 @@ void gtt_highspeed::update_channel() {
 
 	imta* __imta = new imta[vue_physics::s_vue_count*(vue_physics::s_vue_count - 1) / 2];
 	int imta_id = 0;
+
+	//清空上一次的信道
+	vue_physics::clean_channel();
 	for (int vue_id_i = 0; vue_id_i < vue_physics::s_vue_count; vue_id_i++) {
 		for (int vue_id_j = vue_id_i + 1; vue_id_j < vue_physics::s_vue_count; vue_id_j++) {
 			auto vuei = context::get_context()->get_vue_array()[vue_id_i].get_physics_level();
@@ -146,8 +169,6 @@ void gtt_highspeed::update_channel() {
 			double t_Pl = 0;
 
 			__imta[imta_id].build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//计算了结果代入信道模型计算UE之间信道系数
-
-			//cout << "(" << vue_physics::get_distance(vue_id_i, vue_id_j) << "," << t_Pl << ")" << endl;
 
 			vue_physics::set_pl(vue_id_i, vue_id_j, t_Pl);
 

@@ -1,11 +1,11 @@
 <!--地理拓扑单元选择
 	[URBAN]：城市场景
 	[HIGHSPEED]：高速场景-->	
-<gtt_mode>HIGHSPEED</gtt_mode>
+<gtt_mode>URBAN</gtt_mode>
 
 
 <!--仿真总时间，单位TTI(毫秒)-->
-<ntti>200</ntti>
+<ntti>500</ntti>
 
 
 
