@@ -65,40 +65,30 @@ void vue_link::receive() {
 	while (it != m_receiver_event_list.end()) {
 		receiver_event* __cur_event = *it;
 
-		if (vue_physics::get_pl(__cur_event->get_send_vue_id(), __cur_event->get_receive_vue_id()) >= -150)
-		{
-			double factor = __context->get_rrm_config()->get_modulation_type()* __context->get_rrm_config()->get_code_rate();
+		double factor = __context->get_rrm_config()->get_modulation_type()* __context->get_rrm_config()->get_code_rate();
 
-			//该编码方式下，该pattern在一个tti最多可传输的有效信息bit数量
-			int transimit_max_bit_num = (int)((double)(__context->get_rrm_config()->get_rb_num_per_pattern() * rrm_config::s_BIT_NUM_PER_RB)* factor);
-			__cur_event->transimit(transimit_max_bit_num);
+		//该编码方式下，该pattern在一个tti最多可传输的有效信息bit数量
+		int transimit_max_bit_num = (int)((double)(__context->get_rrm_config()->get_rb_num_per_pattern() * rrm_config::s_BIT_NUM_PER_RB)* factor);
+		__cur_event->transimit(transimit_max_bit_num);
 
-			//计算SINR
-			wt* __wt = context::get_context()->get_wt();
+		//计算SINR
+		wt* __wt = context::get_context()->get_wt();
 
+		double sinr = 0;
+		int vue_send_id = __cur_event->get_send_vue_id();
+		int vue_receive_id = __cur_event->get_receive_vue_id();
 
-			double sinr = 0;
-			int vue_send_id = __cur_event->get_send_vue_id();
-			int vue_receive_id = __cur_event->get_receive_vue_id();
-
-			if (vue_physics::get_channel(vue_send_id, vue_receive_id, __cur_event->get_pattern_idx())==nullptr) {
-
-				sinr = __context->get_rrm_config()->get_drop_sinr_boundary() - 1;
-			}
-			else{
-				sinr = __wt->calculate_sinr(vue_send_id,
-					vue_receive_id,
-					__cur_event->get_pattern_idx(),
-					vue_network::s_vue_id_per_pattern[__cur_event->get_pattern_idx()]);
-			}
-			
-			if (sinr < __context->get_rrm_config()->get_drop_sinr_boundary()) {
-				__cur_event->set_is_loss();//记录丢包
-			}
+		if (vue_physics::get_channel(vue_send_id, vue_receive_id, __cur_event->get_pattern_idx()) == nullptr) {
+			sinr = __context->get_rrm_config()->get_drop_sinr_boundary() - 1;
+		}
+		else {
+			sinr = __wt->calculate_sinr(vue_send_id,
+				vue_receive_id,
+				__cur_event->get_pattern_idx(),
+				vue_network::s_vue_id_per_pattern[__cur_event->get_pattern_idx()]);
 		}
 
-		else 
-		{
+		if (sinr < __context->get_rrm_config()->get_drop_sinr_boundary()) {
 			__cur_event->set_is_loss();//记录丢包
 		}
 
@@ -110,7 +100,7 @@ void vue_link::receive() {
 				m_success_event_list.push_back(__cur_event);
 			}
 			vue_network::s_vue_id_per_pattern_finished[__cur_event->get_pattern_idx()].insert(__cur_event->get_send_vue_id());
-			
+
 			it = m_receiver_event_list.erase(it);
 		}
 		else {
