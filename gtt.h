@@ -35,5 +35,13 @@ public:
 
 	virtual int get_vue_num() = 0;
 
-	virtual void update_channel() = 0;
+	/*
+	* 用于清空上一次的信道响应
+	*/
+	virtual void clean_channel() = 0;
+
+	/*
+	* 用于计算指定信道响应矩阵
+	*/
+	virtual void calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_idx) = 0;
 };

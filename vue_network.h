@@ -37,7 +37,7 @@ private:
 	static std::default_random_engine s_engine;
 
 	/*
-	* 正在传输的车辆id
+	* 正在传输的车辆id(发送车辆)
 	* 外层下标为pattern编号
 	*/
 	static std::vector<std::set<int>> s_vue_id_per_pattern;

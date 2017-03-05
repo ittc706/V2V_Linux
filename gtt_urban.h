@@ -11,7 +11,9 @@ public:
 
 	int get_vue_num() override;
 
-	void update_channel() override;
+	void clean_channel() override;
+
+	void calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_idx) override;
 
 	gtt_urban_config* get_precise_config();
 }; 

@@ -74,8 +74,6 @@ void vue_link::receive() {
 			__cur_event->transimit(transimit_max_bit_num);
 
 			//计算SINR
-			pair<int, int> subcarrier_interval = get_subcarrier_interval(__cur_event->get_pattern_idx());
-
 			wt* __wt = context::get_context()->get_wt();
 
 
@@ -83,13 +81,14 @@ void vue_link::receive() {
 			int vue_send_id = __cur_event->get_send_vue_id();
 			int vue_receive_id = __cur_event->get_receive_vue_id();
 
-			if (vue_physics::get_channel(vue_send_id, vue_receive_id)==nullptr) {
+			if (vue_physics::get_channel(vue_send_id, vue_receive_id, __cur_event->get_pattern_idx())==nullptr) {
+
 				sinr = __context->get_rrm_config()->get_drop_sinr_boundary() - 1;
 			}
 			else{
 				sinr = __wt->calculate_sinr(vue_send_id,
 					vue_receive_id,
-					subcarrier_interval,
+					__cur_event->get_pattern_idx(),
 					vue_network::s_vue_id_per_pattern[__cur_event->get_pattern_idx()]);
 			}
 			
@@ -118,9 +117,4 @@ void vue_link::receive() {
 			++it;
 		}
 	}
-}
-
-pair<int, int> vue_link::get_subcarrier_interval(int t_pattern_idx) {
-	int subcarrier_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
-	return pair<int, int>(subcarrier_num_per_pattern*t_pattern_idx, subcarrier_num_per_pattern*(t_pattern_idx + 1) - 1);
 }

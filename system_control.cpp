@@ -51,7 +51,7 @@ void system_control::process() {
 		cout << "TTI: " << m_context->get_tti() << endl;
 
 		//更新信道
-		m_context->get_gtt()->update_channel();
+		m_context->get_gtt()->clean_channel();
 
 		//更新该时刻触发的事件
 		m_context->get_tmc()->event_trigger();

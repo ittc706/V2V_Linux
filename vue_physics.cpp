@@ -31,7 +31,7 @@ using namespace std;
 int vue_physics::s_vue_count = 0;
 
 
-vector<vector<double*>> vue_physics::s_channel_all(0);
+vector<vector<vector<pair<bool,double*>>>> vue_physics::s_channel_all(0);
 
 vector<vector<double>> vue_physics::s_pl_all(0);
 
@@ -41,29 +41,46 @@ int vue_physics::get_vue_num() {
 	return s_vue_count;
 }
 
-void vue_physics::set_channel(int i, int j, double* t_channel) {
-	if (i < j) {
-		s_channel_all[i][j] = t_channel;
+void vue_physics::set_channel(int t_vue_id1, int t_vue_id2, int t_pattern_idx, bool t_isCalculated, double* t_channel) {
+	if (t_vue_id1 < t_vue_id2) {
+		s_channel_all[t_vue_id1][t_vue_id2][t_pattern_idx].first = t_isCalculated;
+		s_channel_all[t_vue_id1][t_vue_id2][t_pattern_idx].second = t_channel;
 	}
 	else {
-		s_channel_all[j][i] = t_channel;
+		s_channel_all[t_vue_id2][t_vue_id1][t_pattern_idx].first = t_isCalculated;
+		s_channel_all[t_vue_id2][t_vue_id1][t_pattern_idx].second = t_channel;
 	}
 }
 
 void vue_physics::clean_channel() {
 	for (int i = 0; i < s_vue_count; i++) {
 		for (int j = 0; j < i; j++) {
-			memory_clean::safe_delete(s_channel_all[j][i], true);
+			for (int pattern_idx = 0; pattern_idx < context::get_context()->get_rrm_config()->get_pattern_num(); pattern_idx++) {
+				memory_clean::safe_delete(s_channel_all[j][i][pattern_idx].second, true);
+				s_channel_all[j][i][pattern_idx].first = false;
+			}
 		}
 	}
 }
 
-double* vue_physics::get_channel(int i, int j) {
-	if (i < j) {
-		return s_channel_all[i][j];
+double* vue_physics::get_channel(int t_vue_id1, int t_vue_id2, int t_pattern_idx) {
+	if (t_vue_id1 < t_vue_id2) {
+		if (s_channel_all[t_vue_id1][t_vue_id2][t_pattern_idx].first) {//已经被计算过，计算结果可能是nullptr(距离太远忽略)
+			return s_channel_all[t_vue_id1][t_vue_id2][t_pattern_idx].second;
+		}
+		else {
+			context::get_context()->get_gtt()->calculate_channel(t_vue_id1, t_vue_id2, t_pattern_idx);
+			return s_channel_all[t_vue_id1][t_vue_id2][t_pattern_idx].second;
+		}
 	}
 	else {
-		return s_channel_all[j][i];
+		if (s_channel_all[t_vue_id2][t_vue_id1][t_pattern_idx].first) {//已经被计算过，计算结果可能是nullptr(距离太远忽略)
+			return s_channel_all[t_vue_id2][t_vue_id1][t_pattern_idx].second;
+		}
+		else {
+			context::get_context()->get_gtt()->calculate_channel(t_vue_id2, t_vue_id1, t_pattern_idx);
+			return s_channel_all[t_vue_id2][t_vue_id1][t_pattern_idx].second;
+		}
 	}
 }
 

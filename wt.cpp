@@ -53,9 +53,9 @@ wt::~wt() {
 
 }
 
-double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pair<int, int>& t_subcarrier_interval, const set<int>& t_sending_vue_id_set) {
+double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, const set<int>& t_sending_vue_id_set) {
 	m_ploss = vue_physics::get_pl(t_send_vue_id, t_receive_vue_id);
-	int subcarrier_num = t_subcarrier_interval.second - t_subcarrier_interval.first + 1;
+	int subcarrier_num = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
 	m_pt = pow(10, (23 - 10 * log10(subcarrier_num * 15 * 1000)) / 10);
 	m_sigma = pow(10, -17.4);
 
@@ -68,11 +68,10 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pa
 
 	/*****求每个子载波上的信噪比****/
 	vector<double> sinr(subcarrier_num);//每个子载波上的信噪比，维度为nt的向量
-	for (int subcarrier_idx = t_subcarrier_interval.first; subcarrier_idx <= t_subcarrier_interval.second; subcarrier_idx++) {
-		int relative_subcarrier_idx = subcarrier_idx - t_subcarrier_interval.first;//相对的子载波下标
+	for (int subcarrier_idx = 0; subcarrier_idx <subcarrier_num; subcarrier_idx++) {
 
-		m_h = read_h(t_send_vue_id, t_receive_vue_id, subcarrier_idx);//读入当前子载波的信道响应矩阵
-		m_inter_h = read_inter_h(t_sending_vue_id_set, t_send_vue_id,t_receive_vue_id,subcarrier_idx);//读入当前子载波干扰相应矩阵数组
+		m_h = read_h(t_send_vue_id, t_receive_vue_id, t_pattern_idx, subcarrier_idx);//读入当前子载波的信道响应矩阵
+		m_inter_h = read_inter_h(t_sending_vue_id_set, t_send_vue_id, t_receive_vue_id, t_pattern_idx, subcarrier_idx);//读入当前子载波干扰相应矩阵数组
 
 		double h_sum1 = 0;
 		for (int r = 0; r < m_nr; r++) {
@@ -93,7 +92,7 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pa
 
 		double denominator = h_sum1*m_sigma + h_sum2;
 
-		sinr[relative_subcarrier_idx] = 10 * log10(molecule / denominator);
+		sinr[subcarrier_idx] = 10 * log10(molecule / denominator);
 	}
 
 	//互信息方法求有效信噪比sinreff
@@ -112,32 +111,37 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, const std::pa
 	return sinreff;
 }
 
-matrix wt::read_h(int t_send_vue_id, int t_receive_vue_id, int t_subcarrier_idx) {
+matrix wt::read_h(int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, int t_subcarrier_idx) {
 	matrix res(m_nr, m_nt);
-	double* p = vue_physics::get_channel(t_send_vue_id, t_receive_vue_id);
+	double* p = vue_physics::get_channel(t_send_vue_id, t_receive_vue_id, t_pattern_idx);
+	if (p == nullptr) throw logic_error("error");
+
+	int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
 	for (int row = 0; row < m_nr; row++) {
 		for (int col = 0; col < m_nt; col++) {
-			res[row][col] = complex(p[row * 2048 + t_subcarrier_idx * 2], p[row * 2048 + t_subcarrier_idx * 2 + 1]);
+			res[row][col] = complex(p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2], p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2 + 1]);
 		}
 	}
 	return res;
 }
 
-std::vector<matrix> wt::read_inter_h(const std::set<int>& t_sending_vue_id_set, int t_send_vue_id, int t_receive_vue_id, int t_subcarrier_idx) {
+std::vector<matrix> wt::read_inter_h(const std::set<int>& t_sending_vue_id_set, int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, int t_subcarrier_idx) {
 	vector<matrix> res;
 	//<Warn>
 	for (int inter_vue_id : t_sending_vue_id_set) {
 		if (inter_vue_id == t_send_vue_id) continue;
 		if (inter_vue_id == t_receive_vue_id) continue;
 		
-		double* p = vue_physics::get_channel(inter_vue_id, t_receive_vue_id);
+		double* p = vue_physics::get_channel(inter_vue_id, t_receive_vue_id, t_pattern_idx);
 		if (p == nullptr) continue;//该信道响应矩阵没有计算，即该信道强度很弱，已被忽略
 
 		matrix m(m_nr, m_nt);
+		int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
+
 		for (int row = 0; row < m_nr; row++) {
 			for (int col = 0; col < m_nt; col++) {
-				m[row][col] = complex(p[row * 2048 + t_subcarrier_idx * 2],
-					p[row * 2048 + t_subcarrier_idx * 2 + 1]);
+				m[row][col] = complex(p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2],
+					p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2 + 1]);
 			}
 		}
 		res.push_back(m);
