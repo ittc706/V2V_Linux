@@ -83,7 +83,10 @@ void vue_network::send_connection() {
 		int pattern_idx = select_pattern();
 
 		//<Warn>:当没有可选Pattern时，进行退避，下一TTI继续选择，可以修改为退避一段时间，需要在sender_event中添加退避窗大小等参数，并且给定最长退避时间(超过此设定值，可直接判定丢包)
-		if (pattern_idx == -1) continue;
+		if (pattern_idx == -1) {
+			++it;
+			continue;
+		}
 
 		__sender_event->set_pattern_idx(pattern_idx);
 		
