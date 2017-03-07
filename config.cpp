@@ -381,6 +381,14 @@ double rrm_config::get_drop_sinr_boundary() {
 	return m_drop_sinr_boundary;
 }
 
+void rrm_config::set_select_altorithm(int t_select_altorithm) {
+	m_select_altorithm = t_select_altorithm;
+}
+
+int rrm_config::get_select_altorithm() {
+	return m_select_altorithm;
+}
+
 void rrm_config::load() {
 	//开始解析系统配置文件
 	switch (context::get_context()->get_global_control_config()->get_platform()) {
@@ -429,6 +437,13 @@ void rrm_config::load() {
 	else
 		throw logic_error("ConfigLoaderError");
 
+	if ((temp = get_config_loader()->get_param("select_altorithm")) != nullString) {
+		set_select_altorithm(stoi(temp));
+	}
+	else
+		throw logic_error("ConfigLoaderError");
+
+	//通过获取的配置信息，计算pattern数量
 	set_pattern_num();
 
 	cout << "total_bandwidth: " << get_total_bandwidth() << endl;
@@ -437,6 +452,7 @@ void rrm_config::load() {
 	cout << "modulation_type: " << get_modulation_type() << endl;
 	cout << "code_rate: " << get_code_rate() << endl;
 	cout << "drop_sinr_boundary: " << get_drop_sinr_boundary() << endl;
+	cout << "select_altorithm: " << get_select_altorithm() << endl;
 	cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 }
 

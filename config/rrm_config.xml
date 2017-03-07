@@ -23,4 +23,10 @@
 <drop_sinr_boundary>1.99</drop_sinr_boundary>
 
 
+<!--丢包临界sinr
+	1:base
+	2:based on sensing
+	3:-->
+<select_altorithm>2</select_altorithm>
+
 

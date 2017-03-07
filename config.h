@@ -336,6 +336,15 @@ private:
 	void set_drop_sinr_boundary(double t_drop_sinr_boundary);
 public:
 	double get_drop_sinr_boundary();
+
+	/*
+	* 选择算法
+	*/
+private:
+	int m_select_altorithm;
+	void set_select_altorithm(int t_select_altorithm);
+public:
+	int get_select_altorithm();
 	/*--------------------接口--------------------*/
 public:
 	void load();

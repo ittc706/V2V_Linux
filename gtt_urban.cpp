@@ -138,6 +138,8 @@ void gtt_urban::fresh_location() {
 			vue_physics::set_distance(vue_id2, vue_id1, sqrt(pow((vuei->m_absx - vuej->m_absx), 2.0f) + pow((vuei->m_absy - vuej->m_absy), 2.0f)));
 		}
 	}
+
+
 }
 
 void gtt_urban::clean_channel() {
@@ -151,6 +153,8 @@ void gtt_urban::clean_channel() {
 			for (int pattern_idx = 0; pattern_idx < context::get_context()->get_rrm_config()->get_pattern_num(); pattern_idx++) {
 				vue_physics::s_channel_all[vue_id2][vue_id1][pattern_idx].first = false;
 				memory_clean::safe_delete(vue_physics::s_channel_all[vue_id2][vue_id1][pattern_idx].second, true);
+
+
 			}
 		}
 	}
