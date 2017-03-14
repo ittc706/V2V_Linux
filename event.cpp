@@ -20,14 +20,21 @@
 #include"context.h"
 #include"event.h"
 #include"config.h"
+#include"vue.h"
 #include"vue_physics.h"
+#include"vue_link.h"
+#include"vue_network.h"
+#include"wt.h"
 
 using namespace std;
 
 int sender_event::s_event_count = 0;
 
 sender_event::sender_event() {
+	m_package_num = context::get_context()->get_tmc_config()->get_package_num();
+	m_bit_num_per_package = context::get_context()->get_tmc_config()->get_bit_num_per_package();
 
+	m_remain_bit_num = m_bit_num_per_package[0];
 }
 
 sender_event::~sender_event() {
@@ -38,12 +45,20 @@ int sender_event::get_event_id() {
 	return m_event_id;
 }
 
-void sender_event::set_vue_id(int t_vue_id) {
-	m_vue_id = t_vue_id;
+void sender_event::add_receiver_event(receiver_event* t_receiver_event) {
+	m_receiver_event_vec.push_back(t_receiver_event);
 }
 
-int sender_event::get_vue_id() {
-	return m_vue_id;
+void sender_event::set_sender_vue(vue* t_sender_vue) {
+	m_sender_vue = t_sender_vue;
+}
+
+vue* sender_event::get_sender_vue() {
+	return m_sender_vue;
+}
+
+int sender_event::get_sender_vue_id() {
+	return m_sender_vue->get_physics_level()->get_vue_id();
 }
 
 void sender_event::set_pattern_idx(int t_pattern_idx) {
@@ -54,46 +69,122 @@ int sender_event::get_pattern_idx() {
 	return m_pattern_idx;
 }
 
-receiver_event::receiver_event(sender_event* t_sender_event, int t_receiver_vue_id) {
-	set_event_id(t_sender_event->get_event_id());
-	set_send_vue_id(t_sender_event->get_vue_id());
-	set_receive_vue_id(t_receiver_vue_id);
+void sender_event::set_slot_time_idx(int t_slot_time_idx) {
+	m_slot_time_idx = t_slot_time_idx;
+}
+
+int sender_event::get_slot_time_idx() {
+	return m_slot_time_idx;
+}
+
+int sender_event::get_package_idx() {
+	return m_package_idx;
+}
+
+bool sender_event::get_is_finished() {
+	return m_is_finished;
+}
+
+void sender_event::transimit() {
+	context* __context = context::get_context();
+	int tti = __context->get_tti();
+	//当该事件所对应的发送车辆不在该时隙传输时，continue
+	if (!is_transmit_time_slot(tti)) return;
+
+	double factor = __context->get_rrm_config()->get_modulation_type()* __context->get_rrm_config()->get_code_rate();
+
+	//该编码方式下，该pattern在一个tti最多可传输的有效信息bit数量
+	int transimit_max_bit_num = (int)((double)(__context->get_rrm_config()->get_rb_num_per_pattern() * rrm_config::s_BIT_NUM_PER_RB)* factor);
+	
+	//当前正在传输的package序号
+	int cur_transimiting_package_idx = get_package_idx();
+	
+	//更新sender_event状态
+	update(transimit_max_bit_num);
+
+	bool cur_is_finished = get_is_finished();
+
+	//所有车辆进行接收
+	for (receiver_event *__receiver_event : m_receiver_event_vec) {
+		__receiver_event->receive(cur_transimiting_package_idx, cur_is_finished);
+	}
+
+	if (cur_is_finished) {
+		vue_network::s_sender_event_per_pattern_finished[get_pattern_idx()].insert(this);
+	}
+}
+
+bool sender_event::is_transmit_time_slot(int t_tti) {
+	int granularity = context::get_context()->get_rrm_config()->get_time_division_granularity();
+	return t_tti% granularity == m_slot_time_idx;
+}
+
+void sender_event::update(int t_transimit_max_bit_num) {
+	if (t_transimit_max_bit_num >= m_remain_bit_num) {
+		if (++m_package_idx == m_package_num) {
+			m_remain_bit_num = 0;
+			m_is_finished = true;
+		}
+		else {
+			m_remain_bit_num = m_bit_num_per_package[m_package_idx];
+		}
+	}
+	else {
+		m_remain_bit_num -= t_transimit_max_bit_num;
+	}
+}
+
+int receiver_event::s_event_count = 0;
+
+receiver_event::receiver_event(sender_event* t_sender_event, vue* t_receiver_vue) {
+	set_sender_event(t_sender_event);
+	set_sender_vue(t_sender_event->get_sender_vue());
+	set_receiver_vue(t_receiver_vue);
 	set_pattern_idx(t_sender_event->get_pattern_idx());
 
-	m_package_num = context::get_context()->get_tmc_config()->get_package_num();
-	m_bit_num_per_package = context::get_context()->get_tmc_config()->get_bit_num_per_package();
+	m_package_loss.assign(context::get_context()->get_tmc_config()->get_package_num(), false);
 
-	m_remain_bit_num = m_bit_num_per_package[0];
-
-	set_distance(vue_physics::get_distance(get_send_vue_id(), get_receive_vue_id()));
+	set_distance(vue_physics::get_distance(get_sendr_vue_id(), get_receiver_vue_id()));
 }
 
 receiver_event::~receiver_event() {
 
 }
 
-void receiver_event::set_event_id(int t_event_id) {
-	m_event_id = t_event_id;
-}
-
 int receiver_event::get_event_id() {
 	return m_event_id;
 }
 
-void receiver_event::set_send_vue_id(int t_send_vue_id) {
-	m_send_vue_id = t_send_vue_id;
+void receiver_event::set_sender_event(sender_event * t_sender_event) {
+	m_sender_event = t_sender_event;
 }
 
-int receiver_event::get_send_vue_id() {
-	return m_send_vue_id;
+sender_event* receiver_event::get_sender_event() {
+	return m_sender_event;
 }
 
-void receiver_event::set_receive_vue_id(int t_receive_vue_id) {
-	m_receive_vue_id = t_receive_vue_id;
+void receiver_event::set_sender_vue(vue *t_sender_vue) {
+	m_sender_vue = t_sender_vue;
 }
 
-int receiver_event::get_receive_vue_id() {
-	return m_receive_vue_id;
+vue* receiver_event::get_sender_vue() {
+	return m_sender_vue;
+}
+
+int receiver_event::get_sendr_vue_id() {
+	return m_sender_vue->get_physics_level()->get_vue_id();
+}
+
+void receiver_event::set_receiver_vue(vue *t_receiver_vue) {
+	m_receiver_vue = t_receiver_vue;
+}
+
+vue* receiver_event::get_receiver_vue() {
+	return m_receiver_vue;
+}
+
+int receiver_event::get_receiver_vue_id() {
+	return m_receiver_vue->get_physics_level()->get_vue_id();
 }
 
 void receiver_event::set_distance(double t_distance) {
@@ -112,11 +203,8 @@ int receiver_event::get_pattern_idx() {
 	return m_pattern_idx;
 }
 
-bool receiver_event::get_is_finished() {
-	return m_is_finished;
-}
-
-void receiver_event::set_is_loss() {
+void receiver_event::set_package_loss(int t_package_loss) {
+	m_package_loss[t_package_loss] = true;
 	m_is_loss = true;
 }
 
@@ -124,18 +212,52 @@ bool receiver_event::get_is_loss() {
 	return m_is_loss;
 }
 
-void receiver_event::transimit(int t_transimit_max_bit_num) {
-	if (t_transimit_max_bit_num >= m_remain_bit_num) {
-		if (++m_package_idx == m_package_num) {
-			m_remain_bit_num = 0;
-			m_is_finished = true;
-		}
-		else {
-			m_remain_bit_num = m_bit_num_per_package[m_package_idx];
-		}
+void receiver_event::receive(int t_package_idx,bool t_is_finished) {
+	context* __context = context::get_context();
+
+	//计算SINR
+	wt* __wt = __context->get_wt();
+
+	double sinr = 0;
+	int vue_send_id = get_sendr_vue_id();
+	int vue_receive_id = get_receiver_vue_id();
+	int pattern_idx = get_pattern_idx();
+
+	if (vue_physics::get_channel(vue_send_id, vue_receive_id, pattern_idx) == nullptr) {
+		sinr = __context->get_rrm_config()->get_drop_sinr_boundary() - 1;
 	}
 	else {
-		m_remain_bit_num -= t_transimit_max_bit_num;
+		//当前pattern下，发送车辆的id，为什么用set，因为可能同一个频段上，同一个车辆触发了不同的事件，但是只需要统计车辆id，因此用set
+		set<int> sending_vue_id_vec;
+		for (sender_event *__sender_event : vue_network::s_sender_event_per_pattern[pattern_idx]) {
+			sending_vue_id_vec.insert(__sender_event->get_sender_vue_id());
+		}
+
+		sinr = __wt->calculate_sinr(
+			vue_send_id,
+			vue_receive_id,
+			get_pattern_idx(),
+			sending_vue_id_vec
+		);
+	}
+
+	auto p = __context->get_vue_array()[vue_receive_id].get_physics_level();
+
+	if (sinr < __context->get_rrm_config()->get_drop_sinr_boundary()) {
+		set_package_loss(t_package_idx);//记录丢包
+	}
+	else {
+		p->m_pattern_occupied[pattern_idx] = true;
+	}
+
+	if (t_is_finished) {
+		if (get_is_loss()) {
+			get_receiver_vue()->get_link_level()->m_loss_event_list.push_back(this);
+		}
+		else {
+			get_receiver_vue()->get_link_level()->m_success_event_list.push_back(this);
+		}
 	}
 }
+
 

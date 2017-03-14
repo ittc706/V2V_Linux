@@ -6,6 +6,8 @@
 #include<memory>
 #include"matrix.h"
 
+class sender_event;
+
 class wt {
 	/*------------------友元声明------------------*/
 	/*

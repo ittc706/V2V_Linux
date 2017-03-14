@@ -26,6 +26,7 @@
 #include"vue_physics.h"
 #include"imta.h"
 #include"function.h"
+#include<memory.h>
 
 
 using namespace std;
@@ -102,6 +103,10 @@ void gtt_urban::initialize() {
 			vue_coordinate << p->m_absx << " ";
 			vue_coordinate << p->m_absy << " ";
 			vue_coordinate << endl;
+
+			//初始化pattern占用情况的数组全为false，即未被占用状态
+			p->m_pattern_occupied = new bool[context::get_context()->get_rrm_config()->get_pattern_num()];
+			memset(p->m_pattern_occupied, false, sizeof(p->m_pattern_occupied));
 		}
 	}
 	memory_clean::safe_delete(m_pupr, true);

@@ -19,6 +19,11 @@ class vue_link {
 	* 将tmc设为友元，事件相关的字段需要通过tmc对象来配置
 	*/
 	friend class tmc;
+
+	/*
+	* 将receive_event设为友元
+	*/
+	friend class receiver_event;
 	/*----------------拷贝控制成员----------------*/
 private:
 	/*
@@ -64,12 +69,6 @@ public:
 	vue* get_superior_level();
 
 	/*
-	* 接收事件列表
-	*/
-private:
-	std::list<receiver_event*> m_receiver_event_list;
-
-	/*
 	* 成功传输事件链表
 	*/
 private:
@@ -93,11 +92,6 @@ public:
 	* 维护接受事件列表
 	*/
 	void receive_connection(sender_event* t_sender_event);
-
-	/*
-	* 接收信息
-	*/
-	void receive();
 
 	/*--------------------实现--------------------*/
 private:

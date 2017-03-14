@@ -13,6 +13,8 @@ class vue_physics {
 	friend class vue;
 	friend class gtt_highspeed;
 	friend class gtt_urban;
+	friend class receiver_event;
+	friend class vue_network;
 
 	/*----------------拷贝控制成员----------------*/
 private:
@@ -143,11 +145,18 @@ private:
 	*/
 private:
 	double m_rely = 0;
+
 	/*
 	* 所在街区id
 	*/
 private:
 	int m_road_id = -1;
+
+	/*
+	* 各个pattern上是否有接收信号,true表示有，false表示没有
+	*/
+private:
+	bool *m_pattern_occupied;
 
 	/*
 	* 拥塞等级<Warn>:目前暂时设为0
@@ -156,6 +165,18 @@ private:
 	int m_congestion_level = 0;
 public:
 	int get_congestion_level();
+
+	/*
+	* 发送时隙编号，用于时分复用，该区域编号在地理位置更新后更新
+	* 该编号假设由基站告知，并且假设基站无缝无重合划分整个区域
+	* TTI%granularity==m_slot_time_idx来判断是否可以发送
+	* 其中granularity为时分粒度，例如奇偶划分就是2
+	*/
+private:
+	int m_slot_time_idx = 0;
+	void set_slot_time_idx(int t_slot_time_idx);
+public:
+	int get_slot_time_idx();
 	/*----------------访问与编辑器----------------*/
 public:
 

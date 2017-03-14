@@ -132,6 +132,14 @@ int vue_physics::get_congestion_level() {
 	return m_congestion_level;
 }
 
+void vue_physics::set_slot_time_idx(int t_slot_time_idx) {
+	this->m_slot_time_idx = t_slot_time_idx;
+}
+
+int vue_physics::get_slot_time_idx() {
+	return m_slot_time_idx;
+}
+
 void vue_physics::update_location_highspeed() {
 	auto p = (gtt_highspeed*)context::get_context()->get_gtt();
 	//get_freshtime()的单位是TTI，这里转换成s

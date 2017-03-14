@@ -69,17 +69,22 @@ void tmc::event_trigger() {
 	context* __context = context::get_context();
 	for (int vue_id = 0; vue_id < __context->get_gtt()->get_vue_num(); vue_id++) {
 		int tti = __context->get_tti();
-		//<Warn>:下面这句会导致，若拥塞等级改变前后，车辆永远不触发事件了
+		
 		int congestion_level = __context->get_vue_array()[vue_id].get_physics_level()->get_congestion_level();
-		if (__context->get_vue_array()[vue_id].get_network_level()->get_periodic_event_next_trigger_tti()[congestion_level] != tti)continue;
+		/*
+		* 为什么要用大于，因为，如果用等于来判断，若拥塞等级改变前后，车辆永远不触发事件了
+		* 例如之前处于一个拥塞状态，预计触发时间为2000TTI，但是1900时刻，拥塞等级刷新为较低的值，其对应的触发时间为1800TTI，那么在1900TTI以后不可能与1800TTI相等了
+		*/
+		if (__context->get_vue_array()[vue_id].get_network_level()->get_periodic_event_next_trigger_tti()[congestion_level] > tti) continue;
 		
 		sender_event* __sender_event = new sender_event();
-		__sender_event->set_vue_id(vue_id);
+		__sender_event->set_sender_vue(&__context->get_vue_array()[vue_id]);
+		__sender_event->set_slot_time_idx(__context->get_vue_array()[vue_id].get_physics_level()->get_slot_time_idx());
 
 		__context->get_event_array().push_back(__sender_event);
 		__context->get_tti_event_list()[tti].push_back(__sender_event);
 
-		//将事件状态标记为待发状态
+		//将事件添加到该车辆的发送列表中
 		__context->get_vue_array()[vue_id].get_network_level()->add_sender_event(__sender_event);
 
 		for (int congestion_level = 0; congestion_level < __context->get_tmc_config()->get_congestion_level_num(); congestion_level++) {

@@ -29,6 +29,12 @@ class vue_network {
 	*/
 	friend class vue_link;
 
+	/*
+	* 将sender/receiver_event设为友元
+	*/
+	friend class sender_event;
+	friend class receiver_event;
+
 	/*------------------静态成员------------------*/
 private:
 	/*
@@ -37,23 +43,16 @@ private:
 	static std::default_random_engine s_engine;
 
 	/*
-	* 正在传输的车辆id(发送车辆)
+	* 正在传输的发送事件
 	* 外层下标为pattern编号
 	*/
-	static std::vector<std::set<int>> s_vue_id_per_pattern;
+	static std::vector<std::set<sender_event*>> s_sender_event_per_pattern;
 
 	/*
-	* 传输完毕的车辆id
+	* 传输完毕的发送事件
 	* 外层下标为pattern编号
 	*/
-	static std::vector<std::set<int>> s_vue_id_per_pattern_finished;
-
-public:
-	/*
-	* 用于更新s_vue_id_per_pattern
-	* 从s_vue_id_per_pattern删去s_vue_id_per_pattern_finished
-	*/
-	static void update_vue_id_per_pattern();
+	static std::vector<std::set<sender_event*>> s_sender_event_per_pattern_finished;
 
 	/*----------------拷贝控制成员----------------*/
 private:
@@ -108,9 +107,6 @@ private:
 public:
 	const std::vector<int>& get_periodic_event_next_trigger_tti();
 
-	/*
-	* 标记是否有待发事件
-	*/
 private:
 	/*
 	* 发送事件列表
@@ -138,7 +134,18 @@ private:
 	int select_pattern_base();
 
 	/*
-	* 加强版随机选择
+	* 加强版随机选择(0-1)式
 	*/
 	int select_pattern_based_on_sensing();
+
+	/*
+	* 加强版随机选择(古典式)
+	*/
+	int select_pattern_based_on_sensing_classical();
+
+	/*
+	* 依据是否接收到信号来判断该频段是否被占用
+	*/
+	int select_sensing();
+
 };

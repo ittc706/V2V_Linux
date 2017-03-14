@@ -26,7 +26,13 @@
 <!--丢包临界sinr
 	1:base
 	2:based on sensing
-	3:-->
-<select_altorithm>2</select_altorithm>
+	3:base on sensing classical
+        4:sensing
+	-->
+<select_altorithm>4</select_altorithm>
+
+
+<!--时分粒度，例如奇偶时分方式就设为2-->
+<time_division_granularity>2</time_division_granularity>
 
 

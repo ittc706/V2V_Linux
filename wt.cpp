@@ -18,11 +18,13 @@
 
 #include<fstream>
 #include<iterator>
+#include<vector>
 #include"context.h"
 #include"config.h"
 #include"wt.h"
 #include"vue_physics.h"
 #include"vue_network.h"
+#include"event.h"
 
 
 using namespace std;
@@ -53,7 +55,7 @@ wt::~wt() {
 
 }
 
-double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, const set<int>& t_sending_vue_id_set) {
+double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, const std::set<int>& t_sending_vue_id_set) {
 	m_ploss = vue_physics::get_pl(t_send_vue_id, t_receive_vue_id);
 	int subcarrier_num = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
 	m_pt = pow(10, (23 - 10 * log10(subcarrier_num * 15 * 1000)) / 10);

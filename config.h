@@ -345,6 +345,15 @@ private:
 	void set_select_altorithm(int t_select_altorithm);
 public:
 	int get_select_altorithm();
+
+	/*
+	* 选择算法
+	*/
+private:
+	int m_time_division_granularity;
+	void set_time_division_granularity(int t_time_division_granularity);
+public:
+	int get_time_division_granularity();
 	/*--------------------接口--------------------*/
 public:
 	void load();
