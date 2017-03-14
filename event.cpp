@@ -214,6 +214,7 @@ bool receiver_event::get_is_loss() {
 
 void receiver_event::receive(int t_package_idx,bool t_is_finished) {
 	context* __context = context::get_context();
+	int tti = __context->get_tti();
 
 	//计算SINR
 	wt* __wt = __context->get_wt();
@@ -230,7 +231,8 @@ void receiver_event::receive(int t_package_idx,bool t_is_finished) {
 		//当前pattern下，发送车辆的id，为什么用set，因为可能同一个频段上，同一个车辆触发了不同的事件，但是只需要统计车辆id，因此用set
 		set<int> sending_vue_id_vec;
 		for (sender_event *__sender_event : vue_network::s_sender_event_per_pattern[pattern_idx]) {
-			sending_vue_id_vec.insert(__sender_event->get_sender_vue_id());
+			if (__sender_event->is_transmit_time_slot(tti))
+				sending_vue_id_vec.insert(__sender_event->get_sender_vue_id());
 		}
 
 		sinr = __wt->calculate_sinr(

@@ -134,8 +134,10 @@ public:
 	*/
 	void transimit();
 
-private:
+
 	bool is_transmit_time_slot(int t_tti);
+
+private:
 	void update(int t_transimit_max_bit_num);
 };
 
