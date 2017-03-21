@@ -91,6 +91,10 @@ void sender_event::transimit() {
 
 	//当前正在传输的package序号
 	int cur_transimiting_package_idx = get_package_idx();
+
+	if (cur_transimiting_package_idx == 4) {
+		cout << "here" << endl;
+	}
 	
 	//更新sender_event状态
 	update();
@@ -101,10 +105,6 @@ void sender_event::transimit() {
 	for (receiver_event *__receiver_event : m_receiver_event_vec) {
 		__receiver_event->receive(cur_transimiting_package_idx, cur_is_finished);
 	}
-
-	if (cur_is_finished) {
-		vue_network::s_sender_event_per_pattern_finished[get_pattern_idx()].insert(this);
-	}
 }
 
 bool sender_event::is_transmit_time_slot(int t_tti) {
@@ -114,8 +114,16 @@ bool sender_event::is_transmit_time_slot(int t_tti) {
 
 void sender_event::update() {
 	if (--m_remaining_transmission_time_per_package[m_package_idx] == 0) {
+		//当前包传输完毕，将其添加到该列表中进行后续维护
+		vue_network::s_sender_event_per_pattern_finished[get_pattern_idx()].insert(this);
+
 		if (++m_package_idx == m_package_num) {
 			m_is_finished = true;
+		}
+		else{//当还有包需要传送时，将其再次添加到对应vue的发送列表中进行再次的pattern选择
+			int sender_vue_id = m_sender_vue->get_physics_level()->get_vue_id();
+			//当一个包传输完毕后，将当前sender_event添加到对应车辆的发送事件列表中，进行下一次的pattern选择
+			context::get_context()->get_vue_array()[sender_vue_id].get_network_level()->add_sender_event(this);
 		}
 	}
 }

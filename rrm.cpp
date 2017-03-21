@@ -66,7 +66,4 @@ void rrm::schedule() {
 		}
 		vue_network::s_sender_event_per_pattern_finished[pattern_idx].clear();
 	}
-
-	
-
 }
