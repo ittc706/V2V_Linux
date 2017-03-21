@@ -6,7 +6,7 @@
 <periodic_event_period>500 500 500</periodic_event_period>
 
 
-<!--紧急事件的数据包数量-->
+<!--事件的数据包数量-->
 <package_num>4</package_num>
 
 

@@ -107,14 +107,31 @@ void tmc::statistic() {
 	}
 	context* __context = context::get_context();
 	for (int vue_id = 0; vue_id < __context->get_gtt()->get_vue_num(); vue_id++) {
-		
-		for (receiver_event* __receiver_event : __context->get_vue_array()[vue_id].get_link_level()->get_loss_event_list()) {
-			loss_package_distance << __receiver_event->get_distance() << " ";
-			distance << __receiver_event->get_distance() << " ";
+
+		//以事件为最小粒度统计丢包率
+		/*for (receiver_event* __receiver_event : __context->get_vue_array()[vue_id].get_link_level()->get_loss_event_list()) {
+		loss_package_distance << __receiver_event->get_distance() << " ";
+		distance << __receiver_event->get_distance() << " ";
 		}
 
 		for (receiver_event* __receiver_event : __context->get_vue_array()[vue_id].get_link_level()->get_success_event_list()) {
-			distance << __receiver_event->get_distance() << " ";
+		distance << __receiver_event->get_distance() << " ";
+		}*/
+
+		//以包为最小粒度统计丢包率
+		for (receiver_event* __receiver_event : __context->get_vue_array()[vue_id].get_link_level()->get_loss_event_list()) {
+			for (int package_idx = 0; package_idx < __context->get_tmc_config()->get_package_num(); package_idx++) {
+				if (__receiver_event->get_package_loss()[package_idx]) {
+					loss_package_distance << __receiver_event->get_distance() << " ";
+				}
+				distance << __receiver_event->get_distance() << " ";
+			}
+		}
+
+		for (receiver_event* __receiver_event : __context->get_vue_array()[vue_id].get_link_level()->get_success_event_list()) {
+			for (int package_idx = 0; package_idx < __context->get_tmc_config()->get_package_num(); package_idx++) {
+				distance << __receiver_event->get_distance() << " ";
+			}
 		}
 	}
 }

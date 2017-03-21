@@ -208,6 +208,10 @@ void receiver_event::set_package_loss(int t_package_loss) {
 	m_is_loss = true;
 }
 
+const vector<bool>& receiver_event::get_package_loss() {
+	return m_package_loss;
+}
+
 bool receiver_event::get_is_loss() {
 	return m_is_loss;
 }

@@ -251,6 +251,7 @@ private:
 	bool m_is_loss = false;
 public:
 	void set_package_loss(int t_package_loss);
+	const std::vector<bool>& get_package_loss();
 	bool get_is_loss();
 
 	/*--------------------接口--------------------*/
