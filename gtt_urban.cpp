@@ -220,58 +220,62 @@ void gtt_urban::calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_id
 	__imta->build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//计算了结果代入信道模型计算UE之间信道系数
 
 	vue_physics::set_pl(t_vue_id1, t_vue_id2, t_Pl);
-	if (t_Pl>1e-15)
-	{
-		bool *flag = new bool();
-		*flag = true;
-		__imta->enable(flag);
+	if (context::get_context()->get_global_control_config()->get_fast_fading_switch()) {
+		if (t_Pl>1e-15){
+			bool *flag = new bool();
+			*flag = true;
+			__imta->enable(flag);
 
-		double *H = new double[1 * 2 * 19 * 2];
-		double *FFT = new double[1 * 2 * 1024 * 2];
-		double *ch_buffer = new double[1 * 2 * 19 * 20];
-		double *ch_sin = new double[1 * 2 * 19 * 20];
-		double *ch_cos = new double[1 * 2 * 19 * 20];
+			double *H = new double[1 * 2 * 19 * 2];
+			double *FFT = new double[1 * 2 * 1024 * 2];
+			double *ch_buffer = new double[1 * 2 * 19 * 20];
+			double *ch_sin = new double[1 * 2 * 19 * 20];
+			double *ch_cos = new double[1 * 2 * 19 * 20];
 
-		double *t_HAfterFFT = new double[2 * 1024 * 2];
+			double *t_HAfterFFT = new double[2 * 1024 * 2];
 
-		__imta->calculate(t_HAfterFFT, 0.01f, ch_buffer, ch_sin, ch_cos, H, FFT);
+			__imta->calculate(t_HAfterFFT, 0.01f, ch_buffer, ch_sin, ch_cos, H, FFT);
 
-		//一个pattern占用了多少个频点
-		int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
+			//一个pattern占用了多少个频点
+			int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
 
-		//将该pattern_idx对应的信道从t_HAfterFFT中取出来
-		double *t_HAfterFFT_pattern = new double[2 * point_num_per_pattern * 2];
+			//将该pattern_idx对应的信道从t_HAfterFFT中取出来
+			double *t_HAfterFFT_pattern = new double[2 * point_num_per_pattern * 2];
 
-		//需要的频段相对于1024个频点的偏移量
-		int offset = point_num_per_pattern*t_pattern_idx;
-		for (int point_idx = 0; point_idx < point_num_per_pattern; point_idx++) {
-			t_HAfterFFT_pattern[0 * (point_num_per_pattern * 2) + 2 * (point_idx)] = t_HAfterFFT[0 * (1024 * 2) + 2 * (point_idx + offset)];
-			t_HAfterFFT_pattern[0 * (point_num_per_pattern * 2) + 2 * (point_idx)+1] = t_HAfterFFT[0 * (1024 * 2) + 2 * (point_idx + offset) + 1];
+			//需要的频段相对于1024个频点的偏移量
+			int offset = point_num_per_pattern*t_pattern_idx;
+			for (int point_idx = 0; point_idx < point_num_per_pattern; point_idx++) {
+				t_HAfterFFT_pattern[0 * (point_num_per_pattern * 2) + 2 * (point_idx)] = t_HAfterFFT[0 * (1024 * 2) + 2 * (point_idx + offset)];
+				t_HAfterFFT_pattern[0 * (point_num_per_pattern * 2) + 2 * (point_idx)+1] = t_HAfterFFT[0 * (1024 * 2) + 2 * (point_idx + offset) + 1];
 
-			t_HAfterFFT_pattern[1 * (point_num_per_pattern * 2) + 2 * point_idx] = t_HAfterFFT[1 * (1024 * 2) + 2 * (point_idx + offset)];
-			t_HAfterFFT_pattern[1 * (point_num_per_pattern * 2) + 2 * point_idx + 1] = t_HAfterFFT[1 * (1024 * 2) + 2 * (point_idx + offset) + 1];
+				t_HAfterFFT_pattern[1 * (point_num_per_pattern * 2) + 2 * point_idx] = t_HAfterFFT[1 * (1024 * 2) + 2 * (point_idx + offset)];
+				t_HAfterFFT_pattern[1 * (point_num_per_pattern * 2) + 2 * point_idx + 1] = t_HAfterFFT[1 * (1024 * 2) + 2 * (point_idx + offset) + 1];
+			}
+
+
+			vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, t_HAfterFFT_pattern);
+
+			memory_clean::safe_delete(flag);
+			memory_clean::safe_delete(H, true);
+			memory_clean::safe_delete(ch_buffer, true);
+			memory_clean::safe_delete(ch_sin, true);
+			memory_clean::safe_delete(ch_cos, true);
+			memory_clean::safe_delete(FFT, true);
+			memory_clean::safe_delete(t_HAfterFFT, true);
 		}
+		else {
+			vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, nullptr);
+		}
+		memory_clean::safe_delete(_antenna.TxSlantAngle, true);
+		memory_clean::safe_delete(_antenna.TxAntSpacing, true);
+		memory_clean::safe_delete(_antenna.RxSlantAngle, true);
+		memory_clean::safe_delete(_antenna.RxAntSpacing, true);
 
-
-		vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, t_HAfterFFT_pattern);
-
-		memory_clean::safe_delete(flag);
-		memory_clean::safe_delete(H, true);
-		memory_clean::safe_delete(ch_buffer, true);
-		memory_clean::safe_delete(ch_sin, true);
-		memory_clean::safe_delete(ch_cos, true);
-		memory_clean::safe_delete(FFT, true);
-		memory_clean::safe_delete(t_HAfterFFT, true);
+		memory_clean::safe_delete(__imta);
 	}
 	else {
 		vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, nullptr);
 	}
-	memory_clean::safe_delete(_antenna.TxSlantAngle, true);
-	memory_clean::safe_delete(_antenna.TxAntSpacing, true);
-	memory_clean::safe_delete(_antenna.RxSlantAngle, true);
-	memory_clean::safe_delete(_antenna.RxAntSpacing, true);
-
-	memory_clean::safe_delete(__imta);
 }
 
 gtt_urban_config* gtt_urban::get_precise_config() {

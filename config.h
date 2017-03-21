@@ -32,6 +32,16 @@ private:
 	void set_platform(platform t_platform);
 public:
 	platform get_platform();
+
+	/*
+	* 仿真时长
+	*/
+private:
+	bool m_fast_fading_switch;
+	void set_fast_fading_switch(bool t_fast_fading_switch);
+public:
+	bool get_fast_fading_switch();
+
 	
 	/*
 	* 仿真时长
@@ -43,7 +53,7 @@ public:
 	int get_ntti();
 
 	/*
-	* 信道刷新周期
+	* gtt模式选择
 	*/
 private:
 	gtt_mode m_gtt_mode;
@@ -306,28 +316,6 @@ private:
 public:
 	int get_pattern_num();
 
-
-	/*
-	* 调制方式
-	* 2:QOSK
-	* 4:16QAM
-	* 6:64QAM
-	*/
-private:
-	int m_modulation_type;
-	void set_modulation_type(int t_modulation_type);
-public:
-	int get_modulation_type();
-
-	/*
-	* 信道编码码率
-	*/
-private:
-	double m_code_rate;
-	void set_code_rate(double t_code_rate);
-public:
-	double get_code_rate();
-
 	/*
 	* 丢包临界sinr
 	*/
@@ -404,12 +392,12 @@ public:
 	int get_package_num();
 
 	/*
-	* 周期事件每个包对应的bit数量
+	* 每个包的传输时间，以TTI为单位
 	*/
 private:
-	std::vector<int> m_bit_num_per_package;
+	std::vector<int> m_tti_per_package;
 public:
-	const std::vector<int>& get_bit_num_per_package();
+	const std::vector<int>& get_tti_per_package();
 	/*--------------------接口--------------------*/
 public:
 	void load();

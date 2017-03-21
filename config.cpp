@@ -42,6 +42,15 @@ platform global_control_config::get_platform() {
 	return m_platform;
 }
 
+void global_control_config::set_fast_fading_switch(bool t_fast_fading_switch) {
+	m_fast_fading_switch = t_fast_fading_switch;
+}
+
+bool global_control_config::get_fast_fading_switch() {
+	return m_fast_fading_switch;
+}
+
+
 void global_control_config::set_ntti(int t_ntti) {
 	m_ntti = t_ntti;
 }
@@ -96,6 +105,12 @@ void global_control_config::load() {
 	else
 		throw logic_error("ConfigLoaderError");
 
+	if ((temp = get_config_loader()->get_param("fast_fading_switch")) != nullString) {
+		set_fast_fading_switch(static_cast<bool>(stoi(temp)));
+	}
+	else
+		throw logic_error("ConfigLoaderError");
+
 	if ((temp = get_config_loader()->get_param("gtt_mode")) != nullString) {
 		if (temp == "HIGHSPEED")
 			set_gtt_mode(HIGHSPEED);
@@ -108,6 +123,7 @@ void global_control_config::load() {
 		throw logic_error("ConfigLoaderError");
 
 	cout << "ntti: " << get_ntti() << endl;
+	cout << "fast_fading_switch: " << (get_fast_fading_switch() ? "ON" : "OFF") << endl;
 	cout << "gtt_mode: " << (get_gtt_mode() == URBAN ? "URBAN" : "HIGHSPEED") << endl;
 	cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 }
@@ -357,22 +373,6 @@ int rrm_config::get_pattern_num() {
 	return m_pattern_num;
 }
 
-void rrm_config::set_modulation_type(int t_modulation_type) {
-	m_modulation_type = t_modulation_type;
-}
-
-int rrm_config::get_modulation_type() {
-	return m_modulation_type;
-}
-
-void rrm_config::set_code_rate(double t_code_rate) {
-	m_code_rate = t_code_rate;
-}
-
-double rrm_config::get_code_rate() {
-	return m_code_rate;
-}
-
 void rrm_config::set_drop_sinr_boundary(double t_drop_sinr_boundary) {
 	m_drop_sinr_boundary = t_drop_sinr_boundary;
 }
@@ -427,18 +427,6 @@ void rrm_config::load() {
 	else
 		throw logic_error("ConfigLoaderError");
 
-	if ((temp = get_config_loader()->get_param("modulation_type")) != nullString) {
-		set_modulation_type(stoi(temp));
-	}
-	else
-		throw logic_error("ConfigLoaderError");
-
-	if ((temp = get_config_loader()->get_param("code_rate")) != nullString) {
-		set_code_rate(stod(temp));
-	}
-	else
-		throw logic_error("ConfigLoaderError");
-
 	if ((temp = get_config_loader()->get_param("drop_sinr_boundary")) != nullString) {
 		set_drop_sinr_boundary(stod(temp));
 	}
@@ -463,8 +451,6 @@ void rrm_config::load() {
 	cout << "total_bandwidth: " << get_total_bandwidth() << endl;
 	cout << "rb_num_per_pattern: " << get_rb_num_per_pattern() << endl;
 	cout << "pattern_num: " << get_pattern_num() << endl;
-	cout << "modulation_type: " << get_modulation_type() << endl;
-	cout << "code_rate: " << get_code_rate() << endl;
 	cout << "drop_sinr_boundary: " << get_drop_sinr_boundary() << endl;
 	cout << "select_altorithm: " << get_select_altorithm() << endl;
 	cout << "time_division_granularity: " << get_time_division_granularity() << endl;
@@ -499,8 +485,8 @@ int tmc_config::get_package_num() {
 	return m_package_num;
 }
 
-const std::vector<int>& tmc_config::get_bit_num_per_package() {
-	return m_bit_num_per_package;
+const std::vector<int>& tmc_config::get_tti_per_package() {
+	return m_tti_per_package;
 }
 
 void tmc_config::load() {
@@ -542,12 +528,12 @@ void tmc_config::load() {
 	else
 		throw logic_error("ConfigLoaderError");
 
-	if ((temp = get_config_loader()->get_param("bit_num_per_package")) != nullString) {
+	if ((temp = get_config_loader()->get_param("tti_per_package")) != nullString) {
 		stringstream ss;
 		ss << temp;
 		string temp2;
 		while (ss >> temp2) {
-			m_bit_num_per_package.push_back(stoi(temp2));
+			m_tti_per_package.push_back(stoi(temp2));
 		}
 	}
 	else
@@ -556,6 +542,6 @@ void tmc_config::load() {
 	cout << "congestion_level_num: " << get_congestion_level_num() << endl;
 	cout << "periodic_event_period_per_congestion_level: "; array_print::print_vector_dim1(get_periodic_event_period_per_congestion_level());
 	cout << "package_num: " << get_package_num() << endl;
-	cout << "bit_num_per_package: "; array_print::print_vector_dim1(get_bit_num_per_package());
+	cout << "tti_per_package: "; array_print::print_vector_dim1(get_tti_per_package());
 	cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 }

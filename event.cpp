@@ -32,9 +32,7 @@ int sender_event::s_event_count = 0;
 
 sender_event::sender_event() {
 	m_package_num = context::get_context()->get_tmc_config()->get_package_num();
-	m_bit_num_per_package = context::get_context()->get_tmc_config()->get_bit_num_per_package();
-
-	m_remain_bit_num = m_bit_num_per_package[0];
+	m_remaining_transmission_time_per_package = context::get_context()->get_tmc_config()->get_tti_per_package();
 }
 
 sender_event::~sender_event() {
@@ -91,16 +89,11 @@ void sender_event::transimit() {
 	//当该事件所对应的发送车辆不在该时隙传输时，continue
 	if (!is_transmit_time_slot(tti)) return;
 
-	double factor = __context->get_rrm_config()->get_modulation_type()* __context->get_rrm_config()->get_code_rate();
-
-	//该编码方式下，该pattern在一个tti最多可传输的有效信息bit数量
-	int transimit_max_bit_num = (int)((double)(__context->get_rrm_config()->get_rb_num_per_pattern() * rrm_config::s_BIT_NUM_PER_RB)* factor);
-	
 	//当前正在传输的package序号
 	int cur_transimiting_package_idx = get_package_idx();
 	
 	//更新sender_event状态
-	update(transimit_max_bit_num);
+	update();
 
 	bool cur_is_finished = get_is_finished();
 
@@ -119,18 +112,11 @@ bool sender_event::is_transmit_time_slot(int t_tti) {
 	return t_tti% granularity == m_slot_time_idx;
 }
 
-void sender_event::update(int t_transimit_max_bit_num) {
-	if (t_transimit_max_bit_num >= m_remain_bit_num) {
+void sender_event::update() {
+	if (--m_remaining_transmission_time_per_package[m_package_idx] == 0) {
 		if (++m_package_idx == m_package_num) {
-			m_remain_bit_num = 0;
 			m_is_finished = true;
 		}
-		else {
-			m_remain_bit_num = m_bit_num_per_package[m_package_idx];
-		}
-	}
-	else {
-		m_remain_bit_num -= t_transimit_max_bit_num;
 	}
 }
 
@@ -228,7 +214,9 @@ void receiver_event::receive(int t_package_idx,bool t_is_finished) {
 	int vue_receive_id = get_receiver_vue_id();
 	int pattern_idx = get_pattern_idx();
 
-	if (vue_physics::get_channel(vue_send_id, vue_receive_id, pattern_idx) == nullptr) {
+	//get_channel只为确保信道计算过，因为pl是在计算信道时才附带计算的
+	vue_physics::get_channel(vue_send_id, vue_receive_id, pattern_idx);
+	if (vue_physics::get_pl(vue_send_id, vue_receive_id) <1e-15) {
 		sinr = __context->get_rrm_config()->get_drop_sinr_boundary() - 1;
 	}
 	else {

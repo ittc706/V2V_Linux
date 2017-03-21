@@ -114,41 +114,69 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, int t_pattern
 }
 
 matrix wt::read_h(int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, int t_subcarrier_idx) {
-	matrix res(m_nr, m_nt);
-	double* p = vue_physics::get_channel(t_send_vue_id, t_receive_vue_id, t_pattern_idx);
-	if (p == nullptr) throw logic_error("error");
+	if (context::get_context()->get_global_control_config()->get_fast_fading_switch()) {
+		matrix res(m_nr, m_nt);
+		double* p = vue_physics::get_channel(t_send_vue_id, t_receive_vue_id, t_pattern_idx);
+		if (p == nullptr) throw logic_error("error");
 
-	int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
-	for (int row = 0; row < m_nr; row++) {
-		for (int col = 0; col < m_nt; col++) {
-			res[row][col] = complex(p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2], p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2 + 1]);
+		int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
+		for (int row = 0; row < m_nr; row++) {
+			for (int col = 0; col < m_nt; col++) {
+				res[row][col] = complex(p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2], p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2 + 1]);
+			}
 		}
+		return res;
 	}
-	return res;
+	else {
+		matrix res(m_nr, m_nt);
+		for (int row = 0; row < m_nr; row++) {
+			for (int col = 0; col < m_nt; col++) {
+				res[row][col] = pow(10, 0.6);
+			}
+		}
+		return res;
+	}
 }
 
 std::vector<matrix> wt::read_inter_h(const std::set<int>& t_sending_vue_id_set, int t_send_vue_id, int t_receive_vue_id, int t_pattern_idx, int t_subcarrier_idx) {
-	vector<matrix> res;
-	//<Warn>
-	for (int inter_vue_id : t_sending_vue_id_set) {
-		if (inter_vue_id == t_send_vue_id) continue;
-		if (inter_vue_id == t_receive_vue_id) continue;
-		
-		double* p = vue_physics::get_channel(inter_vue_id, t_receive_vue_id, t_pattern_idx);
-		if (p == nullptr) continue;//该信道响应矩阵没有计算，即该信道强度很弱，已被忽略
+	if (context::get_context()->get_global_control_config()->get_fast_fading_switch()) {
+		vector<matrix> res;
+		for (int inter_vue_id : t_sending_vue_id_set) {
+			if (inter_vue_id == t_send_vue_id) continue;
+			if (inter_vue_id == t_receive_vue_id) continue;
 
-		matrix m(m_nr, m_nt);
-		int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
+			double* p = vue_physics::get_channel(inter_vue_id, t_receive_vue_id, t_pattern_idx);
+			if (p == nullptr) continue;//该信道响应矩阵没有计算，即该信道强度很弱，已被忽略
 
-		for (int row = 0; row < m_nr; row++) {
-			for (int col = 0; col < m_nt; col++) {
-				m[row][col] = complex(p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2],
-					p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2 + 1]);
+			matrix m(m_nr, m_nt);
+			int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
+
+			for (int row = 0; row < m_nr; row++) {
+				for (int col = 0; col < m_nt; col++) {
+					m[row][col] = complex(p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2],
+						p[row * (point_num_per_pattern * 2) + t_subcarrier_idx * 2 + 1]);
+				}
 			}
+			res.push_back(m);
 		}
-		res.push_back(m);
+		return res;
 	}
-	return res;
+	else {
+		vector<matrix> res;
+		for (int inter_vue_id : t_sending_vue_id_set) {
+			if (inter_vue_id == t_send_vue_id) continue;
+			if (inter_vue_id == t_receive_vue_id) continue;
+
+			matrix m(m_nr, m_nt);
+			for (int row = 0; row < m_nr; row++) {
+				for (int col = 0; col < m_nt; col++) {
+					m[row][col] = pow(10, 0.6);
+				}
+			}
+			res.push_back(m);
+		}
+		return res;
+	}
 }
 
 int wt::closest(std::vector<double> t_vec, double t_target) {

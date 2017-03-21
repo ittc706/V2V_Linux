@@ -1,11 +1,20 @@
+<!--仿真总时间，单位TTI(毫秒)-->
+<ntti>100</ntti>
+
+
+<!--快衰落开关
+	1：打开
+	0：关闭-->	
+<fast_fading_switch>0</fast_fading_switch>
+
+
+
 <!--地理拓扑单元选择
 	[URBAN]：城市场景
 	[HIGHSPEED]：高速场景-->	
 <gtt_mode>HIGHSPEED</gtt_mode>
 
 
-<!--仿真总时间，单位TTI(毫秒)-->
-<ntti>100</ntti>
 
 
 

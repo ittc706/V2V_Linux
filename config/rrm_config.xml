@@ -6,19 +6,6 @@
 <rb_num_per_pattern>10</rb_num_per_pattern>
 
 
-<!--调制方式
-	2:QOSK
-	4:16QAM
-	6:64QAM-->
-<modulation_type>2</modulation_type>
-
-
-
-<!--信道编码码率-->
-<code_rate>0.5</code_rate>
-
-
-
 <!--丢包临界sinr-->
 <drop_sinr_boundary>1.99</drop_sinr_boundary>
 
@@ -29,10 +16,10 @@
 	3:base on sensing classical
         4:sensing
 	-->
-<select_altorithm>4</select_altorithm>
+<select_altorithm>1</select_altorithm>
 
 
 <!--时分粒度，例如奇偶时分方式就设为2-->
-<time_division_granularity>2</time_division_granularity>
+<time_division_granularity>1</time_division_granularity>
 
 

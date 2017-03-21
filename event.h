@@ -100,24 +100,18 @@ private:
 	int m_package_num;
 
 	/*
-	* 每个包的bit数量
+	* 每个包剩余传输时间
 	*/
 private:
-	std::vector<int> m_bit_num_per_package;
+	std::vector<int> m_remaining_transmission_time_per_package;
 
 	/*
-	* 标记即将要传输的bit所在的包序号
+	* 标记当前时刻传输的包编号
 	*/
 private:
 	int m_package_idx = 0;
 public:
 	int get_package_idx();
-
-	/*
-	* 当前包剩余bit数目
-	*/
-private:
-	int m_remain_bit_num;
 
 	/*
 	* 标记是否传输完毕(无论是否发生丢包)
@@ -134,11 +128,13 @@ public:
 	*/
 	void transimit();
 
-
+	/*
+	* 判断当前时刻该事件是否处于可发送时隙
+	*/
 	bool is_transmit_time_slot(int t_tti);
 
 private:
-	void update(int t_transimit_max_bit_num);
+	void update();
 };
 
 
