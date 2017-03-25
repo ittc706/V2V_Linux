@@ -186,11 +186,45 @@ void gtt_urban::calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_id
 	auto vuei = context::get_context()->get_vue_array()[t_vue_id1].get_physics_level();
 	auto vuej = context::get_context()->get_vue_array()[t_vue_id2].get_physics_level();
 
-	_location.locationType = Nlos;
-	_location.manhattan = false;
+	//判断车辆运动方向是东西方向还是南北方向，true代表东西方向，false代表南北方向
+	bool v_diri, v_dirj;
+	if (vuei->m_vangle == 0 || vuei->m_vangle == 180) {
+		v_diri = true;
+	}
+	else {
+		v_diri = false;
+	}
 
+	if (vuej->m_vangle == 0 || vuej->m_vangle == 180) {
+		v_dirj = true;
+	}
+	else {
+		v_dirj = false;
+	}
+
+	//计算两车辆的绝对横纵坐标的距离
+	double x_between = abs(vuei->m_absx - vuej->m_absx);
+	double y_between = abs(vuei->m_absy - vuej->m_absy);
+
+	//判断辆车间是否有建筑物遮挡，从而确定是Nlos还是Los,如果是NLos，再判断是否是曼哈顿街角模型
+	if ((v_diri == true && v_dirj == true && y_between < 20)||(v_diri == false && v_dirj == false && x_between < 20)){
+		_location.locationType = Los;
+	}
+	else {
+		_location.locationType = Nlos;
+		if (v_diri == v_dirj) {
+		_location.manhattan = false;
+		}
+		else {
+		_location.manhattan = true;
+		}
+	}
+	
 	double angle = 0;
+
 	_location.distance = vue_physics::get_distance(t_vue_id1, t_vue_id2);
+	_location.distance1 = x_between;
+	_location.distance2 = y_between;
 
 	angle = atan2(vuei->m_absy - vuej->m_absy, vuei->m_absx - vuej->m_absx) / imta::s_DEGREE_TO_PI;
 
