@@ -72,17 +72,18 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, int t_pattern
 	vector<double> sinr(subcarrier_num);//每个子载波上的信噪比，维度为nt的向量
 	for (int subcarrier_idx = 0; subcarrier_idx <subcarrier_num; subcarrier_idx++) {
 
-		m_h = read_h(t_send_vue_id, t_receive_vue_id, t_pattern_idx, subcarrier_idx);//读入当前子载波的信道响应矩阵
-		m_inter_h = read_inter_h(t_sending_vue_id_set, t_send_vue_id, t_receive_vue_id, t_pattern_idx, subcarrier_idx);//读入当前子载波干扰相应矩阵数组
+		//m_h = read_h(t_send_vue_id, t_receive_vue_id, t_pattern_idx, subcarrier_idx);//读入当前子载波的信道响应矩阵
+		//m_inter_h = read_inter_h(t_sending_vue_id_set, t_send_vue_id, t_receive_vue_id, t_pattern_idx, subcarrier_idx);//读入当前子载波干扰相应矩阵数组
 
-		double h_sum1 = 0;
-		for (int r = 0; r < m_nr; r++) {
-			h_sum1 += complex::abs(m_h[r][0])*complex::abs(m_h[r][0]);
-		}
+		//double h_sum1 = 0;
+		//for (int r = 0; r < m_nr; r++) {
+		//	h_sum1 += complex::abs(m_h[r][0])*complex::abs(m_h[r][0]);
+		//}
 
-		double molecule = m_pt*m_ploss*h_sum1*h_sum1;
+		//double molecule = m_pt*m_ploss*h_sum1*h_sum1;
+		double molecule = m_pt*m_ploss;
 
-		double h_sum2 = 0;
+		/*double h_sum2 = 0;
 		for (int j = 0; j < m_inter_h.size(); j++) {
 			double weight = m_pt*m_inter_ploss[j];
 			complex tmp(0, 0);
@@ -90,9 +91,15 @@ double wt::calculate_sinr(int t_send_vue_id, int t_receive_vue_id, int t_pattern
 				tmp += m_h[r][0] * m_inter_h[j][r][0];
 			}
 			h_sum2 += weight * complex::abs(tmp)*complex::abs(tmp);
+		}*/
+		double h_sum2 = 0;
+		for (int j = 0; j < m_inter_h.size(); j++) {
+			double weight = m_pt*m_inter_ploss[j];
+			h_sum2 += weight;
 		}
 
-		double denominator = h_sum1*m_sigma + h_sum2;
+		//double denominator = h_sum1*m_sigma + h_sum2;
+		double denominator = m_sigma + h_sum2;
 
 		sinr[subcarrier_idx] = 10 * log10(molecule / denominator);
 	}

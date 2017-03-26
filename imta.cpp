@@ -424,7 +424,8 @@ bool imta::build(double* t_Pl, double t_fFrequency/*Hz*/, location &t_eLocation,
 			m_PLSF = fPL1 < fPL2 ? fPL1 : fPL2;
 		}
 		else {
-			m_PLSF = (44.9 - 6.55*log10(t_eLocation.VeUEAntH))*log10(t_eLocation.distance) + 5.83*log10(t_eLocation.VeUEAntH) + 18.38 + 23 * (log10(t_fFrequency)-9.0f);
+			//m_PLSF = (44.9 - 6.55*log10(t_eLocation.VeUEAntH))*log10(t_eLocation.distance) + 5.83*log10(t_eLocation.VeUEAntH) + 18.38 + 23 * (log10(t_fFrequency)-9.0f);
+			m_PLSF = 200;
 		}
 		break;
 	}
