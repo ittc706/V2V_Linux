@@ -4,6 +4,7 @@
 #include<utility>
 #include<random>
 #include<list>
+#include"wt.h"
 
 class vue_physics {
 	/*------------------友元声明------------------*/
@@ -15,6 +16,7 @@ class vue_physics {
 	friend class gtt_urban;
 	friend class receiver_event;
 	friend class vue_network;
+	friend class wt;
 
 	/*----------------拷贝控制成员----------------*/
 private:

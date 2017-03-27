@@ -12,7 +12,7 @@
 
 <!--紧急事件/周期事件/数据业务事件 每个数据包的传输TTI时间-->
 <tti_per_package>
-	4 4 4 4
+	3 2 2 2
 </tti_per_package>
 
 
