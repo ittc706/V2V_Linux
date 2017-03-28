@@ -37,16 +37,6 @@ public:
 	* 仿真时长
 	*/
 private:
-	bool m_fast_fading_switch;
-	void set_fast_fading_switch(bool t_fast_fading_switch);
-public:
-	bool get_fast_fading_switch();
-
-	
-	/*
-	* 仿真时长
-	*/
-private:
 	int m_ntti;
 	void set_ntti(int t_ntti);
 public:

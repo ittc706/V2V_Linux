@@ -42,15 +42,6 @@ platform global_control_config::get_platform() {
 	return m_platform;
 }
 
-void global_control_config::set_fast_fading_switch(bool t_fast_fading_switch) {
-	m_fast_fading_switch = t_fast_fading_switch;
-}
-
-bool global_control_config::get_fast_fading_switch() {
-	return m_fast_fading_switch;
-}
-
-
 void global_control_config::set_ntti(int t_ntti) {
 	m_ntti = t_ntti;
 }
@@ -105,12 +96,6 @@ void global_control_config::load() {
 	else
 		throw logic_error("ConfigLoaderError");
 
-	if ((temp = get_config_loader()->get_param("fast_fading_switch")) != nullString) {
-		set_fast_fading_switch(static_cast<bool>(stoi(temp)));
-	}
-	else
-		throw logic_error("ConfigLoaderError");
-
 	if ((temp = get_config_loader()->get_param("gtt_mode")) != nullString) {
 		if (temp == "HIGHSPEED")
 			set_gtt_mode(HIGHSPEED);
@@ -123,7 +108,6 @@ void global_control_config::load() {
 		throw logic_error("ConfigLoaderError");
 
 	cout << "ntti: " << get_ntti() << endl;
-	cout << "fast_fading_switch: " << (get_fast_fading_switch() ? "ON" : "OFF") << endl;
 	cout << "gtt_mode: " << (get_gtt_mode() == URBAN ? "URBAN" : "HIGHSPEED") << endl;
 	cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 }
