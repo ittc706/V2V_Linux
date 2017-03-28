@@ -2,13 +2,6 @@
 <ntti>10</ntti>
 
 
-<!--快衰落开关
-	1：打开
-	0：关闭-->	
-<fast_fading_switch>0</fast_fading_switch>
-
-
-
 <!--地理拓扑单元选择
 	[URBAN]：城市场景
 	[HIGHSPEED]：高速场景-->	
