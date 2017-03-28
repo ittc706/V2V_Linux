@@ -50,12 +50,8 @@ void system_control::process() {
 	while (m_context->get_tti() < m_context->get_global_control_config()->get_ntti()) {
 		cout << "TTI: " << m_context->get_tti() << endl;
 
-		//更新信道
-		m_context->get_gtt()->clean_channel();
-
 		//车辆运动
 		m_context->get_gtt()->fresh_location();
-
 
 		//更新该时刻触发的事件
 		m_context->get_tmc()->event_trigger();

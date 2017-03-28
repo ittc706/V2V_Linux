@@ -53,5 +53,5 @@ const std::list<receiver_event*>& vue_link::get_loss_event_list() {
 
 void vue_link::receive_connection(sender_event* t_sender_event) {
 	receiver_event* __receiver_event = new receiver_event(t_sender_event, this->get_superior_level());
-	t_sender_event->add_receiver_event(__receiver_event);
+	t_sender_event->add_receiver_event_vec(__receiver_event);
 }

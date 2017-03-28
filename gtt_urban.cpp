@@ -113,11 +113,6 @@ void gtt_urban::initialize() {
 
 	vue_coordinate.close();
 
-	vue_physics::s_channel_all.assign(get_vue_num(),
-		std::vector<std::vector<std::pair<bool, double*>>>(get_vue_num(),
-			std::vector<std::pair<bool, double*>>(context::get_context()->get_rrm_config()->get_pattern_num(),
-				std::pair<bool, double*>(false, nullptr))));
-
 	vue_physics::s_pl_all.assign(get_vue_num(), std::vector<double>(get_vue_num(), 0));
 	vue_physics::s_distance_all.assign(get_vue_num(), std::vector<double>(get_vue_num(), 0));
 }
@@ -141,31 +136,14 @@ void gtt_urban::fresh_location() {
 			auto vuei = context::get_context()->get_vue_array()[vue_id1].get_physics_level();
 			auto vuej = context::get_context()->get_vue_array()[vue_id2].get_physics_level();
 			vue_physics::set_distance(vue_id2, vue_id1, sqrt(pow((vuei->m_absx - vuej->m_absx), 2.0f) + pow((vuei->m_absy - vuej->m_absy), 2.0f)));
+			calculate_pl(vue_id1, vue_id2);
 		}
 	}
 
 
 }
 
-void gtt_urban::clean_channel() {
-	//<Warn>:将信道刷新时间和位置刷新时间分开
-	if (context::get_context()->get_tti() % get_precise_config()->get_freshtime() != 0) {
-		return;
-	}
-
-	for (int vue_id1 = 0; vue_id1 < get_vue_num(); vue_id1++) {
-		for (int vue_id2 = 0; vue_id2 < vue_id1; vue_id2++) {
-			for (int pattern_idx = 0; pattern_idx < context::get_context()->get_rrm_config()->get_pattern_num(); pattern_idx++) {
-				vue_physics::s_channel_all[vue_id2][vue_id1][pattern_idx].first = false;
-				memory_clean::safe_delete(vue_physics::s_channel_all[vue_id2][vue_id1][pattern_idx].second, true);
-
-
-			}
-		}
-	}
-}
-
-void gtt_urban::calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_idx) {
+void gtt_urban::calculate_pl(int t_vue_id1, int t_vue_id2) {
 
 	location _location;
 	_location.eNBAntH = 5;
@@ -207,19 +185,19 @@ void gtt_urban::calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_id
 	double y_between = abs(vuei->m_absy - vuej->m_absy);
 
 	//判断辆车间是否有建筑物遮挡，从而确定是Nlos还是Los,如果是NLos，再判断是否是曼哈顿街角模型
-	if ((v_diri == true && v_dirj == true && y_between < 20)||(v_diri == false && v_dirj == false && x_between < 20)){
+	if ((v_diri == true && v_dirj == true && y_between < 20) || (v_diri == false && v_dirj == false && x_between < 20)) {
 		_location.locationType = Los;
 	}
 	else {
 		_location.locationType = Nlos;
 		if (v_diri == v_dirj) {
-		_location.manhattan = false;
+			_location.manhattan = false;
 		}
 		else {
-		_location.manhattan = true;
+			_location.manhattan = true;
 		}
 	}
-	
+
 	double angle = 0;
 
 	_location.distance = vue_physics::get_distance(t_vue_id1, t_vue_id2);
@@ -254,62 +232,14 @@ void gtt_urban::calculate_channel(int t_vue_id1, int t_vue_id2, int t_pattern_id
 	__imta->build(&t_Pl, imta::s_FC, _location, _antenna, vuei->m_speed, vuej->m_speed, vuei->m_vangle, vuej->m_vangle);//计算了结果代入信道模型计算UE之间信道系数
 
 	vue_physics::set_pl(t_vue_id1, t_vue_id2, t_Pl);
-	if (context::get_context()->get_global_control_config()->get_fast_fading_switch()) {
-		if (t_Pl>1e-15){
-			bool *flag = new bool();
-			*flag = true;
-			__imta->enable(flag);
 
-			double *H = new double[1 * 2 * 19 * 2];
-			double *FFT = new double[1 * 2 * 1024 * 2];
-			double *ch_buffer = new double[1 * 2 * 19 * 20];
-			double *ch_sin = new double[1 * 2 * 19 * 20];
-			double *ch_cos = new double[1 * 2 * 19 * 20];
+	memory_clean::safe_delete(_antenna.TxSlantAngle, true);
+	memory_clean::safe_delete(_antenna.TxAntSpacing, true);
+	memory_clean::safe_delete(_antenna.RxSlantAngle, true);
+	memory_clean::safe_delete(_antenna.RxAntSpacing, true);
 
-			double *t_HAfterFFT = new double[2 * 1024 * 2];
-
-			__imta->calculate(t_HAfterFFT, 0.01f, ch_buffer, ch_sin, ch_cos, H, FFT);
-
-			//一个pattern占用了多少个频点
-			int point_num_per_pattern = context::get_context()->get_rrm_config()->get_rb_num_per_pattern() * 12;
-
-			//将该pattern_idx对应的信道从t_HAfterFFT中取出来
-			double *t_HAfterFFT_pattern = new double[2 * point_num_per_pattern * 2];
-
-			//需要的频段相对于1024个频点的偏移量
-			int offset = point_num_per_pattern*t_pattern_idx;
-			for (int point_idx = 0; point_idx < point_num_per_pattern; point_idx++) {
-				t_HAfterFFT_pattern[0 * (point_num_per_pattern * 2) + 2 * (point_idx)] = t_HAfterFFT[0 * (1024 * 2) + 2 * (point_idx + offset)];
-				t_HAfterFFT_pattern[0 * (point_num_per_pattern * 2) + 2 * (point_idx)+1] = t_HAfterFFT[0 * (1024 * 2) + 2 * (point_idx + offset) + 1];
-
-				t_HAfterFFT_pattern[1 * (point_num_per_pattern * 2) + 2 * point_idx] = t_HAfterFFT[1 * (1024 * 2) + 2 * (point_idx + offset)];
-				t_HAfterFFT_pattern[1 * (point_num_per_pattern * 2) + 2 * point_idx + 1] = t_HAfterFFT[1 * (1024 * 2) + 2 * (point_idx + offset) + 1];
-			}
-
-
-			vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, t_HAfterFFT_pattern);
-
-			memory_clean::safe_delete(flag);
-			memory_clean::safe_delete(H, true);
-			memory_clean::safe_delete(ch_buffer, true);
-			memory_clean::safe_delete(ch_sin, true);
-			memory_clean::safe_delete(ch_cos, true);
-			memory_clean::safe_delete(FFT, true);
-			memory_clean::safe_delete(t_HAfterFFT, true);
-		}
-		else {
-			vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, nullptr);
-		}
-		memory_clean::safe_delete(_antenna.TxSlantAngle, true);
-		memory_clean::safe_delete(_antenna.TxAntSpacing, true);
-		memory_clean::safe_delete(_antenna.RxSlantAngle, true);
-		memory_clean::safe_delete(_antenna.RxAntSpacing, true);
-
-		memory_clean::safe_delete(__imta);
-	}
-	else {
-		vue_physics::set_channel(t_vue_id1, t_vue_id2, t_pattern_idx, true, nullptr);
-	}
+	memory_clean::safe_delete(__imta);
+	
 }
 
 gtt_urban_config* gtt_urban::get_precise_config() {

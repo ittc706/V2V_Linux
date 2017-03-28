@@ -43,9 +43,14 @@ int sender_event::get_event_id() {
 	return m_event_id;
 }
 
-void sender_event::add_receiver_event(receiver_event* t_receiver_event) {
+void sender_event::add_receiver_event_vec(receiver_event* t_receiver_event) {
 	m_receiver_event_vec.push_back(t_receiver_event);
 }
+
+const std::vector<receiver_event*>& sender_event::get_receiver_event_vec() {
+	return m_receiver_event_vec;
+}
+
 
 void sender_event::set_sender_vue(vue* t_sender_vue) {
 	m_sender_vue = t_sender_vue;
@@ -222,9 +227,8 @@ void receiver_event::receive(int t_package_idx,bool t_is_finished) {
 	int vue_receive_id = get_receiver_vue_id();
 	int pattern_idx = get_pattern_idx();
 
-	//get_channel只为确保信道计算过，因为pl是在计算信道时才附带计算的
-	vue_physics::get_channel(vue_send_id, vue_receive_id, pattern_idx);
-	if (vue_physics::get_pl(vue_send_id, vue_receive_id) <=1e-15) {
+
+	if (vue_physics::get_pl(vue_send_id, vue_receive_id) <1e-15) {
 		sinr = __context->get_rrm_config()->get_drop_sinr_boundary() - 1;
 	}
 	else {
@@ -234,22 +238,13 @@ void receiver_event::receive(int t_package_idx,bool t_is_finished) {
 			if (__sender_event->is_transmit_time_slot(tti))
 				sending_vue_id_vec.insert(__sender_event->get_sender_vue_id());
 		}
-		if (context::get_context()->get_global_control_config()->get_fast_fading_switch()) {
-			sinr = __wt->calculate_sinr(
-				vue_send_id,
-				vue_receive_id,
-				get_pattern_idx(),
-				sending_vue_id_vec
-			);
-		}
-		else {
-			sinr = __wt->calculate_sinr_without_fast_fading(
-				vue_send_id,
-				vue_receive_id,
-				get_pattern_idx(),
-				sending_vue_id_vec
-			);
-		}
+
+		sinr = __wt->calculate_sinr(
+			vue_send_id,
+			vue_receive_id,
+			get_pattern_idx(),
+			sending_vue_id_vec
+		);
 	}
 
 	auto p = __context->get_vue_array()[vue_receive_id].get_physics_level();

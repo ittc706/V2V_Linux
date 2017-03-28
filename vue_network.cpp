@@ -83,10 +83,13 @@ void vue_network::send_connection() {
 		
 		s_sender_event_per_pattern[pattern_idx].insert(__sender_event);
 
-		//与其余所有车辆建立关联
-		for (int vue_id = 0; vue_id < __context->get_gtt()->get_vue_num(); vue_id++) {
-			if (vue_id == __sender_event->get_sender_vue_id()) continue;
-			vue_ary[vue_id].get_link_level()->receive_connection(__sender_event);
+		if (__sender_event->get_package_idx() == 0) {
+			if (__sender_event->get_receiver_event_vec().size() != 0) throw logic_error("logic error");
+			//与其余所有车辆建立关联
+			for (int vue_id = 0; vue_id < __context->get_gtt()->get_vue_num(); vue_id++) {
+				if (vue_id == __sender_event->get_sender_vue_id()) continue;
+				vue_ary[vue_id].get_link_level()->receive_connection(__sender_event);
+			}
 		}
 		it = m_sender_event_list.erase(it);
 	}

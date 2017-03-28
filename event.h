@@ -62,7 +62,8 @@ public:
 private:
 	std::vector<receiver_event*> m_receiver_event_vec;
 public:
-	void add_receiver_event(receiver_event* t_receiver_event);
+	void add_receiver_event_vec(receiver_event* t_receiver_event);
+	const std::vector<receiver_event*>& get_receiver_event_vec();
 
 	/*
 	* 车辆
