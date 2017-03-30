@@ -33,6 +33,7 @@ int sender_event::s_event_count = 0;
 sender_event::sender_event() {
 	m_package_num = context::get_context()->get_tmc_config()->get_package_num();
 	m_remaining_transmission_time_per_package = context::get_context()->get_tmc_config()->get_tti_per_package();
+	m_time_offset = rand() % 108;
 }
 
 sender_event::~sender_event() {

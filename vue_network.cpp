@@ -70,6 +70,12 @@ void vue_network::send_connection() {
 	while (it != m_sender_event_list.end()) {
 		sender_event* __sender_event = *it;
 
+		if (__sender_event->m_time_offset != 0) {
+			__sender_event->m_time_offset--;
+			++it;
+			continue;
+		}
+
 		//选择发送频段
 		int pattern_idx = select_pattern();
 

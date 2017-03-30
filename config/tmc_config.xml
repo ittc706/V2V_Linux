@@ -3,7 +3,7 @@
 
 
 <!--对应拥塞等级下周期事件周期，单位TTI-->
-<periodic_event_period>500 500 500</periodic_event_period>
+<periodic_event_period>100 100 100</periodic_event_period>
 
 
 <!--事件的数据包数量-->
